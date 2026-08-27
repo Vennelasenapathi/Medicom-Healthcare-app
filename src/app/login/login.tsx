@@ -406,7 +406,7 @@ export default function Login() {
                         {/* Home Button */}
 
                         <Pressable
-                            onPress={() => router.replace("/Home/Home") }
+                            onPress={() => router.replace("/") }
                             className="mt-8 h-[56px] flex-row items-center justify-center rounded-xl bg-[#246AFD]"
                         >
                             <Text className="text-[16px] font-semibold text-white">
