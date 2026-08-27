@@ -22,24 +22,7 @@ export default function Login() {
     // Login errors are separate
     const [emailLoginError, setEmailLoginError] =  useState(false);
     const [passwordLoginError, setPasswordLoginError] = useState(false);
-    const [loginSuccess, setLoginSuccess] = useState(false);
-
-    /* ========================= GOOGLE ICON ========================= */
-
-    const [iconColor, setIconColor] =
-        useState("#4285F4");
-
-    const toggleColor = () => {
-        if (iconColor === "#4285F4") {
-            setIconColor("#0F9D58");
-        } else if (iconColor === "#0F9D58") {
-            setIconColor("#F4B400");
-        } else if (iconColor === "#F4B400") {
-            setIconColor("#DB4437");
-        } else {
-            setIconColor("#4285F4");
-        }
-    };
+    const [loginSuccess, setLoginSuccess] = useState(false);    
 
     /* ========================= LOGIN FUNCTION========================= */
 
