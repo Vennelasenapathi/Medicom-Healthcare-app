@@ -10,12 +10,11 @@ import {
     View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
 import { Formik } from "formik";
-import {loginValidationSchema} from "../../validations/validation";
+import {loginValidationSchema} from "../../validations/loginvalidation";
+import ScreenHeader from "@/components/ScreenHeader";
 
-export default function Login() {
-    const router = useRouter();
+export default function Login({navigation}:any) {
     /* =========================  STATES========================= */
 
     const [showPassword, setShowPassword] = useState(false);
@@ -38,19 +37,12 @@ export default function Login() {
         setPasswordLoginError(false);
         setLoginSuccess(false);
 
-        /* Check email separately */
         const isEmailCorrect = email.trim().toLowerCase() === correctEmail;
-
-        /*Check password separately*/
         const isPasswordCorrect = password === correctPassword;
-
-        /*Wrong email*/
 
         if (!isEmailCorrect) {
             setEmailLoginError(true);
         }
-
-        /* Wrong password */
 
         if (!isPasswordCorrect) {
             setPasswordLoginError(true);
@@ -108,14 +100,15 @@ export default function Login() {
                                 />
                             </View>
                             {/* =========================HEADING========================= */}
-                            <View className="mt-8 items-center">
+                            <ScreenHeader title="Log in to your account" subtitle="Your journey to better health starts here!"/>  
+                             <View className="mt-8 items-center">
                                 <Text className="text-[22px] font-bold text-[#011133]">
                                     Log in to your account
                                 </Text>
                                 <Text className="mt-1 text-[14px] text-[#989898]">
                                     Your journey to better health starts here!
                                 </Text>
-                            </View>
+                            </View> 
 
                             {/* ========================= EMAIL ========================= */}
                             <View className="mt-10">
@@ -243,10 +236,8 @@ export default function Login() {
                                 {/* ========================= FORGOT PASSWORD ========================= */}
 
                                 {!passwordLoginError && (
-                                    <Pressable onPress={() =>
-                                        router.push(
-                                            "/forgot-password/forgot-password"
-                                        )}>
+                                    <Pressable onPress={() =>navigation.navigate("forgotpassword")
+                                        }>
                                         <Text className="mt-7 text-right text-[16px] font-medium text-[#246AFD]">
                                             Forgot Password?
                                         </Text>
@@ -258,10 +249,6 @@ export default function Login() {
 
                             <Pressable
                                 onPress={() => {
-                                    /*
-                                      Mark both fields as touched
-                                      so Yup validation appears
-                                    */
                                     setFieldTouched( "email", true );
                                     setFieldTouched( "password",  true );
                                     handleSubmit();
@@ -296,59 +283,14 @@ export default function Login() {
 
                                 <Pressable
                                     onPress={() =>
-                                        router.push(
-                                            "/signup/signup"
-                                        )
+                                       navigation.navigate("Signup")
                                     }
                                 >
                                     <Text className="text-[13px] font-medium text-[#246AFD]">
                                         Sign Up
                                     </Text>
                                 </Pressable>
-
                             </View>
-
-                            {/* ========================= DIVIDER========================= */}
-
-                            {/* <View className="mt-7 h-[21px] flex-row items-center">
-                                <View className="h-[1px] flex-1 bg-[#989898]" />
-                                <Text className="mx-3 text-[10px] text-[#989898]">
-                                    OR
-                                </Text>
-                                <View className="h-[1px] flex-1 bg-[#989898]" />
-                            </View> */}
-
-                            {/* =========================GOOGLE ========================= */}
-
-                             {/* <Pressable
-                                onPress={toggleColor}
-                                className="mt-8 h-[56px] flex-row items-center justify-center rounded-lg border border-[#EEEEEE] bg-[#FAFAFA]"
-                            >
-
-                                <Ionicons
-                                    name="logo-google"
-                                    size={18}
-                                    color={iconColor}
-                                />
-                                <Text className="ml-2 text-[12px] text-[#717784]">
-                                    Continue with Google
-                                </Text>
-                            </Pressable> */}
-
-                            {/* ========================= APPLE ========================= */}
-
-                            {/* <Pressable
-                                className="mt-2 h-[56px] flex-row items-center justify-center rounded-lg border border-[#EEEEEE] bg-[#FAFAFA]"
-                            >
-                                <Ionicons
-                                    name="logo-apple"
-                                    size={18}
-                                    color="#333333"
-                                />
-                                <Text className="ml-2 text-[12px] text-[#717784]">
-                                    Continue with Apple
-                                </Text>
-                            </Pressable>  */}
                         </View>
                     </ScrollView>
                 )}
@@ -389,7 +331,7 @@ export default function Login() {
                         {/* Home Button */}
 
                         <Pressable
-                            onPress={() => router.replace("/") }
+                            onPress={() => navigation.replace("SplashScreen") }
                             className="mt-8 h-[56px] flex-row items-center justify-center rounded-xl bg-[#246AFD]"
                         >
                             <Text className="text-[16px] font-semibold text-white">

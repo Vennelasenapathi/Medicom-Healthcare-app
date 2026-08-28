@@ -1,9 +1,7 @@
 import { Image, Pressable, Text, View } from "react-native";
-import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function Auth() {
-  const router = useRouter();
+export default function Auth({navigation}:any) {
 
   return (
     <View className="flex-1 pt-[50px] bg-white">
@@ -35,7 +33,7 @@ export default function Auth() {
 
         {/* Login */}
         <Pressable
-          onPress={() => router.push("/login/login")}
+          onPress={() => navigation.navigate("Login")}
           className="flex-row h-14 w-full items-center justify-center rounded-xl bg-[#2867FF]"
         >
           <Text className="text-base font-semibold text-white">
@@ -53,7 +51,7 @@ export default function Auth() {
 
         {/* Sign Up */}
         <Pressable
-          onPress={() => router.push("/signup/signup")}
+          onPress={() => navigation.navigate("Signup")}
           className="mt-4 h-14 w-full flex-row items-center justify-center rounded-xl border border-[#2867FF] bg-white"
         >
           <Text className="text-base font-semibold text-[#2867FF]">

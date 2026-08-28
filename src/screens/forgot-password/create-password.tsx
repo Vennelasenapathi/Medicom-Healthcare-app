@@ -8,55 +8,17 @@ import {
   TextInput,
   View,
 } from "react-native";
-
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
 import { Formik } from "formik";
-import * as Yup from "yup";
+import { createPasswordSchema } from "@/validations/createpasswordvalidation";
+import BackButton from "@/components/BackButton";
+import ScreenHeader from "@/components/ScreenHeader";
 
-/* =====================================================
-   VALIDATION
-===================================================== */
+export default function CreatePassword({navigation}:any) {
 
-const createPasswordSchema = Yup.object({
-  password: Yup.string()
-    .required("Password is required")
-    .min(
-      8,
-      "Password must be at least 8 characters"
-    )
-    .matches(
-      /[A-Z]/,
-      "Password must contain one uppercase letter"
-    )
-    .matches(
-      /[0-9]/,
-      "Password must contain one number"
-    ),
-
-  confirmPassword: Yup.string()
-    .required("Please confirm your password")
-    .oneOf(
-      [Yup.ref("password")],
-      "Passwords do not match"
-    ),
-});
-
-/* =====================================================
-   COMPONENT
-===================================================== */
-
-export default function CreatePassword() {
-  const router = useRouter();
-
-  const [showPassword, setShowPassword] =
-    useState(false);
-
-  const [showConfirmPassword, setShowConfirmPassword] =
-    useState(false);
-
-  const [passwordSaved, setPasswordSaved] =
-    useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [passwordSaved, setPasswordSaved] = useState(false);
 
   return (
     <KeyboardAvoidingView
@@ -74,15 +36,7 @@ export default function CreatePassword() {
         }}
         validationSchema={createPasswordSchema}
         onSubmit={(values) => {
-          console.log(
-            "New password:",
-            values.password
-          );
-
-          /*
-            Later you can call your API here.
-          */
-
+          console.log( "New password:", values.password );
           setPasswordSaved(true);
         }}
       >
@@ -104,38 +58,10 @@ export default function CreatePassword() {
           >
             <View className="flex-1 px-8 pt-[60px]">
 
-              {/* =================================================
-                  BACK BUTTON
-              ================================================= */}
+              <BackButton onPress={() =>navigation.back()} />
 
-              <Pressable
-                onPress={() =>
-                  router.back()
-                }
-                className="h-[46px] w-[46px] items-center justify-center rounded-xl bg-[#246AFD]"
-              >
-                <Ionicons
-                  name="chevron-back"
-                  size={21}
-                  color="#FFFFFF"
-                />
-              </Pressable>
+              <ScreenHeader title="Create new Password" subtitle="Create a new password to login"/>
 
-              {/* =================================================
-                  HEADING
-              ================================================= */}
-
-              <View className="mt-9">
-
-                <Text className="text-[21px] font-bold text-[#011133]">
-                  Create new password
-                </Text>
-
-                <Text className="mt-3 text-[13px] text-[#989898]">
-                  Create a new password to login
-                </Text>
-
-              </View>
 
               {/* =================================================
                   NEW PASSWORD
@@ -286,10 +212,7 @@ export default function CreatePassword() {
                       { errors.confirmPassword }
                     </Text>
                   )}
-              </View>
-
-              {/* =================================================  PASSWORD REQUIREMENTS ================================================= */}
-              
+              </View>              
 
               {/* =================================================
                   SAVE BUTTON
@@ -297,21 +220,12 @@ export default function CreatePassword() {
 
               <Pressable
                 onPress={() => {
-                  setFieldTouched(
-                    "password",
-                    true
-                  );
-
-                  setFieldTouched(
-                    "confirmPassword",
-                    true
-                  );
-
+                  setFieldTouched( "password", true  );
+                  setFieldTouched(  "confirmPassword", true );
                   handleSubmit();
                 }}
                 className="mt-9 h-[56px] flex-row items-center justify-center rounded-xl bg-[#2867FF]"
               >
-
                 <Text className="text-[16px] font-semibold text-white">
                   Save
                 </Text>
@@ -349,17 +263,11 @@ export default function CreatePassword() {
               </View>
             </View>
 
-            {/* =================================================
-                TITLE
-            ================================================= */}
+            {/* ================================================= TITLE ================================================= */}
 
             <Text className="text-center text-[22px] font-bold text-[#011133]">
               Password Updated
             </Text>
-
-            {/* =================================================
-                DESCRIPTION
-            ================================================= */}
 
             <Text className="mt-4 text-center text-[13px] leading-4 text-[#989898]">
               Your new password is ready to use.
@@ -370,14 +278,9 @@ export default function CreatePassword() {
             ================================================= */}
 
             <Pressable
-              onPress={() =>
-                router.replace(
-                  "/login/login"
-                )
-              }
+              onPress={() => navigation.navigate("Login")  }
               className="mt-9 h-[56px] flex-row items-center justify-center rounded-lg bg-[#2867FF]"
             >
-
               <Text className="text-[16px] font-semibold text-white">
                 Proceed to Login
               </Text>
@@ -390,11 +293,8 @@ export default function CreatePassword() {
                   marginLeft: 3,
                 }}
               />
-
             </Pressable>
-
           </View>
-
         </View>
       )}
     </KeyboardAvoidingView>

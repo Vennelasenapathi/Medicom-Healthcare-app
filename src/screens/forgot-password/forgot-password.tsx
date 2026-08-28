@@ -8,53 +8,17 @@ import {
   TextInput,
   View,
 } from "react-native";
-
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
 import { Formik } from "formik";
-import * as Yup from "yup";
-
-/* =====================================================
-   TYPES
-===================================================== */
+import BackButton from "@/components/BackButton";
+import ScreenHeader from "@/components/ScreenHeader";
+import { emailValidationSchema,phoneValidationSchema } from "@/validations/forgotpassword";
 
 type ForgotPasswordMode = "email" | "phone";
 
-/* =====================================================
-   EMAIL VALIDATION
-===================================================== */
 
-const emailValidationSchema = Yup.object({
-  email: Yup.string()
-    .trim()
-    .required("Email is required")
-    .email("Please enter a valid email"),
-});
-
-/* =====================================================
-   PHONE VALIDATION
-===================================================== */
-
-const phoneValidationSchema = Yup.object({
-  phone: Yup.string()
-    .required("Phone number is required")
-    .matches(
-      /^[6-9]\d{9}$/,
-      "Please enter a valid 10-digit phone number"
-    ),
-});
-
-/* =====================================================
-   COMPONENT
-===================================================== */
-
-export default function ForgotPassword() {
-  const router = useRouter();
+export default function ForgotPassword({navigation}:any) {
   const [mode, setMode] = useState<ForgotPasswordMode>("email");
-
-  /* =====================================================
-     SWITCH EMAIL / PHONE
-  ===================================================== */
 
   const handleModeChange = (
     newMode: ForgotPasswordMode,
@@ -67,13 +31,11 @@ export default function ForgotPassword() {
       values:
         newMode === "email"
           ? {
-              email: "",
-              phone: "",
-            }
+            email: "", phone: "",
+          }
           : {
-              email: "",
-              phone: "",
-            },
+            email: "", phone: "",
+          },
     });
   };
 
@@ -102,7 +64,7 @@ export default function ForgotPassword() {
               "Email:",
               values.email
             );
-            router.push(  "/forgot-password/otp" );
+            navigation.navigate("otp");
           }}
         >
           {({
@@ -122,36 +84,12 @@ export default function ForgotPassword() {
               }}
             >
               <View className="flex-1 px-8 pt-[60px]">
-
-                {/* ================================================BACK BUTTON================================================= */}
-                <Pressable
-                  onPress={() => router.back() }
-                  className="h-[46px] w-[46px] items-center justify-center rounded-xl bg-[#246AFD]"
-                >
-                  <Ionicons
-                    name="chevron-back"
-                    size={21}
-                    color="#FFFFFF"
-                  />
-                </Pressable>
-
-                {/* ================================================= HEADING ================================================= */}
-
-                <View className="mt-9">
-                  <Text className="text-[21px] font-bold text-[#011133]">
-                    Forgot Password?
-                  </Text>
-                  <Text className="mt-3 text-[13px] text-[#989898]">
-                    Enter your registered email to continue
-                  </Text>
-                </View>
-
+                <BackButton onPress={() => navigation.back()} />
+                <ScreenHeader title="Forgot Password?" subtitle="Enter your registered email to continue" />
                 {/* ================================================= EMAIL / PHONE TOGGLE ================================================= */}
 
                 <View className="mt-9 h-[52px] flex-row rounded-lg bg-[#F1F3F8] p-[3px]">
-
                   {/* EMAIL TAB */}
-
                   <Pressable
                     onPress={() =>
                       handleModeChange(
@@ -199,7 +137,6 @@ export default function ForgotPassword() {
                       Phone
                     </Text>
                   </Pressable>
-
                 </View>
 
                 {/* ================================================= EMAIL INPUT ================================================= */}
@@ -211,19 +148,18 @@ export default function ForgotPassword() {
                       borderWidth: 1,
                       borderColor:
                         touched.email &&
-                        errors.email
+                          errors.email
                           ? "#FF4D4F"
                           : "#8DB2FF",
                     }}
                   >
-
                     {/* EMAIL ICON */}
                     <Ionicons
                       name="mail-outline"
                       size={24}
                       color={
                         touched.email &&
-                        errors.email
+                          errors.email
                           ? "#FF4D4F"
                           : "#246AFD"
                       }
@@ -232,8 +168,8 @@ export default function ForgotPassword() {
                     {/* EMAIL INPUT */}
                     <TextInput
                       value={values.email}
-                      onChangeText={handleChange( "email" )}
-                      onBlur={handleBlur( "email" )}
+                      onChangeText={handleChange("email")}
+                      onBlur={handleBlur("email")}
                       placeholder="Enter your email"
                       placeholderTextColor="#989898"
                       keyboardType="email-address"
@@ -244,7 +180,7 @@ export default function ForgotPassword() {
 
                     {/* CHECKMARK */}
 
-                    {values.email.length >  0 &&
+                    {values.email.length > 0 &&
                       !errors.email && (
                         <Ionicons
                           name="checkmark"
@@ -258,23 +194,22 @@ export default function ForgotPassword() {
                   {/* EMAIL ERROR */}
 
                   {touched.email && errors.email && (
-                      <Text className="mt-1 text-[12px] text-[#FF4D4F]">
-                        {errors.email}
-                      </Text>
-                    )}
+                    <Text className="mt-1 text-[12px] text-[#FF4D4F]">
+                      {errors.email}
+                    </Text>
+                  )}
                 </View>
 
                 {/* ================================================= RESET PASSWORD BUTTON ================================================= */}
 
                 <Pressable
-                  onPress={() => handleSubmit() }
+                  onPress={() => handleSubmit()}
                   className="mt-4 h-[56px] flex-row items-center justify-center rounded-lg bg-[#246AFD]"
                 >
 
                   <Text className="text-[16px] font-semibold text-white">
                     Reset Password
                   </Text>
-
                   <Ionicons
                     name="chevron-forward"
                     size={16}
@@ -316,7 +251,7 @@ export default function ForgotPassword() {
             "Phone:",
             values.phone
           );
-          router.push( "/forgot-password/otp" );
+         navigation.navigate("otp");
         }}
       >
         {({
@@ -338,35 +273,8 @@ export default function ForgotPassword() {
             <View className="flex-1 px-8 pt-[60px]">
 
               {/* ================================================= BACK BUTTON ================================================= */}
-
-              <Pressable
-                onPress={() =>
-                  router.back()
-                }
-                className="h-[46px] w-[46px] items-center justify-center rounded-xl bg-[#2867FF]"
-              >
-                <Ionicons
-                  name="chevron-back"
-                  size={21}
-                  color="#FFFFFF"
-                />
-              </Pressable>
-
-              {/* =================================================
-                  HEADING
-              ================================================= */}
-
-              <View className="mt-9">
-
-                <Text className="text-[21px] font-bold text-[#011133]">
-                  Forgot Password?
-                </Text>
-
-                <Text className="mt-3 text-[13px] text-[#989898]">
-                  Enter your registered phone number to continue
-                </Text>
-
-              </View>
+              <BackButton onPress={() => navigation.back()} />
+              <ScreenHeader title="Forgot Password" subtitle="Enter your registered phone number to continue" />
 
               {/* =================================================
                   EMAIL / PHONE TOGGLE
@@ -405,22 +313,15 @@ export default function ForgotPassword() {
                     Phone
                   </Text>
                 </Pressable>
-
               </View>
 
-              {/* =================================================
-                  PHONE INPUT
-              ================================================= */}
-
               <View className="mt-5">
-
-                <View
-                  className="h-[56px] flex-row items-center rounded-lg bg-[#F9FAFB] px-3"
+                <View className="h-[56px] flex-row items-center rounded-lg bg-[#F9FAFB] px-3"
                   style={{
                     borderWidth: 1,
                     borderColor:
                       touched.phone &&
-                      errors.phone
+                        errors.phone
                         ? "#FF4D4F"
                         : "#8DB2FF",
                   }}
@@ -433,7 +334,7 @@ export default function ForgotPassword() {
                     size={24}
                     color={
                       touched.phone &&
-                      errors.phone
+                        errors.phone
                         ? "#FF4D4F"
                         : "#246AFD"
                     }
@@ -458,10 +359,10 @@ export default function ForgotPassword() {
                       if (
                         numbersOnly.length <= 10
                       ) {
-                        handleChange(  "phone" )(numbersOnly);
+                        handleChange("phone")(numbersOnly);
                       }
                     }}
-                    onBlur={handleBlur( "phone" )}
+                    onBlur={handleBlur("phone")}
                     placeholder="Enter your phone number"
                     placeholderTextColor="#989898"
                     keyboardType="phone-pad"
@@ -485,10 +386,10 @@ export default function ForgotPassword() {
                 {/* PHONE ERROR */}
 
                 {touched.phone && errors.phone && (
-                    <Text className="mt-1 text-[9px] text-[#FF4D4F]">
-                      {errors.phone}
-                    </Text>
-                  )}
+                  <Text className="mt-1 text-[9px] text-[#FF4D4F]">
+                    {errors.phone}
+                  </Text>
+                )}
 
               </View>
 
@@ -497,7 +398,7 @@ export default function ForgotPassword() {
               ================================================= */}
 
               <Pressable
-                onPress={() => handleSubmit() }
+                onPress={() => handleSubmit()}
                 className="mt-4 h-[56px] flex-row items-center justify-center rounded-lg bg-[#2867FF]"
               >
                 <Text className="text-[16px] font-semibold text-white">

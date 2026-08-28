@@ -5,13 +5,11 @@ import {
   Text,
   View,
 } from "react-native";
-import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 const { height } = Dimensions.get("window");
 
 export default function ThirdOnboarding() {
-  const router = useRouter();
 
   return (
     <View className="flex-1 pt-[100px] bg-white">
@@ -67,11 +65,10 @@ export default function ThirdOnboarding() {
 
             {/* Next Button */}
             <Pressable
-              onPress={() => router.replace("/onboarding/auth")}
+             
               className="h-[51px] w-[51px] items-center justify-center rounded-xl bg-[#2867FF]"
             >
               <Text className="text-xl text-white">
-
                 <Ionicons
                   name="arrow-forward"
                   size={22}
@@ -79,11 +76,9 @@ export default function ThirdOnboarding() {
                 />
               </Text>
             </Pressable>
-
           </View>
         </View>
       </View>
-
     </View>
   );
 }

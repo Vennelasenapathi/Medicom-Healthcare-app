@@ -11,9 +11,8 @@ import {
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
 import { Formik } from "formik";
-import { signupValidationSchema } from "@/validations/validation";
+import { signupValidationSchema } from "@/validations/signupvalidation";
 
 /* =====================================================
    COMPONENT
@@ -29,8 +28,7 @@ const parseDate = (dateString: string) => {
     );
 };
 
-export default function Signup() {
-    const router = useRouter();
+export default function Signup({navigation}:any) {
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
@@ -579,7 +577,7 @@ export default function Signup() {
                                     {/* ================================================= LOGIN ================================================= */}
                                     <View className="mt-4 flex-row justify-center">
                                         <Text className="text-[14px] text-[#989898]">  Already have an account?{" "} </Text>
-                                        <Pressable onPress={() => router.push("/login/login")} >
+                                        <Pressable onPress={() =>navigation.navigate("Login")} >
                                             <Text className="text-[14px] font-medium text-[#2867FF]">Log In </Text>
                                         </Pressable>
                                     </View>
@@ -607,7 +605,7 @@ export default function Signup() {
                                             You've successfully created your account.
                                         </Text>
                                         {/* GET STARTED */}
-                                        <Pressable onPress={() => router.replace("/")}
+                                        <Pressable onPress={() => navigation.replace("SplashScreen")}
                                             className="mt-9 h-[56px] flex-row items-center justify-center rounded-lg bg-[#2867FF]"
                                         >
                                             <Text className="text-[16px] font-semibold text-white">
