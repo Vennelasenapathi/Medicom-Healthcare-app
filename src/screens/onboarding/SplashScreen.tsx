@@ -1,3 +1,4 @@
+import { colors } from "@/constants/colors";
 import { useEffect } from "react";
 import { View, Text, Image } from "react-native";
 
@@ -11,7 +12,7 @@ export default function SplashScreen({navigation}:any) {
   }, [navigation]);
 
   return (
-    <View className="flex-1 bg-[#285BCD]">
+    <View className="flex-1 " style={{backgroundColor:colors.primaryDark}}>
       {/* Logo */}
       <View className="flex-1 items-center justify-center">
         <Image

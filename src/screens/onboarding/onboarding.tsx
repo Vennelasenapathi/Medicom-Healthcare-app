@@ -3,23 +3,22 @@ import {
   Dimensions,
   Image,
   Pressable,
-  StyleSheet,
   Text,
   View,
 } from "react-native";
-
 import { Ionicons } from "@expo/vector-icons";
+import { colors } from "@/constants/colors";
 
 const { height } = Dimensions.get("window");
 
 const onboardingData = [
   {
     image: require("../../../assets/images/medicom/doctor1.png"),
-    title: "Find the right doctor\nfor your care",
+    title: "Verified and experienced\nmedical professionals",
   },
   {
     image: require("../../../assets/images/medicom/doctor2.png"),
-    title: "Book appointments\neasily and quickly",
+    title: "Find specialist doctors in\none place",
   },
   {
     image: require("../../../assets/images/medicom/doctor3.png"),
@@ -40,219 +39,88 @@ export default function Onboarding({ navigation }: any) {
     }
   };
 
+  const handleSkip = () => {
+    navigation.replace("auth");
+  };
+
   return (
-    <View style={styles.container}>
+    <View className="flex-1 bg-white pt-[100px]">
 
-      {/* ================= BACKGROUND SHAPES ================= */}
+      {/* SKIP */}
+      <Pressable
+        onPress={handleSkip}
+        className="absolute right-[25px] top-[55px] z-10 px-[10px] py-[8px]"
+      >
+        <Text className="text-[14px] font-medium " style={{color:colors.primaryDark}}>
+          Skip
+        </Text>
+      </Pressable>
 
-      <View style={styles.leftCircle} />
+      {/* BACKGROUND CIRCLES */}
 
-      <View style={styles.rightCircle} />
+      <View className="absolute -left-[50px] -top-[40px] h-[224px] w-[224px] rounded-full" style={{backgroundColor:colors.veryLightBlue}} />
 
-      {/* ================= DOCTOR IMAGE ================= */}
+      <View className="absolute -right-[80px] top-[80px] h-[192px] w-[192px] rounded-full " style={{backgroundColor:colors.paleBlue}} />
 
-      <View style={styles.doctorContainer}>
+      {/* DOCTOR IMAGE */}
+
+      <View
+        className="items-center justify-end pt-[50px]"
+        style={{ height: height * 0.63 }}
+      >
         <Image
           source={currentScreen.image}
           resizeMode="contain"
-          style={styles.doctorImage}
+          className="h-full w-full"
         />
       </View>
 
-      {/* ================= BOTTOM CARD ================= */}
+      {/* BOTTOM CARD */}
 
-      <View style={styles.cardWrapper}>
+      <View className="flex-1 px-[20px]">
+        <View className="flex-1 rounded-t-[16px]  px-[20px] pt-[55px]" style={{backgroundColor:colors.lightBlue}}>
 
-        <View style={styles.card}>
+          {/* TITLE */}
 
-          {/* ================= DESCRIPTION ================= */}
-
-          <Text style={styles.title}>
+          <Text className="max-w-[270px] text-[24px] font-bold leading-[40px] " style={{color:colors.textPrimary}}>
             {currentScreen.title}
           </Text>
 
-          {/* ================= BOTTOM CONTROLS ================= */}
+          {/* CONTROLS */}
 
-          <View style={styles.controls}>
+          <View className="mt-[50px] mb-[32px] flex-row items-center justify-between">
 
-            {/* ================= PAGINATION ================= */}
+            {/* PAGINATION */}
 
-            <View style={styles.pagination}>
-
-              {/* First */}
-              <View
-                style={[
-                  styles.dot,
-                  currentIndex === 0
-                    ? styles.activeDot
-                    : styles.inactiveDot,
-                ]}
-              />
-
-              {/* Second */}
-              <View
-                style={[
-                  styles.dot,
-                  currentIndex === 1
-                    ? styles.activeDot
-                    : styles.inactiveDot,
-                ]}
-              />
-
-              {/* Third */}
-              <View
-                style={[
-                  styles.dot,
-                  currentIndex === 2
-                    ? styles.activeDot
-                    : styles.inactiveDot,
-                ]}
-              />
-
+            <View className="flex-row items-center">
+              {onboardingData.map((_, index) => (
+                <View
+                  key={index}
+                  className={`mr-[4px] h-[4px] ${
+                    currentIndex === index
+                      ? "w-[20px] bg-[#2D6BFF]"
+                      : "w-[12px] bg-[#A9C4FF]"
+                  }`}
+                />
+              ))}
             </View>
 
-            {/* ================= NEXT BUTTON ================= */}
+            {/* NEXT BUTTON */}
 
             <Pressable
               onPress={handleNext}
-              style={styles.nextButton}
+              className="h-[51px] w-[51px] items-center justify-center rounded-[12px] " style={{backgroundColor:colors.primaryDark}}
             >
               <Ionicons
                 name="arrow-forward"
                 size={22}
-                color="#FFFFFF"
+                color={colors.white}
               />
             </Pressable>
 
           </View>
-
         </View>
-
       </View>
-
     </View>
   );
 }
-
-/* ============================================================
-   STYLES
-============================================================ */
-
-const styles = StyleSheet.create({
-
-  /* ================= MAIN CONTAINER ================= */
-
-  container: {
-    flex: 1,
-    paddingTop: 100,
-    backgroundColor: "#FFFFFF",
-  },
-
-  /* ================= BACKGROUND CIRCLES ================= */
-
-  leftCircle: {
-    position: "absolute",
-    left: -50,
-    top: -40,
-    height: 224,
-    width: 224,
-    borderRadius: 112,
-    backgroundColor: "#F5F8FF",
-  },
-
-  rightCircle: {
-    position: "absolute",
-    right: -80,
-    top: 80,
-    height: 192,
-    width: 192,
-    borderRadius: 96,
-    backgroundColor: "#F7F9FF",
-  },
-
-  /* ================= DOCTOR ================= */
-
-  doctorContainer: {
-    paddingTop: 50,
-    alignItems: "center",
-    justifyContent: "flex-end",
-    height: height * 0.63,
-  },
-
-  doctorImage: {
-    height: "100%",
-    width: "100%",
-  },
-
-  /* ================= CARD WRAPPER ================= */
-
-  cardWrapper: {
-    flex: 1,
-    paddingHorizontal: 20,
-  },
-
-  /* ================= CARD ================= */
-
-  card: {
-    flex: 1,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    backgroundColor: "#E8F0FF",
-    paddingHorizontal: 20,
-    paddingTop: 55,
-  },
-
-  /* ================= TITLE ================= */
-
-  title: {
-    maxWidth: 270,
-    fontSize: 24,
-    fontWeight: "700",
-    lineHeight: 40,
-    color: "#011133",
-  },
-
-  /* ================= CONTROLS ================= */
-
-  controls: {
-    marginTop: 50,
-    marginBottom: 32,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-
-  /* ================= PAGINATION ================= */
-
-  pagination: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-
-  dot: {
-    height: 4,
-    marginRight: 4,
-  },
-
-  inactiveDot: {
-    width: 12,
-    backgroundColor: "#A9C4FF",
-  },
-
-  activeDot: {
-    width: 20,
-    backgroundColor: "#2D6BFF",
-  },
-
-  /* ================= NEXT BUTTON ================= */
-
-  nextButton: {
-    height: 51,
-    width: 51,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 12,
-    backgroundColor: "#2867FF",
-  },
-
-});

@@ -1,5 +1,7 @@
 import { Image, Pressable, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import AppButton from "@/components/common/AppButton";
+import { colors } from "@/constants/colors";
 
 export default function Auth({navigation}:any) {
 
@@ -16,12 +18,12 @@ export default function Auth({navigation}:any) {
         />
 
         {/* Heading */}
-        <Text className="pt-[30px] text-center text-[28px] font-bold text-[#071B44]">
+        <Text className="pt-[30px] text-center text-[28px] font-bold" style={{color:colors.textBlue}}>
           Let's get started!
         </Text>
 
         {/* Description */}
-        <Text className="mt-4 max-w-[280px] text-center text-[14px] leading-5 text-[#717784]">
+        <Text className="mt-4 max-w-[280px] text-center text-[14px] leading-5 " style={{color:colors.textGray}}>
           Sign in to manage appointments{"\n"}
           and consult doctors anytime
         </Text>
@@ -32,35 +34,26 @@ export default function Auth({navigation}:any) {
       <View className="px-[61px] pb-[300px]">
 
         {/* Login */}
-        <Pressable
+        <AppButton
+          title="Log In"
           onPress={() => navigation.navigate("Login")}
-          className="flex-row h-14 w-full items-center justify-center rounded-xl bg-[#2867FF]"
-        >
-          <Text className="text-base font-semibold text-white">
-            Log In
-          </Text>
-          <Ionicons
-            name="chevron-forward"
-            size={16}
-            color="#FFFFFF"
-            style={{
-              marginLeft: 3,
-            }}
-          />
-        </Pressable>
+        />
+        
 
         {/* Sign Up */}
+        
         <Pressable
           onPress={() => navigation.navigate("Signup")}
           className="mt-4 h-14 w-full flex-row items-center justify-center rounded-xl border border-[#2867FF] bg-white"
+          style={{borderColor:colors.primary}}
         >
-          <Text className="text-base font-semibold text-[#2867FF]">
+          <Text className="text-base font-semibold " style={{color:colors.primaryDark}}>
             Sign Up
           </Text>
           <Ionicons
             name="chevron-forward"
             size={16}
-            color="#2867FF"
+            color={colors.primaryDark}
             style={{
               marginLeft: 3,
             }}

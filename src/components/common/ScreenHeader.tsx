@@ -1,3 +1,4 @@
+import { colors } from "@/constants/colors";
 import React from "react";
 import { Text, View } from "react-native";
 
@@ -12,12 +13,12 @@ export default function ScreenHeader({
 }: ScreenHeaderProps) {
   return (
     <View className="mt-9">
-      <Text className="text-[21px] font-bold text-[#011133]">
+      <Text className="text-[21px] font-bold " style={{color:colors.textPrimary}}>
         {title}
       </Text>
 
       {subtitle && (
-        <Text className="mt-3 text-[13px] text-[#989898]">
+        <Text className="mt-3 text-[13px]" style={{color:colors.textSecondary}}>
           {subtitle}
         </Text>
       )}

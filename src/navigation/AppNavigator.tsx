@@ -19,14 +19,14 @@ export default function AppNavigator() {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="SplashScreen" component={SplashScreen}/>
+      <Stack.Screen name="SplashScreen" component={SplashScreen} />
       <Stack.Screen name="onboarding" component={Onboarding} />
       <Stack.Screen name="auth" component={Auth} />
-        <Stack.Screen name="Login" component={Login}  />
-        <Stack.Screen name="forgotpassword" component={ForgotPassword}/>
-        <Stack.Screen name="otp" component={ConfirmOTP}/>
-        <Stack.Screen name="createpassword" component={CreatePassword}/>
-        <Stack.Screen name="Signup" component={Signup} />
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="forgotpassword" component={ForgotPassword} />
+      <Stack.Screen name="otp" component={ConfirmOTP} />
+      <Stack.Screen name="createpassword" component={CreatePassword} />
+      <Stack.Screen name="Signup" component={Signup} />
     </Stack.Navigator>
   );
 }
