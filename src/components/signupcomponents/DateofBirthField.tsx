@@ -29,13 +29,10 @@ export default function DateOfBirthField({
 
     const pickDate = (event: DateTimePickerEvent, date?: Date) => {
         setShowPicker(false);
-
         if (event.type !== "set" || !date) return;
-
         const day = String(date.getDate()).padStart(2, "0");
         const month = String(date.getMonth() + 1).padStart(2, "0");
         const year = date.getFullYear();
-
         onChange(`${day}/${month}/${year}`);
         onBlur();
     };
@@ -62,10 +59,7 @@ export default function DateOfBirthField({
                     color={value ? colors.primaryDark : colors.dobcolor}
                 />
 
-                <Text
-                    className={`ml-3 flex-1 text-[12px] ${value ? "text-[#071B44]" : "text-[#989898]"
-                        }`}
-                >
+                <Text  className={`ml-3 flex-1 text-[12px] ${value ? "text-[#071B44]" : "text-[#989898]"  }`} >
                     {value || "Date of birth (DD/MM/YYYY)"}
                 </Text>
 
