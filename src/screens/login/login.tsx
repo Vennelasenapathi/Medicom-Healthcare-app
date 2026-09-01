@@ -5,10 +5,12 @@ import {
   Platform,
   Pressable,
   ScrollView,
+  StyleSheet,
   Text,
   View,
 } from "react-native";
 import { Formik } from "formik";
+
 import AppButton from "@/components/common/AppButton";
 import InputField from "@/components/common/InputField";
 import PasswordField from "@/components/common/PasswordField";
@@ -25,7 +27,8 @@ export default function Login({ navigation }: any) {
     const correctEmail = "vennela@medicom.com";
     const correctPassword = "12345678";
 
-    const validEmail = email.trim().toLowerCase() === correctEmail;
+    const validEmail =
+      email.trim().toLowerCase() === correctEmail;
     const validPassword = password === correctPassword;
 
     setEmailError(!validEmail);
@@ -38,14 +41,13 @@ export default function Login({ navigation }: any) {
 
   return (
     <KeyboardAvoidingView
-      className="flex-1 bg-white"
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      style={styles.container}
+      behavior={
+        Platform.OS === "ios" ? "padding" : undefined
+      }
     >
       <Formik
-        initialValues={{
-          email: "",
-          password: "",
-        }}
+        initialValues={{ email: "", password: "" }}
         validationSchema={loginValidationSchema}
         onSubmit={(values) =>
           login(values.email, values.password)
@@ -63,32 +65,31 @@ export default function Login({ navigation }: any) {
           <ScrollView
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ flexGrow: 1 }}
+            contentContainerStyle={styles.scrollContent}
           >
-            <View className="flex-1 px-6 pt-[125px]">
+            <View style={styles.content}>
 
               {/* LOGO */}
-              <View className="items-center">
+              <View style={styles.logoContainer}>
                 <Image
-                  source={require("../../../assets/images/medicom/Logo2.png")}
-                  className="h-[68px] w-[68px]"
+                  source={require(  "../../../assets/images/medicom/Logo2.png" )}
+                  style={styles.logo}
                   resizeMode="contain"
                 />
               </View>
 
               {/* HEADING */}
-              <View className="mt-8 items-center">
-                <Text className="text-[22px] font-bold " style={{color:colors.textPrimary}}>
+              <View style={styles.heading}>
+                <Text style={styles.title}>
                   Log in to your account
                 </Text>
-
-                <Text className="mt-1 text-[14px] " style={{color:colors.textSecondary}}>
+                <Text style={styles.subtitle}>
                   Your journey to better health starts here!
                 </Text>
               </View>
 
               {/* EMAIL */}
-              <View className="mt-10">
+              <View style={styles.emailContainer}>
                 <InputField
                   icon="mail-outline"
                   value={values.email}
@@ -107,14 +108,14 @@ export default function Login({ navigation }: any) {
                 />
 
                 {emailError && !errors.email && (
-                  <Text className="mt-1 text-[12px] " style={{color:colors.error}}>
+                  <Text style={styles.errorText}>
                     *That email isn't correct
                   </Text>
                 )}
               </View>
 
               {/* PASSWORD */}
-              <View className="mt-4">
+              <View style={styles.passwordContainer}>
                 <PasswordField
                   value={values.password}
                   onChangeText={(text) => {
@@ -128,15 +129,16 @@ export default function Login({ navigation }: any) {
                 />
 
                 {passwordError && !errors.password && (
-                  <Text className="mt-1 text-[12px]" style={{color:colors.error}}>
+                  <Text style={styles.errorText}>
                     *That password isn't correct
                   </Text>
                 )}
 
                 {!passwordError && (
                   <Pressable
-                    onPress={() => navigation.navigate("forgotpassword")  } >
-                    <Text className="mt-7 mb-5 text-right text-[16px] font-medium " style={{color:colors.primaryDark}}>
+                    onPress={() => navigation.navigate("forgotpassword") }
+                  >
+                    <Text style={styles.forgotPassword}>
                       Forgot Password?
                     </Text>
                   </Pressable>
@@ -154,13 +156,15 @@ export default function Login({ navigation }: any) {
               />
 
               {/* SIGN UP */}
-              <View className="mt-7 flex-row justify-center">
-                <Text className="text-[13px]" style={{color:colors.textGray}}>
+              <View style={styles.signupContainer}>
+                <Text style={styles.signupText}>
                   Don't have an account?{" "}
                 </Text>
 
-                <Pressable onPress={() => navigation.navigate("Signup") } >
-                  <Text className="text-[13px] font-medium " style={{color:colors.primaryDark}}>
+                <Pressable
+                  onPress={() => navigation.navigate("Signup")  }
+                >
+                  <Text style={styles.signupButton}>
                     Sign Up
                   </Text>
                 </Pressable>
@@ -176,9 +180,92 @@ export default function Login({ navigation }: any) {
           title="Welcome back!"
           description={ "You've successfully logged into the\nMedicom app." }
           buttonTitle="Go to Home"
-          onPress={() => navigation.replace("SplashScreen") }
+          onPress={() => navigation.replace("Home") }
         />
       )}
     </KeyboardAvoidingView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#FFFFFF",
+  },
+
+  scrollContent: {
+    flexGrow: 1,
+  },
+
+  content: {
+    flex: 1,
+    paddingHorizontal: 24,
+    paddingTop: 125,
+  },
+
+  logoContainer: {
+    alignItems: "center",
+  },
+
+  logo: {
+    width: 68,
+    height: 68,
+  },
+
+  heading: {
+    marginTop: 32,
+    alignItems: "center",
+  },
+
+  title: {
+    fontSize: 22,
+    fontWeight: "700",
+    color: colors.textPrimary,
+  },
+
+  subtitle: {
+    marginTop: 4,
+    fontSize: 14,
+    color: colors.textSecondary,
+  },
+
+  emailContainer: {
+    marginTop: 40,
+  },
+
+  passwordContainer: {
+    marginTop: 16,
+  },
+
+  errorText: {
+    marginTop: 4,
+    fontSize: 12,
+    color: colors.error,
+  },
+
+  forgotPassword: {
+    marginTop: 28,
+    marginBottom: 20,
+    textAlign: "right",
+    fontSize: 16,
+    fontWeight: "500",
+    color: colors.primaryDark,
+  },
+
+  signupContainer: {
+    marginTop: 28,
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+
+  signupText: {
+    fontSize: 13,
+    color: colors.textGray,
+  },
+
+  signupButton: {
+    fontSize: 13,
+    fontWeight: "500",
+    color: colors.primaryDark,
+  },
+});

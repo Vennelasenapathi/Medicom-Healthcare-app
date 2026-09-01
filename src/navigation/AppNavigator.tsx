@@ -8,6 +8,9 @@ import ConfirmOTP from "@/screens/forgot-password/otp";
 import CreatePassword from "@/screens/forgot-password/create-password";
 import SplashScreen from "@/screens/onboarding/SplashScreen";
 import Signup from "@/screens/signup/signup";
+import HomeScreen from "@/screens/home/Homescreen";
+import TopDoctorScreen from "@/screens/home/TopDoctorscreen";
+import SearchScreen from "@/screens/home/searchscreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -27,6 +30,9 @@ export default function AppNavigator() {
       <Stack.Screen name="otp" component={ConfirmOTP} />
       <Stack.Screen name="createpassword" component={CreatePassword} />
       <Stack.Screen name="Signup" component={Signup} />
+      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="TopDoctors" component={TopDoctorScreen} />
+      <Stack.Screen name="Search" component={SearchScreen} />
     </Stack.Navigator>
   );
 }

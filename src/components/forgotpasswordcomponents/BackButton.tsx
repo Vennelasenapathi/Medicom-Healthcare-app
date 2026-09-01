@@ -1,7 +1,8 @@
 import React from "react";
-import { Pressable } from "react-native";
+import { Pressable, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import {colors} from "@/constants/colors";
+
+import { colors } from "@/constants/colors";
 
 type BackButtonProps = {
   onPress: () => void;
@@ -13,8 +14,7 @@ export default function BackButton({
   return (
     <Pressable
       onPress={onPress}
-      className="h-[46px] w-[46px] items-center justify-center rounded-lg "
-      style={{backgroundColor:colors.primaryDark}}
+      style={styles.button}
     >
       <Ionicons
         name="chevron-back"
@@ -24,3 +24,14 @@ export default function BackButton({
     </Pressable>
   );
 }
+
+const styles = StyleSheet.create({
+  button: {
+    width: 46,
+    height: 46,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 8,
+    backgroundColor: colors.primaryDark,
+  },
+});

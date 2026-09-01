@@ -1,32 +1,68 @@
 import { colors } from "@/constants/colors";
-import { useEffect } from "react";
-import { View, Text, Image } from "react-native";
+import React, { useEffect } from "react";
+import {
+  Image,
+  StyleSheet,
+  View,
+} from "react-native";
 
-export default function SplashScreen({navigation}:any) {
+export default function SplashScreen({ navigation }: any) {
 
-   useEffect(() => {
+  useEffect(() => {
     const timer = setTimeout(() => {
-     navigation.navigate("onboarding")
+      navigation.navigate("onboarding");
     }, 2000);
+
     return () => clearTimeout(timer);
   }, [navigation]);
 
   return (
-    <View className="flex-1 " style={{backgroundColor:colors.primaryDark}}>
+    <View style={styles.container}>
+
       {/* Logo */}
-      <View className="flex-1 items-center justify-center">
+      <View style={styles.logoContainer}>
         <Image
           source={require("../../../assets/images/medicom/Logo.png")}
-          className="h-30 w-30"
+          style={styles.logo}
           resizeMode="contain"
         />
       </View>
 
       {/* Bottom indicator */}
-      <View className="items-center pb-5">
-        <View className="h-1 w-24 rounded-full bg-white" />
+      <View style={styles.indicatorContainer}>
+        <View style={styles.indicator} />
       </View>
 
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.primaryDark,
+  },
+
+  logoContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  logo: {
+    width: 120,
+    height: 120,
+  },
+
+  indicatorContainer: {
+    alignItems: "center",
+    paddingBottom: 20,
+  },
+
+  indicator: {
+    width: 96,
+    height: 4,
+    borderRadius: 999,
+    backgroundColor: colors.white,
+  },
+});

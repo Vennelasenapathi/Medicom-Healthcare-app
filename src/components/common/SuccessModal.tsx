@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+
 import AppButton from "./AppButton";
 import { colors } from "@/constants/colors";
 
@@ -18,11 +19,12 @@ export default function SuccessModal({
   onPress,
 }: Props) {
   return (
-    <View className="absolute inset-0 items-center justify-center bg-black/20">
-      <View className="mx-10 h-[377px] w-[90%] rounded-xl bg-white px-6 py-6">
+    <View style={styles.overlay}>
+      <View style={styles.modal}>
 
-        <View className="mb-5 self-center rounded-full p-5" style={{backgroundColor:colors.backgroundselected}}>
-          <View className="h-[102px] w-[102px] items-center justify-center rounded-full bg-[#E7EEFF]">
+        {/* SUCCESS ICON */}
+        <View style={styles.outerCircle}>
+          <View style={styles.innerCircle}>
             <Ionicons
               name="checkmark"
               size={60}
@@ -31,19 +33,79 @@ export default function SuccessModal({
           </View>
         </View>
 
-        <Text className="text-center text-[22px] font-bold" style={{color:colors.textPrimary}}>
+        {/* TITLE */}
+        <Text style={styles.title}>
           {title}
         </Text>
 
-        <Text className="mt-4 mb-9 text-center text-[13px] leading-4 " style={{color:colors.textSecondary}}>
+        {/* DESCRIPTION */}
+        <Text style={styles.description}>
           {description}
         </Text>
 
+        {/* BUTTON */}
         <AppButton
           title={buttonTitle}
           onPress={onPress}
         />
+
       </View>
     </View>
   );
 }
+
+const styles = {
+  overlay: {
+    position: "absolute" as const,
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    alignItems: "center" as const,
+    justifyContent: "center" as const,
+    backgroundColor: "rgba(0,0,0,0.20)",
+  },
+
+  modal: {
+    width: "90%" as const,
+    height: 377,
+    marginHorizontal: 40,
+    paddingHorizontal: 24,
+    paddingVertical: 24,
+    borderRadius: 12,
+    backgroundColor: colors.white,
+  },
+
+  outerCircle: {
+    alignSelf: "center" as const,
+    marginBottom: 20,
+    padding: 20,
+    borderRadius: 999,
+    backgroundColor: colors.backgroundselected,
+  },
+
+  innerCircle: {
+    width: 102,
+    height: 102,
+    alignItems: "center" as const,
+    justifyContent: "center" as const,
+    borderRadius: 999,
+    backgroundColor: "#E7EEFF",
+  },
+
+  title: {
+    textAlign: "center" as const,
+    fontSize: 22,
+    fontWeight: "700" as const,
+    color: colors.textPrimary,
+  },
+
+  description: {
+    marginTop: 16,
+    marginBottom: 36,
+    textAlign: "center" as const,
+    fontSize: 13,
+    lineHeight: 16,
+    color: colors.textSecondary,
+  },
+};

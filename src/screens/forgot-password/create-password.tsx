@@ -4,8 +4,10 @@ import {
   Platform,
   ScrollView,
   View,
+  StyleSheet,
 } from "react-native";
 import { Formik } from "formik";
+
 import BackButton from "@/components/forgotpasswordcomponents/BackButton";
 import ScreenHeader from "@/components/common/ScreenHeader";
 import AppButton from "@/components/common/AppButton";
@@ -18,7 +20,7 @@ export default function CreatePassword({ navigation }: any) {
 
   return (
     <KeyboardAvoidingView
-      className="flex-1 bg-white"
+      style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <Formik
@@ -44,9 +46,9 @@ export default function CreatePassword({ navigation }: any) {
           <ScrollView
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
-            contentContainerStyle={{ flexGrow: 1 }}
+            contentContainerStyle={styles.scrollContent}
           >
-            <View className="flex-1 px-8 pt-[60px]">
+            <View style={styles.content}>
 
               {/* HEADER */}
               <BackButton
@@ -59,7 +61,7 @@ export default function CreatePassword({ navigation }: any) {
               />
 
               {/* NEW PASSWORD */}
-              <View className="mt-9">
+              <View style={styles.newPassword}>
                 <PasswordField
                   value={values.password}
                   onChangeText={handleChange("password")}
@@ -71,7 +73,7 @@ export default function CreatePassword({ navigation }: any) {
               </View>
 
               {/* CONFIRM PASSWORD */}
-              <View className="mt-5">
+              <View style={styles.confirmPassword}>
                 <PasswordField
                   value={values.confirmPassword}
                   onChangeText={handleChange("confirmPassword")}
@@ -83,7 +85,7 @@ export default function CreatePassword({ navigation }: any) {
               </View>
 
               {/* SAVE */}
-              <View className="mt-5">
+              <View style={styles.saveButton}>
                 <AppButton
                   title="Save"
                   onPress={() => {
@@ -110,3 +112,32 @@ export default function CreatePassword({ navigation }: any) {
     </KeyboardAvoidingView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#FFFFFF",
+  },
+
+  scrollContent: {
+    flexGrow: 1,
+  },
+
+  content: {
+    flex: 1,
+    paddingHorizontal: 32,
+    paddingTop: 60,
+  },
+
+  newPassword: {
+    marginTop: 36,
+  },
+
+  confirmPassword: {
+    marginTop: 20,
+  },
+
+  saveButton: {
+    marginTop: 20,
+  },
+});

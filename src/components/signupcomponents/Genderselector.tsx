@@ -1,7 +1,12 @@
 import React from "react";
-import { Pressable, Text, View } from "react-native";
-import { colors } from "@/constants/colors";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
+import { colors } from "@/constants/colors";
 
 interface Props {
   value: string;
@@ -20,12 +25,13 @@ export default function GenderSelector({
 
   return (
     <View>
-      <Text className="mb-2 text-[16px] font-medium"
-      style={{color:colors.textPrimary}}>
+      {/* LABEL */}
+      <Text style={styles.label}>
         Gender
       </Text>
 
-      <View className="flex-row gap-2">
+      {/* GENDER OPTIONS */}
+      <View style={styles.options}>
         {genders.map((gender) => {
           const selected = value === gender;
 
@@ -33,27 +39,32 @@ export default function GenderSelector({
             <Pressable
               key={gender}
               onPress={() => onChange(gender)}
-              className="h-[56px] flex-1 items-center justify-center rounded-xl"
-              style={{
-                borderWidth: 1,
-                borderColor: selected
-                  ? colors.primaryDark
-                  : colors.border,
-                backgroundColor: selected
-                  ? colors.backgroundselected
-                  : colors.background,
-              }}
+              style={[
+                styles.option,
+                {
+                  borderColor: selected
+                    ? colors.primaryDark
+                    : colors.border,
+
+                  backgroundColor: selected
+                    ? colors.backgroundselected
+                    : colors.background,
+                },
+              ]}
             >
               <Text
-                className="text-[14px]"
-                style={{
-                  color: selected
-                    ? colors.primaryDark
-                    : colors.textGray,
-                  fontWeight: selected
-                    ? "600"
-                    : "400",
-                }}
+                style={[
+                  styles.optionText,
+                  {
+                    color: selected
+                      ? colors.primaryDark
+                      : colors.textGray,
+
+                    fontWeight: selected
+                      ? "600"
+                      : "400",
+                  },
+                ]}
               >
                 {gender}
               </Text>
@@ -62,11 +73,45 @@ export default function GenderSelector({
         })}
       </View>
 
+      {/* ERROR */}
       {touched && error && (
-        <Text className="mt-1 text-[10px] " style={{color:colors.error}}>
+        <Text style={styles.error}>
           {error}
         </Text>
       )}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  label: {
+    marginBottom: 8,
+    fontSize: 16,
+    fontWeight: "500",
+    color: colors.textPrimary,
+  },
+
+  options: {
+    flexDirection: "row",
+    gap: 8,
+  },
+
+  option: {
+    height: 56,
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 12,
+    borderWidth: 1,
+  },
+
+  optionText: {
+    fontSize: 14,
+  },
+
+  error: {
+    marginTop: 4,
+    fontSize: 10,
+    color: colors.error,
+  },
+});

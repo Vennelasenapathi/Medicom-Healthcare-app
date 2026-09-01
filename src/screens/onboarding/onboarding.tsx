@@ -3,10 +3,12 @@ import {
   Dimensions,
   Image,
   Pressable,
+  StyleSheet,
   Text,
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+
 import { colors } from "@/constants/colors";
 
 const { height } = Dimensions.get("window");
@@ -44,72 +46,66 @@ export default function Onboarding({ navigation }: any) {
   };
 
   return (
-    <View className="flex-1 bg-white pt-[100px]">
+    <View style={styles.container}>
 
       {/* SKIP */}
       <Pressable
         onPress={handleSkip}
-        className="absolute right-[25px] top-[55px] z-10 px-[10px] py-[8px]"
+        style={styles.skipButton}
       >
-        <Text className="text-[14px] font-medium " style={{color:colors.primaryDark}}>
-          Skip
-        </Text>
+        <Text style={styles.skipText}>Skip</Text>
       </Pressable>
 
       {/* BACKGROUND CIRCLES */}
+      <View style={styles.circleOne} />
 
-      <View className="absolute -left-[50px] -top-[40px] h-[224px] w-[224px] rounded-full" style={{backgroundColor:colors.veryLightBlue}} />
-
-      <View className="absolute -right-[80px] top-[80px] h-[192px] w-[192px] rounded-full " style={{backgroundColor:colors.paleBlue}} />
+      <View style={styles.circleTwo} />
 
       {/* DOCTOR IMAGE */}
-
       <View
-        className="items-center justify-end pt-[50px]"
-        style={{ height: height * 0.63 }}
+        style={[
+          styles.imageContainer,
+          { height: height * 0.63 },
+        ]}
       >
         <Image
           source={currentScreen.image}
           resizeMode="contain"
-          className="h-full w-full"
+          style={styles.doctorImage}
         />
       </View>
 
       {/* BOTTOM CARD */}
-
-      <View className="flex-1 px-[20px]">
-        <View className="flex-1 rounded-t-[16px]  px-[20px] pt-[55px]" style={{backgroundColor:colors.lightBlue}}>
+      <View style={styles.bottomContainer}>
+        <View style={styles.bottomCard}>
 
           {/* TITLE */}
-
-          <Text className="max-w-[270px] text-[24px] font-bold leading-[40px] " style={{color:colors.textPrimary}}>
+          <Text style={styles.title}>
             {currentScreen.title}
           </Text>
 
           {/* CONTROLS */}
-
-          <View className="mt-[50px] mb-[32px] flex-row items-center justify-between">
+          <View style={styles.controls}>
 
             {/* PAGINATION */}
-
-            <View className="flex-row items-center">
+            <View style={styles.pagination}>
               {onboardingData.map((_, index) => (
                 <View
                   key={index}
-                  className={`mr-[4px] h-[4px] ${
+                  style={[
+                    styles.paginationDot,
                     currentIndex === index
-                      ? "w-[20px] bg-[#2D6BFF]"
-                      : "w-[12px] bg-[#A9C4FF]"
-                  }`}
+                      ? styles.activeDot
+                      : styles.inactiveDot,
+                  ]}
                 />
               ))}
             </View>
 
             {/* NEXT BUTTON */}
-
             <Pressable
               onPress={handleNext}
-              className="h-[51px] w-[51px] items-center justify-center rounded-[12px] " style={{backgroundColor:colors.primaryDark}}
+              style={styles.nextButton}
             >
               <Ionicons
                 name="arrow-forward"
@@ -124,3 +120,124 @@ export default function Onboarding({ navigation }: any) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+    paddingTop: 100,
+  },
+
+  /* SKIP */
+  skipButton: {
+    position: "absolute",
+    right: 25,
+    top: 55,
+    zIndex: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+  },
+
+  skipText: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: colors.primaryDark,
+  },
+
+  /* BACKGROUND CIRCLES */
+  circleOne: {
+    position: "absolute",
+    left: -50,
+    top: -40,
+    width: 224,
+    height: 224,
+    borderRadius: 112,
+    backgroundColor: colors.veryLightBlue,
+  },
+
+  circleTwo: {
+    position: "absolute",
+    right: -80,
+    top: 80,
+    width: 192,
+    height: 192,
+    borderRadius: 96,
+    backgroundColor: colors.paleBlue,
+  },
+
+  /* DOCTOR IMAGE */
+  imageContainer: {
+    alignItems: "center",
+    justifyContent: "flex-end",
+    paddingTop: 0,
+  },
+
+  doctorImage: {
+    width: "100%",
+    height: "100%",
+  },
+
+  /* BOTTOM */
+  bottomContainer: {
+    flex: 1,
+    paddingHorizontal: 20,
+  },
+
+  bottomCard: {
+    flex: 1,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    paddingHorizontal: 20,
+    paddingTop: 55,
+    backgroundColor: colors.lightBlue,
+  },
+
+  /* TITLE */
+  title: {
+    maxWidth: 270,
+    fontSize: 24,
+    fontWeight: "700",
+    lineHeight: 40,
+    color: colors.textPrimary,
+  },
+
+  /* CONTROLS */
+  controls: {
+    marginTop: 0,
+    marginBottom: 32,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+
+  /* PAGINATION */
+  pagination: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
+  paginationDot: {
+    height: 4,
+    marginRight: 4,
+  },
+
+  activeDot: {
+    width: 20,
+    backgroundColor: "#2D6BFF",
+  },
+
+  inactiveDot: {
+    width: 12,
+    backgroundColor: "#A9C4FF",
+  },
+
+  /* NEXT BUTTON */
+  nextButton: {
+    width: 51,
+    height: 51,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 12,
+    backgroundColor: colors.primaryDark,
+  },
+});

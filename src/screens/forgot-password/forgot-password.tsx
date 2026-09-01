@@ -4,6 +4,7 @@ import {
   Platform,
   ScrollView,
   View,
+  StyleSheet,
 } from "react-native";
 import { Formik } from "formik";
 
@@ -20,9 +21,7 @@ import {
 
 type ForgotPasswordMode = "email" | "phone";
 
-export default function ForgotPassword({
-  navigation,
-}: any) {
+export default function ForgotPassword({ navigation }: any) {
   const [mode, setMode] =
     useState<ForgotPasswordMode>("email");
 
@@ -33,12 +32,8 @@ export default function ForgotPassword({
 
   return (
     <KeyboardAvoidingView
-      className="flex-1 bg-white"
-      behavior={
-        Platform.OS === "ios"
-          ? "padding"
-          : undefined
-      }
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <Formik
         initialValues={initialValues}
@@ -83,17 +78,13 @@ export default function ForgotPassword({
             <ScrollView
               keyboardShouldPersistTaps="handled"
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={{
-                flexGrow: 1,
-              }}
+              contentContainerStyle={styles.scrollContent}
             >
-              <View className="flex-1 px-8 pt-[60px]">
+              <View style={styles.content}>
 
                 {/* BACK */}
                 <BackButton
-                  onPress={() =>
-                    navigation.goBack()
-                  }
+                  onPress={() => navigation.goBack()}
                 />
 
                 {/* HEADER */}
@@ -114,13 +105,11 @@ export default function ForgotPassword({
 
                 {/* EMAIL */}
                 {mode === "email" && (
-                  <View className="mt-5 ">
+                  <View style={styles.inputContainer}>
                     <InputField
                       icon="mail-outline"
                       value={values.email}
-                      onChangeText={handleChange(
-                        "email"
-                      )}
+                      onChangeText={handleChange("email")}
                       onBlur={handleBlur("email")}
                       placeholder="Enter your email"
                       keyboardType="email-address"
@@ -134,21 +123,18 @@ export default function ForgotPassword({
 
                 {/* PHONE */}
                 {mode === "phone" && (
-                  <View className="mt-5 ">
+                  <View style={styles.inputContainer}>
                     <InputField
                       icon="call-outline"
                       value={values.phone}
                       onChangeText={(text) => {
-                        const numbers =
-                          text.replace(
-                            /[^0-9]/g,
-                            ""
-                          );
+                        const numbers = text.replace(
+                          /[^0-9]/g,
+                          ""
+                        );
 
                         if (numbers.length <= 10) {
-                          handleChange("phone")(
-                            numbers
-                          );
+                          handleChange("phone")(numbers);
                         }
                       }}
                       onBlur={handleBlur("phone")}
@@ -163,12 +149,13 @@ export default function ForgotPassword({
                 )}
 
                 {/* RESET PASSWORD */}
-                <View style={{marginTop:30}}>
-                <AppButton
-                  title="Reset Password"
-                  onPress={() => handleSubmit()}
-                />
+                <View style={styles.buttonContainer}>
+                  <AppButton
+                    title="Reset Password"
+                    onPress={() => handleSubmit()}
+                  />
                 </View>
+
               </View>
             </ScrollView>
           );
@@ -177,3 +164,28 @@ export default function ForgotPassword({
     </KeyboardAvoidingView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#FFFFFF",
+  },
+
+  scrollContent: {
+    flexGrow: 1,
+  },
+
+  content: {
+    flex: 1,
+    paddingHorizontal: 32,
+    paddingTop: 60,
+  },
+
+  inputContainer: {
+    marginTop: 20,
+  },
+
+  buttonContainer: {
+    marginTop: 30,
+  },
+});

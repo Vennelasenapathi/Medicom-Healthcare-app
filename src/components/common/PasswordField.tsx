@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import {Text,
+import {
+  Text,
   Pressable,
   TextInput,
   View,
+  StyleSheet,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "@/constants/colors";
@@ -10,7 +12,7 @@ import { colors } from "@/constants/colors";
 type PasswordFieldProps = {
   value: string;
   onChangeText: (text: string) => void;
-  onBlur?: (e:any) => void;
+  onBlur?: (e: any) => void;
   placeholder?: string;
   error?: string;
   touched?: boolean;
@@ -27,27 +29,35 @@ export default function PasswordField({
 }: PasswordFieldProps) {
   const [showPassword, setShowPassword] = useState(false);
 
-  const hasError = touched && !!error;
+  const hasError = !!touched && !!error;
 
   return (
     <View>
+      {/* PASSWORD CONTAINER */}
       <View
-        className="h-[56px] flex-row items-center rounded-xl bg-[#F9FAFB] px-3"
-        style={{
-          borderWidth: 1,
-          borderColor: hasError
-            ? colors.error
-            : value.length > 0
+        style={[
+          styles.container,
+          {
+            borderColor: hasError
+              ? colors.error
+              : value.length > 0
               ? colors.primaryLight
               : colors.border,
-        }}
+          },
+        ]}
       >
+        {/* LOCK ICON */}
         <Ionicons
           name="lock-closed-outline"
           size={24}
-          color={hasError ? colors.error : colors.textSecondary}
+          color={
+            hasError
+              ? colors.error
+              : colors.textSecondary
+          }
         />
 
+        {/* PASSWORD INPUT */}
         <TextInput
           value={value}
           onChangeText={onChangeText}
@@ -56,12 +66,13 @@ export default function PasswordField({
           placeholderTextColor={colors.textSecondary}
           secureTextEntry={!showPassword}
           autoCapitalize="none"
-          className="ml-2 flex-1 text-[16px] "
-          style={{color:colors.textPrimary}}
+          style={styles.input}
         />
 
+        {/* SHOW / HIDE PASSWORD */}
         <Pressable
           onPress={() => setShowPassword(!showPassword)}
+          style={styles.eyeButton}
         >
           <Ionicons
             name={
@@ -75,11 +86,41 @@ export default function PasswordField({
         </Pressable>
       </View>
 
+      {/* ERROR */}
       {hasError && (
-        <Text className="mt-1 text-[12px] " style={{color:colors.error}}>
+        <Text style={styles.error}>
           {error}
         </Text>
       )}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    height: 56,
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 12,
+    backgroundColor: "#F9FAFB",
+    paddingHorizontal: 12,
+    borderWidth: 1,
+  },
+
+  input: {
+    flex: 1,
+    marginLeft: 8,
+    fontSize: 16,
+    color: colors.textPrimary,
+  },
+
+  eyeButton: {
+    padding: 4,
+  },
+
+  error: {
+    marginTop: 4,
+    fontSize: 12,
+    color: colors.error,
+  },
+});

@@ -5,11 +5,13 @@ import {
   Platform,
   Pressable,
   ScrollView,
+  StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
 import { Formik } from "formik";
+
 import BackButton from "@/components/forgotpasswordcomponents/BackButton";
 import ScreenHeader from "@/components/common/ScreenHeader";
 import AppButton from "@/components/common/AppButton";
@@ -23,24 +25,32 @@ export default function ConfirmOTP({ navigation }: any) {
 
   useEffect(() => {
     if (!timer) return;
+
     const interval = setInterval(
       () => setTimer((prev) => prev - 1),
       1000
     );
+
     return () => clearInterval(interval);
   }, [timer]);
 
   const handleResend = () => {
     if (timer > 0) return;
+
     setTimer(15);
     setOtpError(false);
+
     console.log("OTP resent");
   };
 
   return (
     <KeyboardAvoidingView
-      className="flex-1 bg-white"
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      style={styles.container}
+      behavior={
+        Platform.OS === "ios"
+          ? "padding"
+          : undefined
+      }
     >
       <Formik
         initialValues={{ otp: "" }}
@@ -65,24 +75,32 @@ export default function ConfirmOTP({ navigation }: any) {
           setFieldTouched,
         }) => {
           const hasError =
-            otpError || (touched.otp && !!errors.otp);
+            otpError ||
+            (touched.otp && !!errors.otp);
 
-          const updateOTP = (index: number, text: string) => {
-            const number = text.replace(/[^0-9]/g, "");
+          const updateOTP = (
+            index: number,
+            text: string
+          ) => {
+            const number = text.replace(
+              /[^0-9]/g,
+              "" );
+
             const otp = values.otp.split("");
 
             if (!number) {
               otp[index] = "";
-              setFieldValue("otp", otp.join(""));
+              setFieldValue( "otp", otp.join("") );
               return;
             }
 
             otp[index] = number[number.length - 1];
-            setFieldValue("otp", otp.join(""));
+
+            setFieldValue( "otp", otp.join("")  );
             setOtpError(false);
 
             if (index < 5) {
-              inputRefs.current[index + 1]?.focus();
+              inputRefs.current[ index + 1 ]?.focus();
             } else {
               Keyboard.dismiss();
             }
@@ -92,91 +110,107 @@ export default function ConfirmOTP({ navigation }: any) {
             <ScrollView
               keyboardShouldPersistTaps="handled"
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ flexGrow: 1 }}
+              contentContainerStyle={
+                styles.scrollContent
+              }
             >
-              <View className="flex-1 px-8 pt-[60px]">
-                <BackButton
-                  onPress={() => navigation.goBack()}
-                />
+              <View style={styles.content}>
 
+                {/* BACK */}
+                <BackButton onPress={() =>  navigation.goBack()  } />
+
+                {/* HEADER */}
                 <ScreenHeader
                   title="Confirm OTP"
                   subtitle="Code has been sent"
                 />
 
-                <View className="mt-9 flex-row justify-between">
-                  {Array.from({ length: 6 }).map((_, index) => {
+                {/* OTP INPUTS */}
+                <View style={styles.otpContainer}>
+                  {Array.from({ length: 6, }).map((_, index) => {
                     const digit = values.otp[index] || "";
 
                     return (
                       <TextInput
                         key={index}
-                        ref={(ref) => {
-                          inputRefs.current[index] = ref;
-                        }}
+                        ref={(ref) => { inputRefs.current[  index ] = ref;  }}
                         value={digit}
-                        onChangeText={(text) =>
-                          updateOTP(index, text)
-                        }
-                        onKeyPress={({ nativeEvent }) => {
+                        onChangeText={(text) => updateOTP(index, text) }
+                        onKeyPress={({ nativeEvent, }) => {
                           if (
                             nativeEvent.key === "Backspace" &&
                             !digit &&
                             index > 0
                           ) {
-                            inputRefs.current[index - 1]?.focus();
+                            inputRefs.current[ index - 1 ]?.focus();
                           }
                         }}
                         keyboardType="number-pad"
                         maxLength={1}
                         textAlign="center"
                         selectTextOnFocus
-                        className="h-[56px] w-[56px] rounded-xl  text-[16px] font-semibold "
-                        style={{
-                          backgroundColor:colors.background,
-                          color:colors.textPrimary,
-                          borderWidth: 1,
-                          borderColor: hasError
-                            ? colors.error
-                            : digit
-                            ? colors.primaryLight
-                            : colors.borderLight,
-                        }}
+                        style={[
+                          styles.otpInput,
+                          {
+                            backgroundColor: colors.background,
+                            color:  colors.textPrimary,
+                            borderColor: hasError
+                              ? colors.error
+                              : digit
+                              ? colors.primaryLight  : colors.borderLight,
+                          },
+                        ]}
                       />
                     );
                   })}
                 </View>
 
+                {/* ERROR */}
                 {hasError && (
-                  <Text className="mt-2 text-center text-[12px] " style={{color:colors.error}}>
+                  <Text style={[  styles.errorText,  { color: colors.error, }, ]}  >
                     {otpError
                       ? "Incorrect OTP. Please try again."
                       : errors.otp}
                   </Text>
                 )}
 
-                <View className="mt-5">
+                {/* SUBMIT */}
+                <View style={styles.submitContainer}>
                   <AppButton
                     title="Submit"
-                    onPress={() => {
-                      setFieldTouched("otp", true);
+                    onPress={() => { setFieldTouched( "otp", true  );
                       handleSubmit();
                     }}
                   />
                 </View>
 
-                <View className="mt-7 flex-row justify-center">
-                  <Text className="text-[14px] " style={{color:colors.textSecondary}}>
+                {/* RESEND */}
+                <View style={styles.resendContainer}>
+                  <Text
+                    style={[
+                      styles.resendText,
+                      { color: colors.textSecondary, }, ]}
+                  >
                     Didn't receive code?{" "}
                   </Text>
 
                   {timer > 0 ? (
-                    <Text className="text-[14px] " style={{color:colors.textSecondary}}>
+                    <Text
+                      style={[
+                        styles.resendText,
+                        { color: colors.textSecondary, }, ]}
+                    >
                       Resend in {timer}s
                     </Text>
                   ) : (
-                    <Pressable onPress={handleResend}>
-                      <Text className="text-[14px] font-medium " style={{color:colors.primaryDark}}>
+                    <Pressable  onPress={handleResend} >
+                      <Text
+                        style={[
+                          styles.resendText,
+                          styles.resendButton,
+                          { color: colors.primaryDark,  },
+                        ]}
+                      >
                         Resend
                       </Text>
                     </Pressable>
@@ -190,3 +224,59 @@ export default function ConfirmOTP({ navigation }: any) {
     </KeyboardAvoidingView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#FFFFFF",
+  },
+
+  scrollContent: {
+    flexGrow: 1,
+  },
+
+  content: {
+    flex: 1,
+    paddingHorizontal: 32,
+    paddingTop: 60,
+  },
+
+  otpContainer: {
+    marginTop: 36,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
+  otpInput: {
+    width: 56,
+    height: 56,
+    borderRadius: 12,
+    borderWidth: 1,
+    fontSize: 16,
+    fontWeight: "600",
+  },
+
+  errorText: {
+    marginTop: 8,
+    textAlign: "center",
+    fontSize: 12,
+  },
+
+  submitContainer: {
+    marginTop: 20,
+  },
+
+  resendContainer: {
+    marginTop: 28,
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+
+  resendText: {
+    fontSize: 14,
+  },
+
+  resendButton: {
+    fontWeight: "500",
+  },
+});

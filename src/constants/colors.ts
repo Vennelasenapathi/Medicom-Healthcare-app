@@ -13,6 +13,7 @@ export const colors = {
   veryLightBlue: "#F5F8FF",
   paleBlue: "#F7F9FF",
   dobcolor: "#A5A9B1",
+  notification:"#136daa",
   // Text
   textPrimary: "#011133",
   textSecondary: "#989898",
