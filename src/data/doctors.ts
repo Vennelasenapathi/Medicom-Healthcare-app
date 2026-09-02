@@ -1,6 +1,6 @@
 export const doctors = [
   {
-    name: "Dr. Moh Sharma",
+    name: "Dr. Siri Sharma",
     specialty: "Orthodontist",
     image: require("../../assets/images/medicom/topdoctor2.png"),
     rating: "4.5",
@@ -12,9 +12,9 @@ export const doctors = [
     rating: "4.2",
   },
   {
-    name: "Dr. Jazmin",
+    name: "Dr. Jasmin",
     specialty: "Ophthalmologist",
-    image: require("../../assets/images/medicom/topdoctor3.png"),
+    image: require("../../assets/images/medicom/topdoctor5.png"),
     rating: "4.4",
   },
 ];

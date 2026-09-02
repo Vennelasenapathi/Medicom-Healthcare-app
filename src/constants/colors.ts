@@ -19,6 +19,7 @@ export const colors = {
   textSecondary: "#989898",
   textGray: "#717784",
   textBlue: "#071B44",
+  star:"#F5B400",
 
   // Border
   border: "#E5E7EB",
@@ -35,5 +36,6 @@ export const colors = {
 
   // Overlay
   overlay: "rgba(0,0,0,0.2)",
+
 };
 

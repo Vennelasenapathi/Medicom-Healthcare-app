@@ -35,13 +35,12 @@ export default function HomeHeader({ onSearch }: Props) {
             name="notifications-outline"
             size={22}
             color={colors.white}
-            backgroundColor={colors.notification}
+            backgroundColor={colors.primaryLight}
           />
         </Pressable>
       </View>
 
-      <Pressable
-        style={styles.searchBox}
+      <Pressable  style={styles.searchBox}
         onPress={onSearch}
       >
         <TextInput
@@ -106,7 +105,7 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 12,
-    backgroundColor: colors.notification,
+    backgroundColor: colors.primaryLight,
     alignItems: "center",
     justifyContent: "center",
   },

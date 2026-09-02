@@ -29,31 +29,28 @@ export default function DoctorCard({ doctor }: Props) {
       />
       <View style={styles.details}>
 
-      <Text
-        numberOfLines={1}
-        style={styles.name}
-      >
-        {doctor.name}
-      </Text>
-
-      <View style={styles.rating}>
-        <Ionicons
-          name="star"
-          size={16}
-          color="#F5B400"
-        />
-
-        <Text style={styles.ratingText}>
-          {doctor.rating}
+        <Text numberOfLines={1} style={styles.name} >
+          {doctor.name}
         </Text>
-      </View>
+
+        <View style={styles.rating}>
+          <Ionicons
+            name="star"
+            size={16}
+            color="#F5B400"
+          />
+
+          <Text style={styles.ratingText}>
+            {doctor.rating}
+          </Text>
+        </View>
       </View>
 
       <Text style={styles.specialty}>
         {doctor.specialty}
       </Text>
 
-      
+
     </Pressable>
   );
 }

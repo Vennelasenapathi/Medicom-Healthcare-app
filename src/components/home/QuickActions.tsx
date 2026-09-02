@@ -5,7 +5,7 @@ import {
   Text,
   View,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { colors } from "@/constants/colors";
 
 interface Props {
@@ -14,19 +14,19 @@ interface Props {
 
 const actions = [
   {
-    icon: "medkit-outline" as const,
+    icon: "doctor" as const,
     title: "Doctor",
   },
   {
-    icon: "car-outline" as const,
+    icon: "ambulance" as const,
     title: "Ambulance",
   },
   {
-    icon: "business-outline" as const,
+    icon: "hospital-building" as const,
     title: "Hospital",
   },
   {
-    icon: "bandage-outline" as const,
+    icon: "pill" as const,
     title: "Pharmacy",
   },
 ];
@@ -47,7 +47,7 @@ export default function QuickActions({
           }
         >
           <View style={styles.iconBox}>
-            <Ionicons
+            <MaterialCommunityIcons
               name={item.icon}
               size={32}
               color={colors.primaryDark}
@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
   },
 
   item: {
-    alignItems: "center",
     width: "23%",
+    alignItems: "center",
     paddingTop: 26,
   },
 
@@ -85,8 +85,8 @@ const styles = StyleSheet.create({
   },
 
   text: {
+    marginTop: 6,
     fontSize: 14,
     color: colors.textPrimary,
-    marginTop: 6,
   },
 });
