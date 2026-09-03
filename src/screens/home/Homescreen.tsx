@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -17,6 +18,7 @@ import AppointmentCard from "@/components/home/AppointmentCard";
 import DoctorCard from "@/components/home/DoctorCard";
 import BottomTabBar from "@/components/home/BottomBar";
 
+
 export default function HomeScreen({ navigation }: any) {
   const { width } = useWindowDimensions();
   const isTablet = width >= 600;
@@ -28,6 +30,7 @@ export default function HomeScreen({ navigation }: any) {
         contentContainerStyle={styles.scroll}
       >
         <HomeHeader
+        onProfilePress={() => navigation.navigate("Profile")}
           onSearch={() => navigation.navigate("Search")}
         />
 
@@ -79,6 +82,16 @@ export default function HomeScreen({ navigation }: any) {
               />
             ))}
           </ScrollView>
+
+          {/* LOGOUT */}
+          <Pressable
+            style={styles.logoutButton}
+            onPress={() => navigation.navigate("Login")}
+          >
+            <Text style={styles.logoutText}>
+              Logout
+            </Text>
+          </Pressable>
         </View>
       </ScrollView>
 
@@ -123,8 +136,6 @@ const styles = StyleSheet.create({
   },
 
   seeAll: {
-    width: 73,
-    height: 26,
     fontSize: 12,
     color: colors.primaryDark,
     fontWeight: "600",
@@ -132,7 +143,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 4,
+  },
+
+  logoutButton: {
+    height: 50,
+    marginTop: 30,
+    marginBottom: 20,
+    borderRadius: 8,
+    backgroundColor: colors.primaryDark,
     alignItems: "center",
     justifyContent: "center",
+  },
+
+  logoutText: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: colors.white,
   },
 });

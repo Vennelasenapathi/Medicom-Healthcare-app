@@ -11,6 +11,10 @@ import Signup from "@/screens/signup/signup";
 import HomeScreen from "@/screens/home/Homescreen";
 import TopDoctorScreen from "@/screens/home/TopDoctorscreen";
 import SearchScreen from "@/screens/home/searchscreen";
+import NotificationSettingsScreen from "@/screens/profile/NotificationScreen";
+import EditProfileScreen from "@/screens/profile/Editscreen";
+import profileScreen from "@/screens/profile/profilescreen";
+import settingsScreen from "@/screens/profile/SettingScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +37,10 @@ export default function AppNavigator() {
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="TopDoctors" component={TopDoctorScreen} />
       <Stack.Screen name="Search" component={SearchScreen} />
+      <Stack.Screen name="NotificationSettings" component={NotificationSettingsScreen} />
+      <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+      <Stack.Screen name="Profile" component={profileScreen} />
+      <Stack.Screen name="Settings" component={settingsScreen} />
     </Stack.Navigator>
   );
 }

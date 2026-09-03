@@ -12,35 +12,48 @@ import { colors } from "@/constants/colors";
 
 type Props = {
   onSearch: () => void;
+  onProfilePress: () => void;
 };
 
-export default function HomeHeader({ onSearch }: Props) {
+export default function HomeHeader({
+  onSearch,
+  onProfilePress,
+}: Props) {
   return (
     <View style={styles.header}>
       <View style={styles.topRow}>
-        <View style={styles.profileRow}>
+
+        <Pressable
+          style={styles.profileRow}
+          onPress={onProfilePress}
+        >
           <Image
             source={require("../../../assets/images/medicom/Image.png")}
             style={styles.avatar}
           />
 
           <View>
-            <Text style={styles.welcome}>Hello, Welcome!</Text>
-            <Text style={styles.username}>Emily Humphrey</Text>
+            <Text style={styles.welcome}>
+              Hello, Welcome!
+            </Text>
+
+            <Text style={styles.username}>
+              Vennela
+            </Text>
           </View>
-        </View>
+        </Pressable>
 
         <Pressable style={styles.notification}>
           <Ionicons
             name="notifications-outline"
             size={22}
             color={colors.white}
-            backgroundColor={colors.primaryLight}
           />
         </Pressable>
       </View>
 
-      <Pressable  style={styles.searchBox}
+      <Pressable
+        style={styles.searchBox}
         onPress={onSearch}
       >
         <TextInput

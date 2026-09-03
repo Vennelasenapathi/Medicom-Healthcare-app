@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     alignItems: "center",
     justifyContent: "flex-end",
-    paddingTop: 0,
+    paddingTop: 10,
   },
 
   doctorImage: {
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     paddingHorizontal: 20,
-    paddingTop: 55,
+    paddingTop: 45,
     backgroundColor: colors.lightBlue,
   },
 
