@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   Modal,
@@ -10,19 +10,27 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "@/constants/colors";
 
-export default function ProfileScreen({ navigation }: any) {
+export default function ProfileScreen({ navigation, route }: any) {
   const [logoutVisible, setLogoutVisible] = useState(false);
+  const [profileName, setProfileName] = useState("Vennela");
+
+  // Get updated name whenever EditProfile sends it
+  useEffect(() => {
+    const updatedName = route?.params?.updatedProfile?.fullName;  
+    if (updatedName) {
+      setProfileName(updatedName);
+    }
+  }, [route?.params?.updatedProfile?.fullName]);
 
   const menuItems = [
     { icon: "person-outline", title: "Profile" },
-    { icon: "card-outline", title: "Payment Method" },
-    { icon: "lock-closed-outline", title: "Privacy Policy" },
     { icon: "settings-outline", title: "Settings" },
     { icon: "log-out-outline", title: "Logout" },
   ];
 
   return (
     <View style={styles.container}>
+      {/* HEADER */}
       <View style={styles.header}>
         <Pressable
           style={styles.backButton}
@@ -35,15 +43,18 @@ export default function ProfileScreen({ navigation }: any) {
         <View style={styles.headerSpace} />
       </View>
 
+      {/* PROFILE */}
       <View style={styles.profile}>
         <Image
           source={require("../../../assets/images/medicom/Image.png")}
           style={styles.avatar}
         />
 
-        <Text style={styles.name}>Emily Humphrey</Text>
+        {/* UPDATED NAME */}
+        <Text style={styles.name}>{profileName}</Text>
       </View>
 
+      {/* MENU */}
       <View style={styles.menu}>
         {menuItems.map((item) => (
           <Pressable
@@ -77,13 +88,19 @@ export default function ProfileScreen({ navigation }: any) {
         ))}
       </View>
 
+      {/* BOTTOM BAR */}
       <View style={styles.bottomBar}>
         <Ionicons name="home-outline" size={21} color="#777" />
         <Ionicons name="calendar-outline" size={21} color="#777" />
         <Ionicons name="chatbubbles-outline" size={21} color="#777" />
-        <Ionicons name="person" size={21} color={colors.primaryDark} />
+        <Ionicons
+          name="person"
+          size={21}
+          color={colors.primaryDark}
+        />
       </View>
 
+      {/* LOGOUT MODAL */}
       <Modal
         visible={logoutVisible}
         transparent
@@ -101,8 +118,7 @@ export default function ProfileScreen({ navigation }: any) {
             </View>
 
             <Text style={styles.modalTitle}>
-              Are you sure to log out of
-              {"\n"}your account?
+              Are you sure to log out of{"\n"}your account?
             </Text>
 
             <Pressable

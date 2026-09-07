@@ -15,6 +15,7 @@ import AppButton from "@/components/common/AppButton";
 import InputField from "@/components/common/InputField";
 import PasswordField from "@/components/common/PasswordField";
 import SuccessModal from "@/components/common/SuccessModal";
+import ForgotPasswordFlow from "@/screens/forgot-password/forgotpasswordflow";
 import { loginValidationSchema } from "@/validations/loginvalidation";
 import { colors } from "@/constants/colors";
 
@@ -22,6 +23,7 @@ export default function Login({ navigation }: any) {
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [forgotPasswordVisible, setForgotPasswordVisible] = useState(false);
 
   const login = (email: string, password: string) => {
     const correctEmail = "vennela@medicom.com";
@@ -72,7 +74,7 @@ export default function Login({ navigation }: any) {
               {/* LOGO */}
               <View style={styles.logoContainer}>
                 <Image
-                  source={require(  "../../../assets/images/medicom/Logo2.png" )}
+                  source={require("../../../assets/images/medicom/Logo2.png")}
                   style={styles.logo}
                   resizeMode="contain"
                 />
@@ -136,7 +138,7 @@ export default function Login({ navigation }: any) {
 
                 {!passwordError && (
                   <Pressable
-                    onPress={() => navigation.navigate("forgotpassword") }
+                    onPress={() => setForgotPasswordVisible(true)}
                   >
                     <Text style={styles.forgotPassword}>
                       Forgot Password?
@@ -162,7 +164,7 @@ export default function Login({ navigation }: any) {
                 </Text>
 
                 <Pressable
-                  onPress={() => navigation.navigate("Signup")  }
+                  onPress={() => navigation.navigate("Signup")}
                 >
                   <Text style={styles.signupButton}>
                     Sign Up
@@ -178,11 +180,17 @@ export default function Login({ navigation }: any) {
       {success && (
         <SuccessModal
           title="Welcome back!"
-          description={ "You've successfully logged into the\nMedicom app." }
+          description={"You've successfully logged into the\nMedicom app."}
           buttonTitle="Go to Home"
-          onPress={() => navigation.replace("Home") }
+          onPress={() => navigation.replace("Home")}
         />
       )}
+      <ForgotPasswordFlow
+        visible={forgotPasswordVisible}
+        onClose={() =>
+          setForgotPasswordVisible(false)
+        }
+      />
     </KeyboardAvoidingView>
   );
 }
