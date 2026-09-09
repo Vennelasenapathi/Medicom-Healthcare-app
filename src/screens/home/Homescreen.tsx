@@ -16,7 +16,7 @@ import QuickActions from "@/components/home/QuickActions";
 import CareBanner from "@/components/home/CareBanner";
 import AppointmentCard from "@/components/home/AppointmentCard";
 import DoctorCard from "@/components/home/DoctorCard";
-import BottomTabBar from "@/components/home/BottomBar";
+import BottomTabBar from "@/components/Bottombar/BottomBar";
 
 
 export default function HomeScreen({ navigation }: any) {
@@ -84,18 +84,11 @@ export default function HomeScreen({ navigation }: any) {
           </ScrollView>
 
           {/* LOGOUT */}
-          <Pressable
-            style={styles.logoutButton}
-            onPress={() => navigation.navigate("Login")}
-          >
-            <Text style={styles.logoutText}>
-              Logout
-            </Text>
-          </Pressable>
+          
         </View>
       </ScrollView>
 
-      <BottomTabBar navigation={navigation} />
+      <BottomTabBar navigation={navigation} activeTab="Home" />
     </View>
   );
 }

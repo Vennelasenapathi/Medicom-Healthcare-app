@@ -8,50 +8,73 @@ import {
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+
 import { colors } from "@/constants/colors";
+import BottomTabBar from "@/components/Bottombar/BottomBar";
 
 export default function ProfileScreen({ navigation, route }: any) {
   const [logoutVisible, setLogoutVisible] = useState(false);
   const [profileName, setProfileName] = useState("Vennela");
 
-  // Get updated name whenever EditProfile sends it
   useEffect(() => {
-    const updatedName = route?.params?.updatedProfile?.fullName;  
+    const updatedName =
+      route?.params?.updatedProfile?.fullName;
+
     if (updatedName) {
       setProfileName(updatedName);
     }
   }, [route?.params?.updatedProfile?.fullName]);
 
   const menuItems = [
-    { icon: "person-outline", title: "Profile" },
-    { icon: "settings-outline", title: "Settings" },
-    { icon: "log-out-outline", title: "Logout" },
+    {
+      icon: "person-outline",
+      title: "Profile",
+    },
+    {
+      icon: "settings-outline",
+      title: "Settings",
+    },
+    {
+      icon: "log-out-outline",
+      title: "Logout",
+    },
   ];
 
   return (
     <View style={styles.container}>
+
       {/* HEADER */}
       <View style={styles.header}>
         <Pressable
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
-          <Ionicons name="chevron-back" size={20} color="#fff" />
+          <Ionicons
+            name="chevron-back"
+            size={20}
+            color={colors.white}
+          />
         </Pressable>
 
-        <Text style={styles.headerTitle}>My Profile</Text>
+        <Text style={styles.headerTitle}>
+          My Profile
+        </Text>
+
         <View style={styles.headerSpace} />
       </View>
 
       {/* PROFILE */}
       <View style={styles.profile}>
         <Image
-          source={require("../../../assets/images/medicom/Image.png")}
+          source={require(
+            "../../../assets/images/medicom/Image.png"
+          )}
           style={styles.avatar}
         />
 
-        {/* UPDATED NAME */}
-        <Text style={styles.name}>{profileName}</Text>
+        <Text style={styles.name}>
+          {profileName}
+        </Text>
       </View>
 
       {/* MENU */}
@@ -65,7 +88,7 @@ export default function ProfileScreen({ navigation, route }: any) {
                 navigation.navigate("EditProfile");
               } else if (item.title === "Settings") {
                 navigation.navigate("Settings");
-              } else if (item.title === "Logout") {
+              } else {
                 setLogoutVisible(true);
               }
             }}
@@ -76,7 +99,10 @@ export default function ProfileScreen({ navigation, route }: any) {
                 size={16}
                 color={colors.primaryDark}
               />
-              <Text style={styles.menuText}>{item.title}</Text>
+
+              <Text style={styles.menuText}>
+                {item.title}
+              </Text>
             </View>
 
             <Ionicons
@@ -88,27 +114,24 @@ export default function ProfileScreen({ navigation, route }: any) {
         ))}
       </View>
 
-      {/* BOTTOM BAR */}
-      <View style={styles.bottomBar}>
-        <Ionicons name="home-outline" size={21} color="#777" />
-        <Ionicons name="calendar-outline" size={21} color="#777" />
-        <Ionicons name="chatbubbles-outline" size={21} color="#777" />
-        <Ionicons
-          name="person"
-          size={21}
-          color={colors.primaryDark}
-        />
-      </View>
+      {/* REUSABLE BOTTOM BAR */}
+      <BottomTabBar
+        navigation={navigation}
+        activeTab="Profile"
+      />
 
       {/* LOGOUT MODAL */}
       <Modal
         visible={logoutVisible}
         transparent
         animationType="fade"
-        onRequestClose={() => setLogoutVisible(false)}
+        onRequestClose={() =>
+          setLogoutVisible(false)
+        }
       >
         <View style={styles.overlay}>
           <View style={styles.modal}>
+
             <View style={styles.checkCircle}>
               <Ionicons
                 name="checkmark"
@@ -118,31 +141,41 @@ export default function ProfileScreen({ navigation, route }: any) {
             </View>
 
             <Text style={styles.modalTitle}>
-              Are you sure to log out of{"\n"}your account?
+              Are you sure to log out of{"\n"}
+              your account?
             </Text>
 
             <Pressable
               style={styles.logoutButton}
               onPress={() => {
                 setLogoutVisible(false);
+
                 navigation.reset({
                   index: 0,
                   routes: [{ name: "Login" }],
                 });
               }}
             >
-              <Text style={styles.logoutText}>Log Out</Text>
+              <Text style={styles.logoutText}>
+                Log Out
+              </Text>
             </Pressable>
 
             <Pressable
               style={styles.cancelButton}
-              onPress={() => setLogoutVisible(false)}
+              onPress={() =>
+                setLogoutVisible(false)
+              }
             >
-              <Text style={styles.cancelText}>Back</Text>
+              <Text style={styles.cancelText}>
+                Back
+              </Text>
             </Pressable>
+
           </View>
         </View>
       </Modal>
+
     </View>
   );
 }
@@ -226,20 +259,6 @@ const styles = StyleSheet.create({
     color: "#888",
   },
 
-  bottomBar: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 53,
-    backgroundColor: "#fff",
-    borderTopWidth: 1,
-    borderTopColor: "#eee",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-around",
-  },
-
   overlay: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.25)",
@@ -250,7 +269,7 @@ const styles = StyleSheet.create({
   modal: {
     width: 327,
     height: 414,
-    backgroundColor: "#fff",
+    backgroundColor: colors.white,
     borderRadius: 12,
     padding: 18,
     alignItems: "center",
@@ -288,7 +307,7 @@ const styles = StyleSheet.create({
   },
 
   logoutText: {
-    color: "#fff",
+    color: colors.white,
     fontSize: 16,
     fontWeight: "700",
   },

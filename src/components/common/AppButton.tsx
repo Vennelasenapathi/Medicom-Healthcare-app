@@ -41,6 +41,7 @@ export default function AppButton({
 
 const styles = StyleSheet.create({
   button: {
+    width: "100%",
     height: 56,
     flexDirection: "row",
     alignItems: "center",
@@ -53,6 +54,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: colors.white,
+    
   },
 
   icon: {

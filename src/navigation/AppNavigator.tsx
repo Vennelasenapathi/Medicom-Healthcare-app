@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Onboarding from "@/screens/onboarding/onboarding";
 import Auth from "@/screens/onboarding/auth";
 import Login from "@/screens/login/login";
-import SplashScreen from "@/screens/onboarding/SplashScreen";
+import SplashScreen from "@/screens/splash/SplashScreen";
 import Signup from "@/screens/signup/signup";
 import HomeScreen from "@/screens/home/Homescreen";
 import TopDoctorScreen from "@/screens/home/TopDoctorscreen";
@@ -12,6 +12,9 @@ import NotificationSettingsScreen from "@/screens/profile/NotificationScreen";
 import EditProfileScreen from "@/screens/profile/Editscreen";
 import profileScreen from "@/screens/profile/profilescreen";
 import settingsScreen from "@/screens/profile/SettingScreen";
+import AppointmentScreen from "@/screens/Appointment/AppointmentScreen";
+import ChatScreen from "@/screens/chat/chatscreen";
+import ChatListScreen from "@/screens/chat/chatListscreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +38,9 @@ export default function AppNavigator() {
       <Stack.Screen name="EditProfile" component={EditProfileScreen} />
       <Stack.Screen name="Profile" component={profileScreen} />
       <Stack.Screen name="Settings" component={settingsScreen} />
+      <Stack.Screen name="Appointments" component={AppointmentScreen} />
+      <Stack.Screen name="Chat" component={ChatScreen} />
+      <Stack.Screen name="ChatList" component={ChatListScreen} />
     </Stack.Navigator>
   );
 }

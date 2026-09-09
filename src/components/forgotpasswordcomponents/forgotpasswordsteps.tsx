@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 import { Formik } from "formik";
-import BackButton from "@/components/common/BackButton";
+import BackButton from "@/components/home/BackButton";
 import ScreenHeader from "@/components/common/ScreenHeader";
 import AppButton from "@/components/common/AppButton";
 import InputField from "@/components/common/InputField";

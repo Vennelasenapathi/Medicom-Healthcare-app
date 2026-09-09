@@ -49,6 +49,7 @@ export default function SuccessModal({
           onPress={onPress}
         />
 
+        
       </View>
     </View>
   );
