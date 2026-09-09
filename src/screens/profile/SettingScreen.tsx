@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "@/constants/colors";
-import ForgotPasswordFlow from "@/screens/forgot-password/forgotpasswordflow";
+import ForgotPasswordFlow from "@/components/forgotpasswordcomponents/forgotpasswordflow";
 
 export default function SettingsScreen({ navigation }: any) {
   const [forgotPasswordVisible, setForgotPasswordVisible] = useState(false);

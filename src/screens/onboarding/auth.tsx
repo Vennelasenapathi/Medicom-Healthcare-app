@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
 
   buttonSection: {
     paddingHorizontal: 61,
-    paddingBottom: 320,
+    paddingBottom: 220,
   },
 
   signupButton: {

@@ -15,7 +15,7 @@ import AppButton from "@/components/common/AppButton";
 import InputField from "@/components/common/InputField";
 import PasswordField from "@/components/common/PasswordField";
 import SuccessModal from "@/components/common/SuccessModal";
-import ForgotPasswordFlow from "@/screens/forgot-password/forgotpasswordflow";
+import ForgotPasswordFlow from "@/components/forgotpasswordcomponents/forgotpasswordflow";
 import { loginValidationSchema } from "@/validations/loginvalidation";
 import { colors } from "@/constants/colors";
 
