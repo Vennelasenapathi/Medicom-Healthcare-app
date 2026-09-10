@@ -32,44 +32,44 @@ const initialAppointments: Appointment[] = [
     id: 1,
     doctor: "Dr. Eshan Khan",
     specialty: "Brain & Spine Specialist",
-    date: "10 Sept 2026",
+    date: "10 September 2026",
     time: "10:00 AM",
     type: "Video Consultation",
     status: "Confirmed",
-    image: require( "../../../assets/images/medicom/topdoctor1.png"),
+    image: require("../../../assets/images/medicom/topdoctor1.png"),
   },
   {
     id: 2,
     doctor: "Dr. Siri Sharma",
     specialty: "Pediatric Neurologist",
-    date: "11 Sept 2026",
-    time: "11:30 AM",
+    date: "11 September 2026",
+    time: "01:00 PM",
     type: "Video Consultation",
     status: "Confirmed",
-    image: require( "../../../assets/images/medicom/topdoctor2.png"),
+    image: require("../../../assets/images/medicom/topdoctor2.png"),
   },
-   {
+  {
     id: 3,
     doctor: "Dr. Jasmin",
     specialty: "Opthalmologist",
-    date: "12 Sept 2026",
-    time: "11:30 AM",
+    date: "12 September 2026",
+    time: "04:00 PM",
     type: "Video Consultation",
     status: "Confirmed",
-    image: require( "../../../assets/images/medicom/topdoctor5.png"),
+    image: require("../../../assets/images/medicom/topdoctor5.png"),
   },
 ];
 
 export default function AppointmentsScreen({ navigation, }: any) {
   const [screen, setScreen] = useState<Screen>("list");
-  const [tab, setTab] =useState<Tab>("Upcoming");
+  const [tab, setTab] = useState<Tab>("Upcoming");
   const [appointments, setAppointments] = useState<Appointment[]>(initialAppointments);
   const [cancelled, setCancelled] = useState<Appointment[]>([]);
   const [selected, setSelected] = useState<Appointment | null>(null);
   const [resultVisible, setResultVisible] = useState(false);
   const [resultType, setResultType] = useState<"cancelled" | "rescheduled">("cancelled");
   const [date, setDate] = useState("");
-  const [time, setTime] =  useState("10:00 AM");
+  const [time, setTime] = useState("10:00 AM");
 
   /* OPEN DETAILS */
 
@@ -81,64 +81,66 @@ export default function AppointmentsScreen({ navigation, }: any) {
   /* DELETE APPOINTMENT */
 
   const deleteAppointment = () => {
-  if (!selected) return;
+    if (!selected) return;
 
-  setAppointments((prev) =>
-    prev.filter((item) => item.id !== selected.id)
-  );
+    setAppointments((prev) =>
+      prev.filter((item) => item.id !== selected.id)
+    );
 
-  setCancelled((prev) => [
-    ...prev,
-    {
-      ...selected,
-      status: "Cancelled",
-    },
-  ]);
+    setCancelled((prev) => [
+      ...prev,
+      {
+        ...selected,
+        status: "Cancelled",
+      },
+    ]);
 
-  setTab("Cancelled");
-  setScreen("list");
-  setResultType("cancelled");
-  setResultVisible(true);
-};
+    setTab("Cancelled");
+    setScreen("list");
+    setResultType("cancelled");
+    setResultVisible(true);
+  };
 
   /* RESCHEDULE */
 
   const confirmReschedule = () => {
-  if (!selected || !date) return;
+    if (!selected || !date) return;
 
-  setAppointments((prev) =>
-    prev.map((item) =>
-      item.id === selected.id
-        ? {
+    setAppointments((prev) =>
+      prev.map((item) =>
+        item.id === selected.id
+          ? {
             ...item,
-            date: `${date} 2029`,
+            date,
             time,
           }
-        : item
-    )
-  );
-  setScreen("list");
-setTab("Upcoming");
-  setResultType("rescheduled");
-  setResultVisible(true);
-};
+          : item
+      )
+    );
+    setScreen("list");
+    setTab("Upcoming");
+    setResultType("rescheduled");
+    setResultVisible(true);
+  };
 
   /* CURRENT LIST */
 
-  const currentList =   tab === "Cancelled" ? cancelled  : appointments;
+  const currentList = tab === "Cancelled" ? cancelled : appointments;
 
   /* DETAILS SCREEN */
 
-  if (screen === "details" && selected ) {
+  if (screen === "details" && selected) {
     return (
       <AppointmentDetails
         appointment={selected}
         navigation={navigation}
         onBack={() => setScreen("list")}
         onDelete={deleteAppointment}
-        onReschedule={() =>
-          setScreen("reschedule")
-        }
+        onReschedule={() => {
+          setDate(selected?.date || "");
+          setTime(selected?.time || "");
+          setScreen("reschedule");
+        }}
       />
     );
   }
@@ -162,83 +164,86 @@ setTab("Upcoming");
   /* LIST SCREEN */
 
   return (
-  <View style={styles.container}>
+    <View style={styles.container}>
 
-    <Text style={styles.title}>
-      My Appointments
-    </Text>
+      <Text style={styles.title}>
+        My Appointments
+      </Text>
 
-    <View style={styles.tabs}>
-      {(
-        [
-          "Upcoming",
-          "Completed",
-          "Cancelled",
-        ] as Tab[]
-      ).map((item) => (
-        <Pressable
-          key={item}
-          onPress={() => setTab(item)}
-          style={[
-            styles.tab,
-            tab === item && styles.activeTab,
-          ]}
-        >
-          <Text
+      <View style={styles.tabs}>
+        {(
+          [
+            "Upcoming",
+            "Completed",
+            "Cancelled",
+          ] as Tab[]
+        ).map((item) => (
+          <Pressable
+            key={item}
+            onPress={() => setTab(item)}
             style={[
-              styles.tabText,
-              tab === item && styles.activeText,
+              styles.tab,
+              tab === item && styles.activeTab,
             ]}
           >
-            {item}
-          </Text>
-        </Pressable>
-      ))}
+            <Text
+              style={[
+                styles.tabText,
+                tab === item && styles.activeText,
+              ]}
+            >
+              {item}
+            </Text>
+          </Pressable>
+        ))}
+      </View>
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.list}
+      >
+        {currentList.length > 0 ? (
+          currentList.map((item) => (
+            <AppointmentCard
+              key={item.id}
+              appointment={item}
+              onPress={() => openDetails(item)}
+              onReschedule={() =>{
+                setSelected(item);
+    setDate(item.date);
+    setTime(item.time);
+                setScreen("reschedule")
+              }}
+            />
+          ))
+        ) : (
+          <View style={styles.empty}>
+            <Text style={styles.emptyText}>
+              No {tab.toLowerCase()} appointments
+            </Text>
+          </View>
+        )}
+      </ScrollView>
+
+      <BottomTabBar
+        navigation={navigation}
+        activeTab="Appointments"
+      />
+
+      {/* RESULT POPUP */}
+      <AppointmentResultModal
+        visible={resultVisible}
+        type={resultType}
+        onBack={() => setResultVisible(false)}
+        onViewAppointments={() => {
+          setResultVisible(false);
+          setTab("Upcoming");
+          setScreen("list");
+        }}
+      />
+
     </View>
-
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      contentContainerStyle={styles.list}
-    >
-      {currentList.length > 0 ? (
-        currentList.map((item) => (
-          <AppointmentCard
-            key={item.id}
-            appointment={item}
-            onPress={() => openDetails(item)}
-            onReschedule={() =>
-          setScreen("reschedule")
-        }
-          />
-        ))
-      ) : (
-        <View style={styles.empty}>
-          <Text style={styles.emptyText}>
-            No {tab.toLowerCase()} appointments
-          </Text>
-        </View>
-      )}
-    </ScrollView>
-
-    <BottomTabBar
-      navigation={navigation}
-      activeTab="Appointments"
-    />
-
-    {/* RESULT POPUP */}
-    <AppointmentResultModal
-      visible={resultVisible}
-      type={resultType}
-      onBack={() => setResultVisible(false)}
-      onViewAppointments={() => {
-        setResultVisible(false);
-        setTab("Upcoming");
-        setScreen("list");
-      }}
-    />
-
-  </View>
-);
+  );
 }
 
 const styles = StyleSheet.create({

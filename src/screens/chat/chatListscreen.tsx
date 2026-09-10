@@ -42,22 +42,60 @@ const chats = [
 export default function ChatListScreen({ navigation }: any) {
   return (
     <View style={styles.container}>
+
+      {/* HEADER */}
       <View style={styles.header}>
-        <Text style={styles.title}>Messages</Text>
+        <View>
+          <Text style={styles.title}>My Messages</Text>
+          <Text style={styles.subtitle}>
+            Chat with your doctors
+          </Text>
+        </View>
 
         <Pressable style={styles.searchButton}>
           <Ionicons
             name="search-outline"
-            size={24}
+            size={25}
             color={colors.primaryDark}
           />
         </Pressable>
       </View>
 
-      <Text style={styles.subtitle}>
-        Chat with your doctors
-      </Text>
+      {/* SEARCH */}
+      <Pressable style={styles.searchBox}>
+        <Ionicons
+          name="search-outline"
+          size={18}
+          color="#A5AAB3"
+        />
 
+        <Text style={styles.searchText}>
+          Search...
+        </Text>
+      </Pressable>
+
+      {/* FILTER */}
+      <View style={styles.filters}>
+        <Pressable style={styles.activeFilter}>
+          <Text style={styles.activeFilterText}>
+            All
+          </Text>
+        </Pressable>
+
+        <Pressable style={styles.filter}>
+          <Text style={styles.filterText}>
+            Group
+          </Text>
+        </Pressable>
+
+        <Pressable style={styles.filter}>
+          <Text style={styles.filterText}>
+            Private
+          </Text>
+        </Pressable>
+      </View>
+
+      {/* CHAT LIST */}
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.list}
@@ -85,19 +123,35 @@ export default function ChatListScreen({ navigation }: any) {
 
 function ChatItem({ chat, onPress }: any) {
   return (
-    <Pressable style={styles.chatItem} onPress={onPress}>
-      <Image source={chat.image} style={styles.avatar} />
+    <Pressable
+      style={styles.chatItem}
+      onPress={onPress}
+    >
+      {/* DOCTOR IMAGE */}
+      <Image
+        source={chat.image}
+        style={styles.avatar}
+      />
 
+      {/* MESSAGE */}
       <View style={styles.chatInfo}>
-        <Text style={styles.name}>{chat.name}</Text>
+        <Text style={styles.name}>
+          {chat.name}
+        </Text>
 
-        <Text style={styles.message} numberOfLines={1}>
+        <Text
+          style={styles.message}
+          numberOfLines={1}
+        >
           {chat.message}
         </Text>
       </View>
 
+      {/* TIME + UNREAD */}
       <View style={styles.right}>
-        <Text style={styles.time}>{chat.time}</Text>
+        <Text style={styles.time}>
+          {chat.time}
+        </Text>
 
         {chat.unread > 0 && (
           <View style={styles.badge}>
@@ -115,12 +169,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-    paddingHorizontal: 16,
+    paddingHorizontal: 18,
   },
 
+  /* HEADER */
   header: {
-    height: 105,
-    paddingTop: 48,
+    paddingTop: 52,
+    paddingBottom: 18,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -128,50 +183,107 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 25,
-    fontWeight: "700",
+    fontWeight: "800",
     color: colors.textPrimary,
   },
 
   subtitle: {
-    fontSize: 15,
+    marginTop: 5,
+    fontSize: 14,
     color: colors.textSecondary,
-    marginBottom: 18,
   },
 
   searchButton: {
-    width: 45,
-    height: 45,
-    borderRadius: 10,
+    width: 48,
+    height: 48,
+    borderRadius: 12,
     backgroundColor: colors.background,
     alignItems: "center",
     justifyContent: "center",
   },
 
-  list: {
-    paddingBottom: 100,
-    gap: 12,
-  },
-
-  chatItem: {
-    minHeight: 88,
-    borderWidth: 1,
-    borderColor: colors.borderLight,
+  /* SEARCH */
+  searchBox: {
+    height: 48,
     borderRadius: 12,
-    padding: 12,
+    backgroundColor: colors.background,
+    paddingHorizontal: 15,
     flexDirection: "row",
     alignItems: "center",
+  },
+
+  searchText: {
+    marginLeft: 9,
+    fontSize: 13,
+    color: "#A5AAB3",
+  },
+
+  /* FILTERS */
+  filters: {
+    height: 48,
+    marginTop: 14,
+    padding: 4,
+    borderRadius: 12,
+    backgroundColor: "#F3F5F8",
+    flexDirection: "row",
+  },
+
+  filter: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 9,
+  },
+
+  activeFilter: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 9,
     backgroundColor: colors.white,
   },
 
+  activeFilterText: {
+    fontSize: 12,
+    fontWeight: "700",
+    color: colors.primaryDark,
+  },
+
+  filterText: {
+    fontSize: 12,
+    color: colors.textSecondary,
+  },
+
+  /* LIST */
+  list: {
+    paddingTop: 18,
+    paddingBottom: 110,
+  },
+
+  /* CHAT ITEM */
+  chatItem: {
+    minHeight: 96,
+    marginBottom: 12,
+    paddingHorizontal: 13,
+    paddingVertical: 12,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
+    backgroundColor: colors.white,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+
   avatar: {
-    width: 62,
-    height: 62,
-    borderRadius: 31,
+    width: 68,
+    height: 68,
+    borderRadius: 34,
   },
 
   chatInfo: {
     flex: 1,
-    marginLeft: 14,
+    marginLeft: 15,
+    paddingRight: 8,
   },
 
   name: {
@@ -181,15 +293,16 @@ const styles = StyleSheet.create({
   },
 
   message: {
+    marginTop: 8,
     fontSize: 13,
+    lineHeight: 19,
     color: colors.textSecondary,
-    marginTop: 7,
   },
 
   right: {
+    height: 67,
     alignItems: "flex-end",
     justifyContent: "space-between",
-    height: 58,
   },
 
   time: {
@@ -198,9 +311,10 @@ const styles = StyleSheet.create({
   },
 
   badge: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+    minWidth: 25,
+    height: 25,
+    paddingHorizontal: 6,
+    borderRadius: 13,
     backgroundColor: colors.primaryDark,
     alignItems: "center",
     justifyContent: "center",

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -20,34 +20,53 @@ export default function RescheduleAppointment({
 }: any) {
   const today = new Date();
 
-  const [month, setMonth] =
-    useState(today.getMonth());
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
-  const [year, setYear] =
-    useState(today.getFullYear());
+  const [month, setMonth] = useState(today.getMonth());
+  const [year, setYear] = useState(today.getFullYear());
 
-  const daysInMonth = new Date(
-    year,
-    month + 1,
-    0
-  ).getDate();
+  /* SHOW THE APPOINTMENT'S MONTH/YEAR */
 
-  const firstDay = new Date(
-    year,
-    month,
-    1
-  ).getDay();
+  useEffect(() => {
+    if (!date) return;
 
-  const monthName = new Date(
-    year,
-    month
-  ).toLocaleString("default", {
-    month: "long",
-  });
+    const parts = date.split(" ");
+
+    if (parts.length === 3) {
+      const selectedMonth = months.indexOf(parts[1]);
+      const selectedYear = Number(parts[2]);
+
+      if ( selectedMonth !== -1 &&  !isNaN(selectedYear)  ) {
+        setMonth(selectedMonth);
+        setYear(selectedYear);
+      }
+    }
+  }, [date]);
+
+  const daysInMonth = new Date( year, month + 1, 0 ).getDate();
+
+  const firstDay = new Date( year, month,  1  ).getDay();
+
+  const monthName = months[month];
 
   const currentMonth =
     month === today.getMonth() &&
     year === today.getFullYear();
+
+  /* PREVIOUS MONTH */
 
   const previousMonth = () => {
     if (currentMonth) return;
@@ -60,6 +79,8 @@ export default function RescheduleAppointment({
     }
   };
 
+  /* NEXT MONTH */
+
   const nextMonth = () => {
     if (month === 11) {
       setMonth(0);
@@ -69,59 +90,52 @@ export default function RescheduleAppointment({
     }
   };
 
-  const isPast = (day: number) => {
-    const selected = new Date(
-      year,
-      month,
-      day
-    );
+  /* CHECK PAST DATE */
 
-    const current = new Date(
+  const isPast = (day: number) => {
+    const selectedDate = new Date( year, month, day );
+
+    const currentDate = new Date(
       today.getFullYear(),
       today.getMonth(),
       today.getDate()
     );
 
-    return selected < current;
+    return selectedDate < currentDate;
   };
+
+  /* CALENDAR */
 
   const calendar = [];
 
   for (let i = 0; i < firstDay; i++) {
     calendar.push(
-      <View
-        key={`empty-${i}`}
-        style={styles.day}
-      />
+      <View key={`empty-${i}`} style={styles.day} />
     );
   }
 
-  for (let day = 1; day <= daysInMonth; day++) {
+  for (  let day = 1; day <= daysInMonth;  day++ ) {
     const disabled = isPast(day);
+
     const selected =
-      date === String(day) &&
+      date === `${day} ${monthName} ${year}` &&
       !disabled;
 
     calendar.push(
       <Pressable
         key={day}
         disabled={disabled}
-        onPress={() =>
-          setDate(String(day))
-        }
+        onPress={() => setDate(`${day} ${monthName} ${year}`)  }
         style={[
           styles.day,
-          selected &&
-            styles.selectedDay,
+          selected && styles.selectedDay,
         ]}
       >
         <Text
           style={[
             styles.dayText,
-            disabled &&
-              styles.disabled,
-            selected &&
-              styles.selectedText,
+            disabled && styles.disabled,
+            selected && styles.selectedText,
           ]}
         >
           {day}
@@ -130,6 +144,7 @@ export default function RescheduleAppointment({
     );
   }
 
+  /* TIME SLOTS */
   const times = [
     "09:00 AM",
     "10:00 AM",
@@ -143,21 +158,23 @@ export default function RescheduleAppointment({
 
   return (
     <View style={styles.container}>
+
+      {/* HEADER */}
       <View style={styles.header}>
         <BackButton onPress={onBack} />
-
         <Text style={styles.title}>
           Reschedule Appointment
         </Text>
-
         <View style={{ width: 40 }} />
       </View>
 
+      {/* DATE */}
       <Text style={styles.label}>
         Choose Date
       </Text>
 
       <View style={styles.calendar}>
+
         <View style={styles.monthHeader}>
           <Pressable
             disabled={currentMonth}
@@ -166,11 +183,7 @@ export default function RescheduleAppointment({
             <Ionicons
               name="chevron-back"
               size={18}
-              color={
-                currentMonth
-                  ? "#CCC"
-                  : colors.textPrimary
-              }
+              color={ currentMonth  ? "#CCC"  : colors.textPrimary }
             />
           </Pressable>
 
@@ -211,35 +224,26 @@ export default function RescheduleAppointment({
         </View>
       </View>
 
-      <Text style={styles.label}>
-        Select Time Slot
-      </Text>
-
+      {/* TIME */}
+      <Text style={styles.label}>  Select Time Slot </Text>
       <View style={styles.times}>
         {times.map((item) => (
           <Pressable
             key={item}
-            onPress={() =>
-              setTime(item)
-            }
+            onPress={() => setTime(item)}
             style={[
               styles.time,
-              time === item &&
-                styles.selectedTime,
+              time === item && styles.selectedTime,
             ]}
           >
-            <Text
-              style={
-                time === item
-                  ? styles.white
-                  : styles.timeText
-              }
-            >
+            <Text style={ time === item ? styles.white : styles.timeText }>
               {item}
             </Text>
           </Pressable>
         ))}
       </View>
+
+      {/* CONFIRM */}
 
       <View style={styles.button}>
         <AppButton
