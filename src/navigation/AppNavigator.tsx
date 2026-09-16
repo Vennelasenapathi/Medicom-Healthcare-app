@@ -15,6 +15,13 @@ import settingsScreen from "@/screens/profile/SettingScreen";
 import AppointmentScreen from "@/screens/Appointment/AppointmentScreen";
 import ChatScreen from "@/screens/chat/chatscreen";
 import ChatListScreen from "@/screens/chat/chatListscreen";
+import DoctorsScreen from "@/screens/doctors/DoctorsScreen";
+import ConsultationScreen from "@/screens/doctors/ConsulationScreen";
+import DoctorDetailsScreen from "@/screens/doctors/DoctorDetailsScreen";
+import SpecialtyDoctorsScreen from "@/screens/doctors/SpecialityDoctorsScreen";
+import PaymentDetails from "@/screens/payment/PaymentDetailsScreen";
+import AudioCallScreen from "@/screens/consulation/AudioCallScreen";
+import VideoCallScreen from "@/screens/consulation/VideoCallScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -41,6 +48,13 @@ export default function AppNavigator() {
       <Stack.Screen name="Appointments" component={AppointmentScreen} />
       <Stack.Screen name="Chat" component={ChatScreen} />
       <Stack.Screen name="ChatList" component={ChatListScreen} />
+      <Stack.Screen name="Doctors" component={DoctorsScreen} />
+      <Stack.Screen name="SpecialtyDoctors" component={SpecialtyDoctorsScreen} />
+      <Stack.Screen name="DoctorDetails" component={DoctorDetailsScreen} />
+      <Stack.Screen name="Consultation" component={ConsultationScreen} />
+      <Stack.Screen name="PaymentDetails" component={PaymentDetails} />
+      <Stack.Screen name="AudioCall" component={AudioCallScreen} />
+      <Stack.Screen  name="VideoCall" component={VideoCallScreen} />
     </Stack.Navigator>
   );
 }

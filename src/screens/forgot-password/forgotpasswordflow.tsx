@@ -29,20 +29,16 @@ export default function ForgotPasswordFlow({
      STEP STATE
   ===================================================== */
 
-  const [step, setStep] =
-    useState<Step>("forgot");
+  const [step, setStep] = useState<Step>("forgot");
 
-  const [mode, setMode] =
-    useState<Mode>("email");
+  const [mode, setMode] = useState<Mode>("email");
 
-  const [timer, setTimer] =
-    useState(15);
+  const [timer, setTimer] = useState(15);
 
-  const [otpError, setOtpError] =
-    useState(false);
+  const [otpError, setOtpError] = useState(false);
 
-  const [success, setSuccess] =
-    useState(false);
+  const [success, setSuccess] = useState(false);
+  const [successVisible,setSuccessVisible]=useState(false);
 
   /* =====================================================
      OTP TIMER
@@ -141,6 +137,7 @@ export default function ForgotPasswordFlow({
 
   const handlePasswordSuccess = () => {
     setSuccess(true);
+    setSuccessVisible(true);
   };
 
   return (
@@ -192,6 +189,7 @@ export default function ForgotPasswordFlow({
 
         {success && (
           <SuccessModal
+          visible={successVisible}
             title="Password Updated"
             description="Your new password is ready to use."
             buttonTitle="Proceed to Login"

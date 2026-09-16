@@ -1,11 +1,11 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Text, View,Modal } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
 import AppButton from "./AppButton";
 import { colors } from "@/constants/colors";
 
 interface Props {
+  visible: boolean;
   title: string;
   description: string;
   buttonTitle: string;
@@ -13,12 +13,14 @@ interface Props {
 }
 
 export default function SuccessModal({
+  visible,
   title,
   description,
   buttonTitle,
   onPress,
 }: Props) {
   return (
+     
     <View style={styles.overlay}>
       <View style={styles.modal}>
 
@@ -52,6 +54,7 @@ export default function SuccessModal({
         
       </View>
     </View>
+   
   );
 }
 

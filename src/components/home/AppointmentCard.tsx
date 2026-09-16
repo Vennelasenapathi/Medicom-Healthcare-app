@@ -9,7 +9,11 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "@/constants/colors";
 
-export default function AppointmentCard() {
+type AppointmentCardProps={
+  press:()=>void;
+}
+
+export default function AppointmentCard({press,}:AppointmentCardProps) {
   return (
     <View style={styles.container}>
 
@@ -39,7 +43,7 @@ export default function AppointmentCard() {
         </View>
 
         <View style={styles.buttons}>
-          <Pressable style={styles.joinButton}>
+          <Pressable onPress={press} style={styles.joinButton}>
             <Text style={styles.joinText}>
               Join Consultation
             </Text>

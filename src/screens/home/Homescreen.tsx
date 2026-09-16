@@ -42,7 +42,7 @@ export default function HomeScreen({ navigation }: any) {
         >
           <QuickActions
             onDoctorPress={() =>
-              navigation.navigate("TopDoctors")
+              navigation.navigate("Doctors")
             }
           />
 
@@ -54,7 +54,23 @@ export default function HomeScreen({ navigation }: any) {
             </Text>
           </View>
 
-          <AppointmentCard />
+          <AppointmentCard
+  press={() =>
+    navigation.navigate("Chat", {
+      doctor: {
+        name: "Dr. Azim Khan",
+        specialty: "Dermatologist",
+        image: require("../../../assets/images/medicom/appointment.png"),
+      },
+      consultation: {
+        type: "Chat Consultation",
+        date: "10 January 2026",
+        time: "5:00 PM IST",
+        reason: "General Consultation",
+      },
+    })
+  }
+/>
 
           <View style={styles.sectionHeader}>
             <Text style={styles.sectionTitle}>

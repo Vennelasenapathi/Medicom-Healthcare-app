@@ -23,6 +23,7 @@ import { colors } from "@/constants/colors";
 
 export default function Signup({ navigation }: any) {
   const [success, setSuccess] = useState(false);
+  const [successVisible,setSuccessVisible]=useState(false);
 
   const initialValues = {
     name: "",
@@ -219,6 +220,7 @@ export default function Signup({ navigation }: any) {
                   <AppButton
                     title="Sign Up"
                     onPress={() => {
+                      setSuccessVisible(true);
                       Object.keys(values).forEach((field) =>
                         setFieldTouched(field as any, true)
                       );
@@ -242,6 +244,7 @@ export default function Signup({ navigation }: any) {
               {/* SUCCESS */}
               {success && (
                 <SuccessModal
+                visible={successVisible}
                   title="All Set!"
                   description="You've successfully created your account."
                   buttonTitle="Get Started"

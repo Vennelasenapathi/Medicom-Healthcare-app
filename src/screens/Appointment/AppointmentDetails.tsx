@@ -1,200 +1,228 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Image,
-  Modal,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
-
 import { Ionicons } from "@expo/vector-icons";
 
-import AppButton from "@/components/common/AppButton";
 import BackButton from "@/components/home/BackButton";
+import AppButton from "@/components/common/AppButton";
 import { colors } from "@/constants/colors";
 
 export default function AppointmentDetails({
   appointment,
+  navigation,
   onBack,
   onDelete,
   onReschedule,
 }: any) {
-  const [deleteVisible, setDeleteVisible] = useState(false);
+  const doctor = {
+    name: appointment.doctor,
+    specialty: appointment.specialty,
+    image: appointment.image,
+  };
+
+  const consultation = {
+    type: appointment.type,
+    date: appointment.date,
+    time: appointment.time,
+    reason: appointment.reason || "General Consultation",
+  };
+
+  const handleJoin = () => {
+    if (appointment.type === "Chat Consultation") {
+      navigation.navigate("Chat", {
+        doctor,
+        consultation,
+      });
+    } else if (appointment.type === "Video Consultation") {
+      navigation.navigate("VideoCall", {
+        doctor,
+        consultation,
+      });
+    } else {
+      navigation.navigate("InPersonConsultation", {
+        doctor,
+        consultation,
+      });
+    }
+  };
 
   return (
     <View style={styles.container}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scroll}
+      >
+        {/* HEADER */}
+        <View style={styles.header}>
+          <BackButton onPress={onBack} />
 
-      {/* HEADER */}
-      <View style={styles.header}>
-        <BackButton onPress={onBack} />
+          <Text style={styles.title}>
+            Appointment Details
+          </Text>
 
-        <Text style={styles.title}>
-          Appointment Details
+          <View style={{ width: 40 }} />
+        </View>
+
+        {/* DOCTOR */}
+        <View style={styles.doctorCard}>
+          <Image
+            source={appointment.image}
+            style={styles.doctorImage}
+          />
+
+          <View style={styles.doctorInfo}>
+            <Text style={styles.doctorName}>
+              {appointment.doctor}
+            </Text>
+
+            <Text style={styles.specialty}>
+              {appointment.specialty}
+            </Text>
+
+            <View style={styles.statusRow}>
+              <Ionicons
+                name="checkmark-circle"
+                size={15}
+                color="#20B486"
+              />
+
+              <Text style={styles.status}>
+                {appointment.status}
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        {/* APPOINTMENT INFORMATION */}
+        <Text style={styles.sectionTitle}>
+          Appointment Information
         </Text>
 
-        <View style={{ width: 40 }} />
-      </View>
-
-      {/* DOCTOR */}
-      <View style={styles.doctor}>
-        <Image
-          source={appointment.image}
-          style={styles.image}
-        />
-
-        <View>
-          <Text style={styles.name}>
-            {appointment.doctor}
-          </Text>
-
-          <Text style={styles.specialty}>
-            {appointment.specialty}
-          </Text>
-        </View>
-      </View>
-
-      {/* INFORMATION */}
-      <View style={styles.infoBox}>
-        <Info
-          label="Date & Time"
-          value={`${appointment.date}, ${appointment.time}`}
-        />
-
-        <Info
-          label="Consultation Type"
-          value={appointment.type}
-        />
-
-        <Info
-          label="Status"
-          value={appointment.status}
-        />
-      </View>
-
-      {/* REPORT */}
-      <View style={styles.report}>
-        <Ionicons
-          name="document-text-outline"
-          size={25}
-          color={colors.primaryDark}
-        />
-
-        <View style={{ flex: 1 }}>
-          <Text style={styles.reportName}>
-            MRI_Report.pdf
-          </Text>
-
-          <Text style={styles.uploaded}>
-            Uploaded successfully
-          </Text>
-        </View>
-      </View>
-
-      {/* ACTIONS */}
-      <View style={styles.actions}>
-
-        <Pressable style={styles.joinButton}>
-          <Text style={styles.joinText}>
-            Join Consultation
-          </Text>
-
-          <Ionicons
-            name="chevron-forward"
-            size={15}
-            color={colors.white}
-          />
-        </Pressable>
-
-        <Pressable
-          style={styles.iconButton}
-          onPress={onReschedule}
-        >
-          <Ionicons
-            name="create-outline"
-            size={21}
-            color={colors.white}
-          />
-        </Pressable>
-
-        <Pressable
-          style={styles.iconButton}
-          onPress={() => setDeleteVisible(true)}
-        >
-          <Ionicons
-            name="trash-outline"
-            size={21}
-            color={colors.white}
-          />
-        </Pressable>
-
-      </View>
-
-      {/* DELETE CONFIRMATION POPUP */}
-      <Modal
-        visible={deleteVisible}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setDeleteVisible(false)}
-      >
-        <View style={styles.overlay}>
-          <View style={styles.modal}>
-
-            <View style={styles.alert}>
+        <View style={styles.card}>
+          <View style={styles.row}>
+            <View style={styles.iconBox}>
               <Ionicons
-                name="alert-outline"
-                size={40}
-                color={colors.error}
+                name="calendar-outline"
+                size={20}
+                color={colors.primaryDark}
               />
             </View>
 
-            <Text style={styles.modalTitle}>
-              Delete Appointment?
-            </Text>
+            <View style={styles.rowInfo}>
+              <Text style={styles.label}>Date</Text>
 
-            <Text style={styles.modalText}>
-              This appointment will be permanently
-              removed from your schedule. This
-              action cannot be undone.
-            </Text>
+              <Text style={styles.value}>
+                {appointment.date}
+              </Text>
+            </View>
+          </View>
 
-            <View style={styles.modalButton}>
-              <AppButton
-                title="Back"
-                onPress={() => setDeleteVisible(false)}
+          <View style={styles.row}>
+            <View style={styles.iconBox}>
+              <Ionicons
+                name="time-outline"
+                size={20}
+                color={colors.primaryDark}
               />
             </View>
 
+            <View style={styles.rowInfo}>
+              <Text style={styles.label}>Time</Text>
+
+              <Text style={styles.value}>
+                {appointment.time}
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.iconBox}>
+              <Ionicons
+                name="videocam-outline"
+                size={20}
+                color={colors.primaryDark}
+              />
+            </View>
+
+            <View style={styles.rowInfo}>
+              <Text style={styles.label}>
+                Consultation Type
+              </Text>
+
+              <Text style={styles.value}>
+                {appointment.type}
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <View style={styles.iconBox}>
+              <Ionicons
+                name="document-text-outline"
+                size={20}
+                color={colors.primaryDark}
+              />
+            </View>
+
+            <View style={styles.rowInfo}>
+              <Text style={styles.label}>
+                Consultation Reason
+              </Text>
+
+              <Text style={styles.value}>
+                {appointment.reason ||
+                  "General Consultation"}
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        {/* ACTIONS */}
+        <View style={styles.actions}>
+          <AppButton
+            title="Join Consultation"
+            onPress={handleJoin}
+          />
+
+          <View style={styles.secondaryActions}>
             <Pressable
-              style={styles.deleteButton}
-              onPress={() => {
-                setDeleteVisible(false);
-                onDelete();
-              }}
+              style={styles.actionButton}
+              onPress={onReschedule}
             >
-              <Text style={styles.deleteText}>
-                Delete Appointment
+              <Ionicons
+                name="create-outline"
+                size={20}
+                color={colors.primaryDark}
+              />
+
+              <Text style={styles.actionText}>
+                Reschedule
               </Text>
             </Pressable>
 
+            <Pressable
+              style={styles.actionButton}
+              onPress={onDelete}
+            >
+              <Ionicons
+                name="trash-outline"
+                size={20}
+                color="#FF4D4F"
+              />
+
+              <Text style={styles.deleteText}>
+                Cancel Appointment
+              </Text>
+            </Pressable>
           </View>
         </View>
-      </Modal>
-
-    </View>
-  );
-}
-
-function Info({ label, value }: any) {
-  return (
-    <View style={styles.infoRow}>
-      <Text style={styles.label}>
-        {label}
-      </Text>
-
-      <Text style={styles.value}>
-        {value}
-      </Text>
+      </ScrollView>
     </View>
   );
 }
@@ -202,59 +230,105 @@ function Info({ label, value }: any) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 14,
     backgroundColor: colors.white,
+    paddingHorizontal: 14,
+  },
+
+  scroll: {
+    paddingBottom: 30,
   },
 
   header: {
-    height: 95,
-    paddingTop: 38,
+    height: 92,
+    paddingTop: 35,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
 
   title: {
-    fontSize: 19,
+    fontSize: 18,
     fontWeight: "700",
     color: colors.textPrimary,
   },
 
-  doctor: {
-    marginTop: 15,
+  doctorCard: {
     flexDirection: "row",
-    alignItems: "center",
-    gap: 14,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
+    borderRadius: 12,
   },
 
-  image: {
-    width: 70,
-    height: 70,
-    borderRadius: 9,
+  doctorImage: {
+    width: 75,
+    height: 75,
+    borderRadius: 10,
   },
 
-  name: {
-    fontSize: 17,
+  doctorInfo: {
+    flex: 1,
+    marginLeft: 12,
+    justifyContent: "center",
+  },
+
+  doctorName: {
+    fontSize: 16,
     fontWeight: "700",
     color: colors.textPrimary,
   },
 
   specialty: {
-    fontSize: 11,
     marginTop: 5,
+    fontSize: 11,
     color: colors.textSecondary,
   },
 
-  infoBox: {
-    marginTop: 22,
-    padding: 15,
-    borderWidth: 1,
-    borderRadius: 9,
-    borderColor: colors.borderLight,
+  statusRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 7,
   },
 
-  infoRow: {
-    marginBottom: 15,
+  status: {
+    marginLeft: 5,
+    fontSize: 10,
+    color: "#20B486",
+    fontWeight: "600",
+  },
+
+  sectionTitle: {
+    marginTop: 22,
+    marginBottom: 10,
+    fontSize: 14,
+    fontWeight: "700",
+    color: colors.textPrimary,
+  },
+
+  card: {
+    padding: 14,
+    borderRadius: 12,
+    backgroundColor: "#F8FAFC",
+  },
+
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 18,
+  },
+
+  iconBox: {
+    width: 38,
+    height: 38,
+    borderRadius: 8,
+    backgroundColor: "#EAF0FF",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  rowInfo: {
+    flex: 1,
+    marginLeft: 12,
   },
 
   label: {
@@ -263,127 +337,44 @@ const styles = StyleSheet.create({
   },
 
   value: {
-    marginTop: 5,
-    fontSize: 13,
-    fontWeight: "600",
-    color: colors.textPrimary,
-  },
-
-  report: {
-    marginTop: 15,
-    padding: 13,
-    borderWidth: 1,
-    borderRadius: 9,
-    borderColor: colors.borderLight,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-  },
-
-  reportName: {
+    marginTop: 3,
     fontSize: 12,
     fontWeight: "600",
-  },
-
-  uploaded: {
-    fontSize: 10,
-    marginTop: 3,
-    color: colors.primaryDark,
+    color: colors.textPrimary,
   },
 
   actions: {
-    marginTop: 28,
+    marginTop: 20,
+  },
+
+  secondaryActions: {
     flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
+    gap: 10,
+    marginTop: 12,
   },
 
-  joinButton: {
+  actionButton: {
     flex: 1,
-    height: 47,
-    borderRadius: 8,
-    backgroundColor: colors.primaryDark,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  joinText: {
-    fontSize: 13,
-    color: colors.white,
-    fontWeight: "600",
-  },
-
-  iconButton: {
-    width: 47,
-    height: 47,
-    borderRadius: 8,
-    backgroundColor: colors.primaryDark,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  overlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.28)",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  modal: {
-    width: "85%",
-    height: 400,
-    padding: 25,
-    borderRadius: 14,
-    backgroundColor: colors.white,
-    alignItems: "center",
-  },
-
-  alert: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    backgroundColor: "#FFF2F2",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  modalTitle: {
-    marginTop: 18,
-    fontSize: 18,
-    fontWeight: "700",
-    color: colors.textPrimary,
-  },
-
-  modalText: {
-    marginTop: 10,
-    marginBottom: 18,
-    paddingHorizontal: 8,
-    paddingBottom: 15,
-    textAlign: "center",
-    fontSize: 13,
-    lineHeight: 15,
-    color: colors.textSecondary,
-  },
-
-  modalButton: {
-    width: "100%",
-  },
-
-  deleteButton: {
-    width: "100%",
-    height: 44,
-    marginTop: 9,
-    borderRadius: 8,
+    height: 45,
     borderWidth: 1,
-    borderColor: colors.primaryDark,
+    borderColor: colors.borderLight,
+    borderRadius: 8,
+    flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+  },
+
+  actionText: {
+    marginLeft: 6,
+    fontSize: 11,
+    fontWeight: "600",
+    color: colors.primaryDark,
   },
 
   deleteText: {
-    color: colors.primaryDark,
-    fontSize: 14,
+    marginLeft: 6,
+    fontSize: 11,
     fontWeight: "600",
+    color: "#FF4D4F",
   },
 });

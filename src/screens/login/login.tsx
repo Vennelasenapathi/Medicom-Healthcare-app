@@ -23,6 +23,7 @@ export default function Login({ navigation }: any) {
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [successVisible, setSuccessVisible] = useState(false);
   const [forgotPasswordVisible, setForgotPasswordVisible] = useState(false);
 
   const login = (email: string, password: string) => {
@@ -151,6 +152,7 @@ export default function Login({ navigation }: any) {
               <AppButton
                 title="Login"
                 onPress={() => {
+                  setSuccessVisible(true);
                   setFieldTouched("email", true);
                   setFieldTouched("password", true);
                   handleSubmit();
@@ -179,6 +181,7 @@ export default function Login({ navigation }: any) {
       {/* SUCCESS */}
       {success && (
         <SuccessModal
+        visible={successVisible}
           title="Welcome back!"
           description={"You've successfully logged into the\nMedicom app."}
           buttonTitle="Go to Home"

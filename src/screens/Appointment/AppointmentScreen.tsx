@@ -32,7 +32,7 @@ const initialAppointments: Appointment[] = [
     id: 1,
     doctor: "Dr. Eshan Khan",
     specialty: "Brain & Spine Specialist",
-    date: "10 September 2026",
+    date: "15 September 2026",
     time: "10:00 AM",
     type: "Video Consultation",
     status: "Confirmed",
@@ -42,7 +42,7 @@ const initialAppointments: Appointment[] = [
     id: 2,
     doctor: "Dr. Siri Sharma",
     specialty: "Pediatric Neurologist",
-    date: "11 September 2026",
+    date: "16 September 2026",
     time: "01:00 PM",
     type: "Video Consultation",
     status: "Confirmed",
@@ -52,7 +52,7 @@ const initialAppointments: Appointment[] = [
     id: 3,
     doctor: "Dr. Jasmin",
     specialty: "Opthalmologist",
-    date: "12 September 2026",
+    date: "17 September 2026",
     time: "04:00 PM",
     type: "Video Consultation",
     status: "Confirmed",
@@ -94,7 +94,6 @@ export default function AppointmentsScreen({ navigation, }: any) {
         status: "Cancelled",
       },
     ]);
-
     setTab("Cancelled");
     setScreen("list");
     setResultType("cancelled");
@@ -208,10 +207,10 @@ export default function AppointmentsScreen({ navigation, }: any) {
               key={item.id}
               appointment={item}
               onPress={() => openDetails(item)}
-              onReschedule={() =>{
+              onReschedule={() => {
                 setSelected(item);
-    setDate(item.date);
-    setTime(item.time);
+                setDate(item.date);
+                setTime(item.time);
                 setScreen("reschedule")
               }}
             />

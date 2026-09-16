@@ -31,7 +31,6 @@ export default function AppointmentResultModal({
       visible={visible}
       transparent
       animationType="fade"
-      onRequestClose={onBack}
     >
       <View style={styles.overlay}>
         <View style={styles.modal}>
