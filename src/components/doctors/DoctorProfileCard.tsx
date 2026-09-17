@@ -1,5 +1,6 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 import { colors } from "@/constants/colors";
 
@@ -11,8 +12,14 @@ export default function DoctorProfileCard({ doctor }: any) {
 
         <View style={styles.info}>
           <Text style={styles.name}>{doctor.name}</Text>
-          <Text style={styles.specialty}>{doctor.specialty}</Text>
-          <Text style={styles.experience}>{doctor.experience}</Text>
+
+          <Text style={styles.specialty}>
+            {doctor.specialty}
+          </Text>
+
+          <Text style={styles.experience}>
+            {doctor.experience}
+          </Text>
         </View>
       </View>
 
@@ -28,7 +35,18 @@ export default function DoctorProfileCard({ doctor }: any) {
         </View>
 
         <View style={styles.stat}>
-          <Text style={styles.value}>⭐ 4.4</Text>
+          <View style={styles.ratingValue}>
+            <Ionicons
+              name="star"
+              size={16}
+              color={colors.star}
+            />
+
+            <Text style={styles.ratingText}>
+              4.4
+            </Text>
+          </View>
+
           <Text style={styles.label}>Ratings</Text>
         </View>
       </View>
@@ -90,6 +108,18 @@ const styles = StyleSheet.create({
   },
 
   value: {
+    fontSize: 17,
+    fontWeight: "700",
+    color: colors.textPrimary,
+  },
+
+  ratingValue: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+
+  ratingText: {
     fontSize: 17,
     fontWeight: "700",
     color: colors.textPrimary,

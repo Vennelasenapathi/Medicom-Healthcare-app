@@ -22,6 +22,9 @@ import SpecialtyDoctorsScreen from "@/screens/doctors/SpecialityDoctorsScreen";
 import PaymentDetails from "@/screens/payment/PaymentDetailsScreen";
 import AudioCallScreen from "@/screens/consulation/AudioCallScreen";
 import VideoCallScreen from "@/screens/consulation/VideoCallScreen";
+import AmbulanceScreen from "@/screens/Ambulance/AmbulanceScreen";
+import HospitalsScreen from "@/screens/Hospital/HospitalScreen";
+import HospitalDetailsScreen from "@/screens/Hospital/HospitalDetailScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -55,6 +58,9 @@ export default function AppNavigator() {
       <Stack.Screen name="PaymentDetails" component={PaymentDetails} />
       <Stack.Screen name="AudioCall" component={AudioCallScreen} />
       <Stack.Screen  name="VideoCall" component={VideoCallScreen} />
+      <Stack.Screen name="Ambulance" component={AmbulanceScreen}/>
+      <Stack.Screen name="Hospitals" component={HospitalsScreen}/>
+      <Stack.Screen name="HospitalDetails" component={HospitalDetailsScreen}/>
     </Stack.Navigator>
   );
 }

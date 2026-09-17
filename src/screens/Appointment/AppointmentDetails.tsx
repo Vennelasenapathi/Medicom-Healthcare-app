@@ -45,7 +45,7 @@ export default function AppointmentDetails({
         consultation,
       });
     } else {
-      navigation.navigate("InPersonConsultation", {
+      navigation.navigate("AudioCall", {
         doctor,
         consultation,
       });

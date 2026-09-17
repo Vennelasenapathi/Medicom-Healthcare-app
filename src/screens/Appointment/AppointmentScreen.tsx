@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -6,6 +6,7 @@ import {
   View,
   Pressable,
 } from "react-native";
+
 import BottomTabBar from "@/components/Bottombar/BottomBar";
 import { colors } from "@/constants/colors";
 import AppointmentCard from "@/components/appointments/AppointmentCard";
@@ -60,7 +61,10 @@ const initialAppointments: Appointment[] = [
   },
 ];
 
-export default function AppointmentsScreen({ navigation, }: any) {
+export default function AppointmentsScreen({
+  navigation,
+  route,
+}: any) {
   const [screen, setScreen] = useState<Screen>("list");
   const [tab, setTab] = useState<Tab>("Upcoming");
   const [appointments, setAppointments] = useState<Appointment[]>(initialAppointments);
@@ -70,6 +74,35 @@ export default function AppointmentsScreen({ navigation, }: any) {
   const [resultType, setResultType] = useState<"cancelled" | "rescheduled">("cancelled");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("10:00 AM");
+
+  /* ADD RECENT BOOKING */
+
+  useEffect(() => {
+    const newAppointment = route?.params?.newAppointment;
+
+    if (!newAppointment) return;
+
+    setAppointments((prev) => {
+      // Prevent duplicate appointment
+      const alreadyExists = prev.some(
+        (item) => item.id === newAppointment.id
+      );
+
+      if (alreadyExists) {
+        return prev;
+      }
+
+      return [newAppointment, ...prev];
+    });
+
+    // Remove the parameter after adding it
+    navigation.setParams({
+      newAppointment: undefined,
+    });
+
+    setTab("Upcoming");
+    setScreen("list");
+  }, [route?.params?.newAppointment]);
 
   /* OPEN DETAILS */
 
@@ -94,6 +127,7 @@ export default function AppointmentsScreen({ navigation, }: any) {
         status: "Cancelled",
       },
     ]);
+
     setTab("Cancelled");
     setScreen("list");
     setResultType("cancelled");
@@ -109,13 +143,14 @@ export default function AppointmentsScreen({ navigation, }: any) {
       prev.map((item) =>
         item.id === selected.id
           ? {
-            ...item,
-            date,
-            time,
-          }
+              ...item,
+              date,
+              time,
+            }
           : item
       )
     );
+
     setScreen("list");
     setTab("Upcoming");
     setResultType("rescheduled");
@@ -124,7 +159,8 @@ export default function AppointmentsScreen({ navigation, }: any) {
 
   /* CURRENT LIST */
 
-  const currentList = tab === "Cancelled" ? cancelled : appointments;
+  const currentList =
+    tab === "Cancelled" ? cancelled : appointments;
 
   /* DETAILS SCREEN */
 
@@ -136,8 +172,8 @@ export default function AppointmentsScreen({ navigation, }: any) {
         onBack={() => setScreen("list")}
         onDelete={deleteAppointment}
         onReschedule={() => {
-          setDate(selected?.date || "");
-          setTime(selected?.time || "");
+          setDate(selected.date || "");
+          setTime(selected.time || "");
           setScreen("reschedule");
         }}
       />
@@ -169,6 +205,8 @@ export default function AppointmentsScreen({ navigation, }: any) {
         My Appointments
       </Text>
 
+      {/* TABS */}
+
       <View style={styles.tabs}>
         {(
           [
@@ -197,6 +235,8 @@ export default function AppointmentsScreen({ navigation, }: any) {
         ))}
       </View>
 
+      {/* APPOINTMENT LIST */}
+
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.list}
@@ -211,7 +251,7 @@ export default function AppointmentsScreen({ navigation, }: any) {
                 setSelected(item);
                 setDate(item.date);
                 setTime(item.time);
-                setScreen("reschedule")
+                setScreen("reschedule");
               }}
             />
           ))
@@ -224,12 +264,15 @@ export default function AppointmentsScreen({ navigation, }: any) {
         )}
       </ScrollView>
 
+      {/* BOTTOM BAR */}
+
       <BottomTabBar
         navigation={navigation}
         activeTab="Appointments"
       />
 
       {/* RESULT POPUP */}
+
       <AppointmentResultModal
         visible={resultVisible}
         type={resultType}
@@ -240,7 +283,6 @@ export default function AppointmentsScreen({ navigation, }: any) {
           setScreen("list");
         }}
       />
-
     </View>
   );
 }

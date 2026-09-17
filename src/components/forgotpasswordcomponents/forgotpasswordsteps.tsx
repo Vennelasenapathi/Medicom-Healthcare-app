@@ -18,6 +18,7 @@ import {emailValidationSchema,phoneValidationSchema,otpValidationSchema,} from "
 import { createPasswordSchema } from "@/validations/createpasswordvalidation";
 import { colors } from "@/constants/colors";
 
+
 type Step = "forgot" | "otp" | "password";
 type Mode = "email" | "phone";
 

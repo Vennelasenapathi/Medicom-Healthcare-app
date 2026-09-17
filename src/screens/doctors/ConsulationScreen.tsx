@@ -148,7 +148,7 @@ export default function ConsultationScreen({
           );
         })}
 
-        {/* MEDICAL RECORDS */}
+        {/* MEDICAL RECORDS 
         <View style={styles.recordHeader}>
           <Text style={styles.label}>
             Medical Records
@@ -159,7 +159,7 @@ export default function ConsultationScreen({
           </Text>
         </View>
 
-        <Pressable style={styles.upload}>
+         <Pressable style={styles.upload}>
           <View style={styles.uploadIcon}>
             <Ionicons
               name="document-text-outline"
@@ -175,7 +175,7 @@ export default function ConsultationScreen({
           <Text style={styles.uploadSub}>
             PDF, JPG, or PNG
           </Text>
-        </Pressable>
+        </Pressable> */}
 
         {/* INFORMATION */}
         <View style={styles.infoBox}>

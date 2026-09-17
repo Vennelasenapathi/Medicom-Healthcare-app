@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 import { colors } from "@/constants/colors";
 
@@ -34,7 +35,16 @@ export default function ReviewList() {
             <Text style={styles.date}>{review.date}</Text>
           </View>
 
-          <Text style={styles.stars}>★★★★★</Text>
+          <View style={styles.stars}>
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Ionicons
+                key={star}
+                name="star"
+                size={16}
+                color={colors.star}
+              />
+            ))}
+          </View>
 
           <Text style={styles.text}>{review.text}</Text>
         </View>
@@ -71,8 +81,9 @@ const styles = StyleSheet.create({
   },
 
   stars: {
+    flexDirection: "row",
+    gap: 3,
     marginTop: 8,
-    fontSize: 15,
   },
 
   text: {

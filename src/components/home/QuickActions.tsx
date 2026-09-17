@@ -6,10 +6,14 @@ import {
   View,
 } from "react-native";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+
 import { colors } from "@/constants/colors";
 
 interface Props {
   onDoctorPress: () => void;
+  onAmbulancePress: () => void;
+  onHospitalPress: () => void;
+  onPharmacyPress: () => void;
 }
 
 const actions = [
@@ -33,18 +37,29 @@ const actions = [
 
 export default function QuickActions({
   onDoctorPress,
+  onAmbulancePress,
+  onHospitalPress,
+  onPharmacyPress,
 }: Props) {
+  const handlePress = (title: string) => {
+    if (title === "Doctor") {
+      onDoctorPress();
+    } else if (title === "Ambulance") {
+      onAmbulancePress();
+    } else if (title === "Hospital") {
+      onHospitalPress();
+    } else if (title === "Pharmacy") {
+      onPharmacyPress();
+    }
+  };
+
   return (
     <View style={styles.container}>
       {actions.map((item) => (
         <Pressable
           key={item.title}
           style={styles.item}
-          onPress={
-            item.title === "Doctor"
-              ? onDoctorPress
-              : undefined
-          }
+          onPress={() => handlePress(item.title)}
         >
           <View style={styles.iconBox}>
             <MaterialCommunityIcons
@@ -54,7 +69,9 @@ export default function QuickActions({
             />
           </View>
 
-          <Text style={styles.text}>{item.title}</Text>
+          <Text style={styles.text}>
+            {item.title}
+          </Text>
         </Pressable>
       ))}
     </View>

@@ -42,7 +42,7 @@ export default function VideoCallScreen({
   /* END CALL */
 
   const endCall = () => {
-    navigation.goBack();
+    navigation.navigate("Home");
   };
 
   return (

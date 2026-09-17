@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   ImageBackground,
   Pressable,
@@ -7,12 +7,39 @@ import {
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
 import { colors } from "@/constants/colors";
 
-export default function AudioCallScreen({
-  navigation,
-}: any) {
+export default function AudioCallScreen({navigation, }: any) {
+  const [seconds, setSeconds] = useState(0);
+
+  /* CALL TIMER */
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSeconds((prev) => prev + 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  /* FORMAT TIMER */
+
+  const formatTime = (totalSeconds: number) => {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const secs = totalSeconds % 60;
+
+    return [ hours, minutes, secs,]
+      .map((value) => String(value).padStart(2, "0"))
+      .join(":");
+  };
+
+  /* END CALL */
+
+  const endCall = () => {
+    navigation.navigate("Home");
+  };
+
   return (
     <ImageBackground
       source={require(
@@ -21,8 +48,9 @@ export default function AudioCallScreen({
       style={styles.container}
       blurRadius={8}
     >
-
       <View style={styles.overlay}>
+
+        {/* AVATAR */}
 
         <View style={styles.avatar}>
           <Ionicons
@@ -32,13 +60,19 @@ export default function AudioCallScreen({
           />
         </View>
 
+        {/* DOCTOR NAME */}
+
         <Text style={styles.name}>
           Dr. Azim Khan
         </Text>
 
+        {/* LIVE TIMER */}
+
         <Text style={styles.timer}>
-          00:05:24
+          {formatTime(seconds)}
         </Text>
+
+        {/* CONTROLS */}
 
         <View style={styles.controls}>
 
@@ -50,9 +84,11 @@ export default function AudioCallScreen({
             />
           </Pressable>
 
+          {/* END CALL */}
+
           <Pressable
             style={styles.endCall}
-            onPress={() => navigation.goBack()}
+            onPress={endCall}
           >
             <Ionicons
               name="call"
@@ -110,7 +146,8 @@ const styles = StyleSheet.create({
 
   timer: {
     marginTop: 70,
-    fontSize: 9,
+    fontSize: 18,
+    fontWeight: "600",
     color: colors.white,
   },
 
