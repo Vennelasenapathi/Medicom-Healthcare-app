@@ -1,82 +1,20 @@
 import React, { useState } from "react";
 import {
-  Dimensions,
-  Platform,
+  ImageBackground,
   Pressable,
   StyleSheet,
   Text,
   View,
 } from "react-native";
-import MapView, {
-  Circle,
-  Marker,
-  Polyline,
-  PROVIDER_GOOGLE,
-} from "react-native-maps";
 import { Ionicons } from "@expo/vector-icons";
-
 import { colors } from "@/constants/colors";
-
-const { width } = Dimensions.get("window");
 
 type AmbulanceState = "request" | "confirm" | "onWay";
 
-const USER_LOCATION = {
-  latitude: 19.076,
-  longitude: 72.8777,
-};
-
-const AMBULANCE_LOCATION = {
-  latitude: 19.0795,
-  longitude: 72.884,
-};
-
-const HOSPITAL_1 = {
-  latitude: 19.078,
-  longitude: 72.888,
-};
-
-const HOSPITAL_2 = {
-  latitude: 19.072,
-  longitude: 72.884,
-};
-
-const ROUTE = [
-  {
-    latitude: 19.076,
-    longitude: 72.8777,
-  },
-  {
-    latitude: 19.077,
-    longitude: 72.88,
-  },
-  {
-    latitude: 19.0795,
-    longitude: 72.884,
-  },
-  {
-    latitude: 19.0785,
-    longitude: 72.887,
-  },
-];
-
 export default function AmbulanceScreen({ navigation }: any) {
-  const [screen, setScreen] =
-    useState<AmbulanceState>("request");
+  const [screen, setScreen] = useState<AmbulanceState>("request");
 
-  const handleBack = () => {
-    if (screen === "request") {
-      navigation.goBack();
-    } else if (screen === "confirm") {
-      setScreen("request");
-    } else {
-      setScreen("confirm");
-    }
-  };
-
-  const handleRequest = () => {
-    setScreen("confirm");
-  };
+  const handleRequest = () => { setScreen("confirm"); };
 
   const handleConfirm = () => {
     setScreen("onWay");
@@ -84,220 +22,206 @@ export default function AmbulanceScreen({ navigation }: any) {
 
   return (
     <View style={styles.container}>
-      {/* HEADER */}
+
+      {/* Header */}
       <View style={styles.header}>
         <Pressable
           style={styles.backButton}
-          onPress={handleBack}
+          onPress={() => navigation.goBack()}
         >
-          <Ionicons
-            name="chevron-back"
-            size={23}
-            color="#FFFFFF"
-          />
+          <Ionicons name="chevron-back" size={24} color="#fff" />
         </Pressable>
 
-        <Text style={styles.headerTitle}>
-          Ambulance
-        </Text>
+        <Text style={styles.headerTitle}>Ambulance</Text>
 
         <View style={styles.headerSpace} />
       </View>
 
-      {/* MAP */}
+      {/* Map */}
       <View style={styles.mapContainer}>
-        <MapView
-          provider={
-            Platform.OS === "android"
-              ? PROVIDER_GOOGLE
-              : undefined
-          }
+        <ImageBackground
+          source={require("../../../assets/images/medicom/ambulancebackground.png")}
           style={styles.map}
-          initialRegion={{
-            latitude: USER_LOCATION.latitude,
-            longitude: USER_LOCATION.longitude,
-            latitudeDelta: 0.015,
-            longitudeDelta: 0.015,
-          }}
-          scrollEnabled={false}
-          zoomEnabled={false}
-          rotateEnabled={false}
-          pitchEnabled={false}
+          imageStyle={styles.mapImage}
         >
-          {/* SEARCH / LOCATION RADIUS */}
+
+          {/* User location circle */}
           {screen !== "onWay" && (
-            <Circle
-              center={USER_LOCATION}
-              radius={700}
-              fillColor="rgba(70,130,220,0.25)"
-              strokeColor="rgba(70,130,220,0.35)"
-              strokeWidth={1}
-            />
+            <View style={styles.locationCircle}>
+              <View style={styles.userMarker}>
+                <Ionicons
+                  name="location"
+                  size={23}
+                  color="#2867FF"
+                />
+              </View>
+            </View>
           )}
 
-          {/* USER LOCATION */}
-          <Marker coordinate={USER_LOCATION}>
-            <View style={styles.userMarker}>
-              <View style={styles.userMarkerDot} />
-            </View>
-          </Marker>
-
-          {/* AMBULANCE / HOSPITAL MARKERS */}
-          <Marker coordinate={HOSPITAL_1}>
-            <View style={styles.hospitalMarker}>
-              <Ionicons
-                name="add"
-                size={17}
-                color="#FFFFFF"
-              />
-            </View>
-          </Marker>
-
-          <Marker coordinate={HOSPITAL_2}>
-            <View style={styles.hospitalMarker}>
-              <Ionicons
-                name="add"
-                size={17}
-                color="#FFFFFF"
-              />
-            </View>
-          </Marker>
-
-          {/* ON THE WAY ROUTE */}
+          {/* User location for on-way screen */}
           {screen === "onWay" && (
             <>
-              <Marker coordinate={AMBULANCE_LOCATION}>
-                <View style={styles.ambulanceMarker}>
-                  <Ionicons
-                    name="location"
-                    size={17}
-                    color="#FFFFFF"
-                  />
-                </View>
-              </Marker>
+              <View style={styles.route}>
+                <View style={styles.routeLine1} />
+                <View style={styles.routeLine2} />
+                <View style={styles.routeLine3} />
+                <View style={styles.routeLine4} />
+              </View>
 
-              <Polyline
-                coordinates={ROUTE}
-                strokeColor="#2867FF"
-                strokeWidth={5}
-                lineCap="round"
-                lineJoin="round"
-              />
+              <View style={styles.onWayUserMarker}>
+                <Ionicons
+                  name="location"
+                  size={22}
+                  color="#2867FF"
+                />
+              </View>
             </>
           )}
-        </MapView>
 
-        {/* ON THE WAY LABEL */}
-        {screen === "onWay" && (
-          <View style={styles.onWayLabel}>
-            <Text style={styles.onWayText}>
-              Ambulance is on the way!
-            </Text>
+          {/* Hospital / ambulance markers */}
+          {screen !== "onWay" && (
+            <View>
+          <View style={styles.markerOne}>
+            <Ionicons name="add" size={17} color="#fff" />
           </View>
-        )}
 
-        {/* REQUEST SCREEN */}
-        {screen === "request" && (
-          <View style={styles.bottomCard}>
-            <Pressable
-              style={styles.primaryButton}
-              onPress={handleRequest}
-            >
-              <Text style={styles.primaryButtonText}>
-                Request Ambulance
-              </Text>
-
-              <Ionicons
-                name="chevron-forward"
-                size={18}
-                color="#FFFFFF"
-              />
-            </Pressable>
-
-            <Pressable style={styles.emergencyButton}>
-              <Text style={styles.emergencyText}>
-                Call Emergency
-              </Text>
-
-              <Ionicons
-                name="chevron-forward"
-                size={18}
-                color="#2867FF"
-              />
-            </Pressable>
+          <View style={styles.markerTwo}>
+            <Ionicons name="add" size={17} color="#fff" />
           </View>
-        )}
 
-        {/* CONFIRM ADDRESS */}
-        {screen === "confirm" && (
-          <View style={styles.confirmCard}>
-            <Text style={styles.cardTitle}>
-              Confirm your address
-            </Text>
+          <View style={styles.markerThree}>
+            <Ionicons name="add" size={17} color="#fff" />
+          </View>
+          </View>
+          )}
 
-            <View style={styles.divider} />
+          {/* Red hospital marker */}
 
-            <View style={styles.addressRow}>
-              <Ionicons
-                name="location"
-                size={21}
-                color="#FF5A61"
-              />
+          {screen === "onWay" && (
+            <View style={styles.markerOne}>
+              <Ionicons name="add" size={18} color="#fff" />
+            </View>
+          )}
 
-              <Text style={styles.address}>
-                2680 Kolpuri Campup Rd #102{"\n"}
-                Aram Nagar, Mumbai, 22314
+
+
+          {/* On way message */}
+          {screen === "onWay" && (
+            <View style={styles.onWayBadge}>
+              <Text style={styles.onWayText}>
+                Ambulance is on the way!
               </Text>
             </View>
-
-            <Pressable
-              style={styles.primaryButton}
-              onPress={handleConfirm}
-            >
-              <Text style={styles.primaryButtonText}>
-                Confirm Location
-              </Text>
-
-              <Ionicons
-                name="chevron-forward"
-                size={18}
-                color="#FFFFFF"
-              />
-            </Pressable>
-          </View>
-        )}
-
-        {/* ON THE WAY */}
-        {screen === "onWay" && (
-          <View style={styles.onWayCard}>
-            <Text style={styles.cardTitle}>
-              Pickup Location Confirmed!
-            </Text>
-
-            <Text style={styles.smallAddress}>
-              2680 Kolpuri Campup Rd #102 Aram Nagar,
-              {"\n"}Mumbai, 22314
-            </Text>
-
-            <Text style={styles.warning}>
-              *Please stay at the pickup location. The driver
-              {"\n"}may contact you if needed.
-            </Text>
-
-            <Pressable style={styles.driverButton}>
-              <Text style={styles.driverButtonText}>
-                Call Driver
-              </Text>
-
-              <Ionicons
-                name="chevron-forward"
-                size={18}
-                color="#FFFFFF"
-              />
-            </Pressable>
-          </View>
-        )}
+          )}
+        </ImageBackground>
       </View>
+
+      {/* Bottom Card */}
+      {screen === "request" && (
+        <View style={styles.bottomCard}>
+
+          <Pressable
+            style={styles.primaryButton}
+            onPress={handleRequest}
+          >
+            <Text style={styles.primaryButtonText}>
+              Request Ambulance
+            </Text>
+
+            <Ionicons
+              name="chevron-forward"
+              size={17}
+              color="#fff"
+            />
+          </Pressable>
+
+          <Pressable style={styles.emergencyButton}>
+            <Text style={styles.emergencyText}>
+              Call Emergency
+            </Text>
+
+            <Ionicons
+              name="chevron-forward"
+              size={17}
+              color="#2867FF"
+            />
+          </Pressable>
+
+        </View>
+      )}
+
+      {screen === "confirm" && (
+        <View style={styles.confirmCard}>
+
+          <Text style={styles.cardTitle}>
+            Confirm your address
+          </Text>
+
+          <View style={styles.divider} />
+
+          <View style={styles.addressRow}>
+            <Ionicons
+              name="location"
+              size={21}
+              color="#FF5A5F"
+            />
+
+            <Text style={styles.addressText}>
+              2680 Kolpuri Campup Rd #102{"\n"}
+              Aaram Nagar, Mumbai, 22314
+            </Text>
+          </View>
+
+          <Pressable
+            style={styles.primaryButton}
+            onPress={handleConfirm}
+          >
+            <Text style={styles.primaryButtonText}>
+              Confirm Location
+            </Text>
+
+            <Ionicons
+              name="chevron-forward"
+              size={17}
+              color="#fff"
+            />
+          </Pressable>
+
+        </View>
+      )}
+
+      {screen === "onWay" && (
+        <View style={styles.onWayCard}>
+
+          <Text style={styles.cardTitle}>
+            Pickup Location Confirmed!
+          </Text>
+
+          <Text style={styles.confirmedAddress}>
+            2680 Kolpuri Campup Rd #102 Aaram Nagar,
+            {"\n"}
+            Mumbai, 22314
+          </Text>
+
+          <Text style={styles.driverMessage}>
+            *Please stay at the pickup location. The driver
+            {"\n"}
+            may contact you if needed.
+          </Text>
+
+          <Pressable style={styles.driverButton}>
+            <Text style={styles.driverButtonText}>
+              Call Driver
+            </Text>
+
+            <Ionicons
+              name="call"
+              size={17}
+              color="#fff"
+            />
+          </Pressable>
+        </View>
+      )}
     </View>
   );
 }
@@ -308,12 +232,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
   },
 
-  /* HEADER */
+  /* =========================
+     HEADER
+  ========================= */
 
   header: {
-    height: 96,
-    paddingTop: 28,
+    height: 105,
     paddingHorizontal: 20,
+    paddingTop: 38,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -321,244 +247,341 @@ const styles = StyleSheet.create({
   },
 
   backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 9,
+    width: 46,
+    height: 46,
+    borderRadius: 11,
     backgroundColor: "#2867FF",
     alignItems: "center",
     justifyContent: "center",
   },
 
   headerTitle: {
-    fontSize: 17,
+    fontSize: 18,
     fontWeight: "700",
-    color: "#061838",
+    color: "#011133",
   },
 
   headerSpace: {
-    width: 40,
+    width: 46,
   },
 
-  /* MAP */
+  /* =========================
+     MAP
+  ========================= */
 
   mapContainer: {
-    flex: 1,
-    position: "relative",
-    overflow: "hidden",
+    height: 600,
+    marginHorizontal: 12,
+
+    borderRadius: 14,
   },
 
   map: {
-  position: "absolute",
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-},
+    flex: 1,
+    width: "100%",
+    height: 700,
+  },
 
-  /* USER MARKER */
+  mapImage: {
+    resizeMode: "cover",
+  },
+
+  /* =========================
+     USER LOCATION
+  ========================= */
+
+  locationCircle: {
+    position: "absolute",
+    width: 165,
+    height: 165,
+    borderRadius: 83,
+    backgroundColor: "rgba(40,103,255,0.18)",
+    left: 95,
+    top: 205,
+    alignItems: "center",
+    justifyContent: "center",
+  },
 
   userMarker: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
+    width: 45,
+    height: 45,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  /* =========================
+     RED LOCATION MARKERS
+  ========================= */
+
+  markerOne: {
+    position: "absolute",
+    width: 27,
+    height: 27,
+    borderRadius: 14,
+    backgroundColor: "#FF5A5F",
+    alignItems: "center",
+    justifyContent: "center",
+    right: 49,
+    top: 255,
+  }, 
+
+  markerTwo: {
+    position: "absolute",
+    width: 27,
+    height: 27,
+    borderRadius: 14,
+    backgroundColor: "#FF5A5F",
+    alignItems: "center",
+    justifyContent: "center",
+    left: 70,
+    top: 380,
+  },
+
+  markerThree: {
+    position: "absolute",
+    width: 27,
+    height: 27,
+    borderRadius: 14,
+    backgroundColor: "#FF5A5F",
+    alignItems: "center",
+    justifyContent: "center",
+    right: 45,
+    top: 500,
+  },
+
+  /* =========================
+    ON WAY ROUTE
+ ========================= */
+
+  route: {
+    position: "absolute",
+    left: 80,
+    top: 280,
+    width: 195,
+    height: 115,
+  },
+
+  /* From blue location → LEFT */
+  routeLine1: {
+    position: "absolute",
+    left: 0,
+    top: 10,
+    width: 82,
+    height: 6,
     backgroundColor: "#2867FF",
-    borderWidth: 6,
-    borderColor: "rgba(40,103,255,0.25)",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  userMarkerDot: {
-    width: 8,
-    height: 8,
     borderRadius: 4,
-    backgroundColor: "#FFFFFF",
   },
 
-  /* HOSPITAL */
+  /* LEFT → DOWN */
+  routeLine2: {
+    position: "absolute",
+    left: 0,
+    top: 10,
+    width: 6,
+    height: 100,
+    backgroundColor: "#2867FF",
+    borderRadius: 4,
+  },
 
-  hospitalMarker: {
-    width: 25,
-    height: 25,
-    borderRadius: 13,
-    backgroundColor: "#FF555A",
+  /* DOWN → RIGHT / SLIGHTLY DOWN */
+  routeLine3: {
+    position: "absolute",
+    left: 0,
+    top: 117,
+    width: 243,
+    height: 6,
+    backgroundColor: "#2867FF",
+    borderRadius: 4,
+    transform: [{ rotate: "6deg" }],
+  },
+
+  /* RIGHT → UP */
+  routeLine4: {
+    position: "absolute",
+    right: -50,
+    top: 0,
+    width: 6,
+    height: 140,
+    backgroundColor: "#2867FF",
+    borderRadius: 4,
+  },
+
+  /* Blue location marker */
+  onWayUserMarker: {
+    position: "absolute",
+    left: 148,
+    top: 257,
+    width: 42,
+    height: 42,
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 2,
-    borderColor: "#FFFFFF",
   },
 
   ambulanceMarker: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    backgroundColor: "#2867FF",
+    position: "absolute",
+    right: 27,
+    top: 164,
+    width: 45,
+    height: 45,
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 3,
-    borderColor: "#FFFFFF",
   },
 
-  /* REQUEST CARD */
+  /* =========================
+     ON WAY BADGE
+  ========================= */
+
+  onWayBadge: {
+    position: "absolute",
+    top: 22,
+    alignSelf: "center",
+    backgroundColor: "#FFD9DA",
+    paddingHorizontal: 14,
+    paddingVertical: 9,
+    borderRadius: 7,
+  },
+
+  onWayText: {
+    color: "#FF3035",
+    fontSize: 13,
+    fontWeight: "700",
+  },
+
+  /* =========================
+     REQUEST SCREEN
+  ========================= */
 
   bottomCard: {
-    position: "absolute",
-    left: 10,
-    right: 10,
-    bottom: 10,
+    marginHorizontal: 14,
+    marginTop: 10,
+    paddingTop: 10,
+    paddingBottom: 20,
     backgroundColor: "#FFFFFF",
-    borderRadius: 14,
-    padding: 10,
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOpacity: 0.12,
-    shadowRadius: 8,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
   },
 
   primaryButton: {
-    height: 52,
-    borderRadius: 11,
+    height: 60,
+    borderRadius: 13,
     backgroundColor: "#2867FF",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    gap: 7,
   },
 
   primaryButtonText: {
     color: "#FFFFFF",
-    fontSize: 13,
+    fontSize: 15,
     fontWeight: "700",
   },
 
   emergencyButton: {
-    height: 48,
-    marginTop: 5,
-    borderRadius: 11,
+    height: 60,
+    marginTop: 12,
+    borderRadius: 13,
     backgroundColor: "#FFFFFF",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    gap: 7,
   },
 
   emergencyText: {
     color: "#2867FF",
-    fontSize: 13,
+    fontSize: 15,
     fontWeight: "700",
   },
 
-  /* CONFIRM CARD */
+  /* =========================
+     CONFIRM CARD
+  ========================= */
 
   confirmCard: {
     position: "absolute",
-    left: 10,
-    right: 10,
-    bottom: 10,
+    left: 12,
+    right: 12,
+    bottom: 0,
     backgroundColor: "#FFFFFF",
-    borderRadius: 14,
-    padding: 15,
-    elevation: 6,
-    shadowColor: "#000",
-    shadowOpacity: 0.15,
-    shadowRadius: 9,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    borderTopLeftRadius: 22,
+    borderTopRightRadius: 22,
+    paddingHorizontal: 18,
+    paddingTop: 22,
+    paddingBottom: 22,
+    elevation: 10,
   },
 
   cardTitle: {
-    fontSize: 13,
+    fontSize: 16,
     fontWeight: "700",
-    color: "#061838",
+    color: "#011133",
   },
 
   divider: {
     height: 1,
-    backgroundColor: "#E7EBF0",
-    marginVertical: 11,
+    backgroundColor: "#E8ECF2",
+    marginVertical: 15,
   },
 
   addressRow: {
     flexDirection: "row",
     alignItems: "flex-start",
-    marginBottom: 13,
+    marginBottom: 17,
   },
 
-  address: {
+  addressText: {
+    marginLeft: 12,
+    color: "#8A919E",
+    fontSize: 13,
+    lineHeight: 19,
     flex: 1,
-    marginLeft: 10,
-    fontSize: 11,
-    lineHeight: 17,
-    color: "#8B929B",
   },
 
-  /* ON THE WAY */
-
-  onWayLabel: {
-    position: "absolute",
-    top: 20,
-    alignSelf: "center",
-    backgroundColor: "#FFE1E1",
-    paddingHorizontal: 9,
-    paddingVertical: 6,
-    borderRadius: 6,
-  },
-
-  onWayText: {
-    color: "#F02D32",
-    fontSize: 11,
-    fontWeight: "700",
-  },
+  /* =========================
+     ON WAY CARD
+  ========================= */
 
   onWayCard: {
     position: "absolute",
-    left: 10,
-    right: 10,
-    bottom: 10,
+    left: 12,
+    right: 12,
+    bottom: 0,
     backgroundColor: "#FFFFFF",
-    borderRadius: 14,
-    padding: 15,
-    elevation: 6,
-    shadowColor: "#000",
-    shadowOpacity: 0.15,
-    shadowRadius: 9,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
+    borderTopLeftRadius: 22,
+    borderTopRightRadius: 22,
+    paddingHorizontal: 18,
+    paddingTop: 22,
+    paddingBottom: 22,
+    elevation: 10,
   },
 
-  smallAddress: {
-    fontSize: 10,
-    lineHeight: 15,
-    color: "#9A9FA7",
-    marginTop: 6,
+  confirmedAddress: {
+    marginTop: 10,
+    color: "#9A9FA8",
+    fontSize: 12,
+    lineHeight: 18,
   },
 
-  warning: {
-    fontSize: 10,
-    lineHeight: 15,
-    color: "#FF3D42",
-    marginTop: 7,
-    marginBottom: 12,
+  driverMessage: {
+    marginTop: 9,
+    color: "#FF3B3F",
+    fontSize: 12,
+    lineHeight: 17,
   },
 
   driverButton: {
-    height: 52,
-    borderRadius: 11,
-    backgroundColor: "#FF3036",
+    height: 60,
+    marginTop: 17,
+    borderRadius: 13,
+    backgroundColor: "#FF3035",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    gap: 8,
   },
 
   driverButtonText: {
     color: "#FFFFFF",
-    fontSize: 13,
+    fontSize: 15,
     fontWeight: "700",
   },
 });

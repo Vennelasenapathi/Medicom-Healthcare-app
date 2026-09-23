@@ -9,7 +9,6 @@ import {
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
 import BottomTabBar from "@/components/Bottombar/BottomBar";
 import { colors } from "@/constants/colors";
 
@@ -63,9 +62,7 @@ export default function HospitalsScreen({ navigation }: any) {
             color={colors.white}
           />
         </Pressable>
-
         <Text style={styles.title}>Hospitals Near You</Text>
-
         <View style={styles.headerSpace} />
       </View>
 

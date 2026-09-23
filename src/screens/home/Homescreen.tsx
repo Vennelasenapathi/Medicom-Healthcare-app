@@ -44,6 +44,7 @@ export default function HomeScreen({ navigation }: any) {
             onDoctorPress={() => navigation.navigate("Doctors") }
             onAmbulancePress={() => navigation.navigate("Ambulance")}
             onHospitalPress={() => navigation.navigate("Hospitals")}
+            onPharmacyPress={() => navigation.navigate("Pharmacy") }
           />
 
           <CareBanner />

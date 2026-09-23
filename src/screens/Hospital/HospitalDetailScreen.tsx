@@ -228,9 +228,7 @@ export default function HospitalDetailsScreen({
 
         <Pressable
           style={styles.bookButton}
-          onPress={() =>
-            navigation.navigate("TopDoctors")
-          }
+          onPress={() =>navigation.navigate("TopDoctors")}
         >
           <Text style={styles.bookText}>
             Book Appointment
