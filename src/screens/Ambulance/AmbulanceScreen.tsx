@@ -8,28 +8,24 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "@/constants/colors";
+import { globalStyles } from "@/constants/Styles";
 
 type AmbulanceState = "request" | "confirm" | "onWay";
 
 export default function AmbulanceScreen({ navigation }: any) {
   const [screen, setScreen] = useState<AmbulanceState>("request");
-
-  const handleRequest = () => { setScreen("confirm"); };
-
-  const handleConfirm = () => {
-    setScreen("onWay");
-  };
+  const handleRequest = () => setScreen("confirm");
+  const handleConfirm = () => setScreen("onWay");
 
   return (
-    <View style={styles.container}>
-
+    <View style={globalStyles.container}>
       {/* Header */}
       <View style={styles.header}>
         <Pressable
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
-          <Ionicons name="chevron-back" size={24} color="#fff" />
+          <Ionicons name="chevron-back" size={24} color={colors.white} />
         </Pressable>
 
         <Text style={styles.headerTitle}>Ambulance</Text>
@@ -44,21 +40,18 @@ export default function AmbulanceScreen({ navigation }: any) {
           style={styles.map}
           imageStyle={styles.mapImage}
         >
-
-          {/* User location circle */}
           {screen !== "onWay" && (
             <View style={styles.locationCircle}>
               <View style={styles.userMarker}>
                 <Ionicons
                   name="location"
                   size={23}
-                  color="#2867FF"
+                  color={colors.primaryDark}
                 />
               </View>
             </View>
           )}
 
-          {/* User location for on-way screen */}
           {screen === "onWay" && (
             <>
               <View style={styles.route}>
@@ -72,40 +65,34 @@ export default function AmbulanceScreen({ navigation }: any) {
                 <Ionicons
                   name="location"
                   size={22}
-                  color="#2867FF"
+                  color={colors.primaryDark}
                 />
               </View>
             </>
           )}
 
-          {/* Hospital / ambulance markers */}
           {screen !== "onWay" && (
-            <View>
-          <View style={styles.markerOne}>
-            <Ionicons name="add" size={17} color="#fff" />
-          </View>
+            <>
+              <View style={styles.markerOne}>
+                <Ionicons name="add" size={17} color={colors.white} />
+              </View>
 
-          <View style={styles.markerTwo}>
-            <Ionicons name="add" size={17} color="#fff" />
-          </View>
+              <View style={styles.markerTwo}>
+                <Ionicons name="add" size={17} color={colors.white} />
+              </View>
 
-          <View style={styles.markerThree}>
-            <Ionicons name="add" size={17} color="#fff" />
-          </View>
-          </View>
+              <View style={styles.markerThree}>
+                <Ionicons name="add" size={17} color={colors.white} />
+              </View>
+            </>
           )}
-
-          {/* Red hospital marker */}
 
           {screen === "onWay" && (
             <View style={styles.markerOne}>
-              <Ionicons name="add" size={18} color="#fff" />
+              <Ionicons name="add" size={18} color={colors.white} />
             </View>
           )}
 
-
-
-          {/* On way message */}
           {screen === "onWay" && (
             <View style={styles.onWayBadge}>
               <Text style={styles.onWayText}>
@@ -116,109 +103,80 @@ export default function AmbulanceScreen({ navigation }: any) {
         </ImageBackground>
       </View>
 
-      {/* Bottom Card */}
+      {/* Request Ambulance */}
       {screen === "request" && (
         <View style={styles.bottomCard}>
-
-          <Pressable
-            style={styles.primaryButton}
-            onPress={handleRequest}
-          >
-            <Text style={styles.primaryButtonText}>
-              Request Ambulance
-            </Text>
-
+          <Pressable style={globalStyles.button} onPress={handleRequest}>
+            <Text style={globalStyles.buttonText}>Request Ambulance</Text>
             <Ionicons
               name="chevron-forward"
               size={17}
-              color="#fff"
+              color={colors.white}
             />
           </Pressable>
 
           <Pressable style={styles.emergencyButton}>
-            <Text style={styles.emergencyText}>
-              Call Emergency
-            </Text>
-
+            <Text style={styles.emergencyText}>Call Emergency</Text>
             <Ionicons
               name="chevron-forward"
               size={17}
-              color="#2867FF"
+              color={colors.primaryDark}
             />
           </Pressable>
-
         </View>
       )}
 
+      {/* Confirm Address */}
       {screen === "confirm" && (
-        <View style={styles.confirmCard}>
-
-          <Text style={styles.cardTitle}>
-            Confirm your address
-          </Text>
+        <View style={styles.bottomSheet}>
+          <Text style={styles.cardTitle}>Confirm your address</Text>
 
           <View style={styles.divider} />
 
           <View style={styles.addressRow}>
-            <Ionicons
-              name="location"
-              size={21}
-              color="#FF5A5F"
-            />
+            <Ionicons name="location" size={21} color="#FF5A5F" />
 
             <Text style={styles.addressText}>
-              2680 Kolpuri Campup Rd #102{"\n"}
+              {"2680 Kolpuri Campup Rd #102\n"}
               Aaram Nagar, Mumbai, 22314
             </Text>
           </View>
 
-          <Pressable
-            style={styles.primaryButton}
-            onPress={handleConfirm}
-          >
-            <Text style={styles.primaryButtonText}>
-              Confirm Location
-            </Text>
-
+          <Pressable style={globalStyles.button} onPress={handleConfirm}>
+            <Text style={globalStyles.buttonText}>Confirm Location</Text>
             <Ionicons
               name="chevron-forward"
               size={17}
-              color="#fff"
+              color={colors.white}
             />
           </Pressable>
-
         </View>
       )}
 
+      {/* Ambulance On The Way */}
       {screen === "onWay" && (
-        <View style={styles.onWayCard}>
-
+        <View style={styles.bottomSheet}>
           <Text style={styles.cardTitle}>
             Pickup Location Confirmed!
           </Text>
 
           <Text style={styles.confirmedAddress}>
-            2680 Kolpuri Campup Rd #102 Aaram Nagar,
-            {"\n"}
+            {"2680 Kolpuri Campup Rd #102 Aaram Nagar,\n"}
             Mumbai, 22314
           </Text>
 
           <Text style={styles.driverMessage}>
-            *Please stay at the pickup location. The driver
-            {"\n"}
+            {"*Please stay at the pickup location. The driver\n"}
             may contact you if needed.
           </Text>
 
-          <Pressable style={styles.driverButton}>
-            <Text style={styles.driverButtonText}>
-              Call Driver
-            </Text>
+          <Pressable
+            style={styles.driverButton}
+            onPress={() => navigation.navigate("Drivercall")}
+          >
+            <Text style={styles.driverButtonText}>Call Driver</Text>
 
-            <Ionicons
-              name="call"
-              size={17}
-              color="#fff"
-            />
+            <Ionicons name="call" size={17} color={colors.white} />
           </Pressable>
         </View>
       )}
@@ -227,15 +185,6 @@ export default function AmbulanceScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FFFFFF",
-  },
-
-  /* =========================
-     HEADER
-  ========================= */
-
   header: {
     height: 105,
     paddingHorizontal: 20,
@@ -243,14 +192,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.white,
   },
 
   backButton: {
     width: 46,
     height: 46,
     borderRadius: 11,
-    backgroundColor: "#2867FF",
+    backgroundColor: colors.primaryDark,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -258,22 +207,18 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 18,
     fontWeight: "700",
-    color: "#011133",
+    color: colors.textPrimary,
   },
 
   headerSpace: {
     width: 46,
   },
 
-  /* =========================
-     MAP
-  ========================= */
-
   mapContainer: {
     height: 600,
     marginHorizontal: 12,
-
     borderRadius: 14,
+    overflow: "hidden",
   },
 
   map: {
@@ -285,10 +230,6 @@ const styles = StyleSheet.create({
   mapImage: {
     resizeMode: "cover",
   },
-
-  /* =========================
-     USER LOCATION
-  ========================= */
 
   locationCircle: {
     position: "absolute",
@@ -309,10 +250,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  /* =========================
-     RED LOCATION MARKERS
-  ========================= */
-
   markerOne: {
     position: "absolute",
     width: 27,
@@ -323,7 +260,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     right: 49,
     top: 255,
-  }, 
+  },
 
   markerTwo: {
     position: "absolute",
@@ -349,10 +286,6 @@ const styles = StyleSheet.create({
     top: 500,
   },
 
-  /* =========================
-    ON WAY ROUTE
- ========================= */
-
   route: {
     position: "absolute",
     left: 80,
@@ -361,52 +294,47 @@ const styles = StyleSheet.create({
     height: 115,
   },
 
-  /* From blue location → LEFT */
   routeLine1: {
     position: "absolute",
     left: 0,
     top: 10,
     width: 82,
     height: 6,
-    backgroundColor: "#2867FF",
+    backgroundColor: colors.primaryDark,
     borderRadius: 4,
   },
 
-  /* LEFT → DOWN */
   routeLine2: {
     position: "absolute",
     left: 0,
     top: 10,
     width: 6,
     height: 100,
-    backgroundColor: "#2867FF",
+    backgroundColor: colors.primaryDark,
     borderRadius: 4,
   },
 
-  /* DOWN → RIGHT / SLIGHTLY DOWN */
   routeLine3: {
     position: "absolute",
     left: 0,
     top: 117,
     width: 243,
     height: 6,
-    backgroundColor: "#2867FF",
+    backgroundColor: colors.primaryDark,
     borderRadius: 4,
     transform: [{ rotate: "6deg" }],
   },
 
-  /* RIGHT → UP */
   routeLine4: {
     position: "absolute",
     right: -50,
     top: 0,
     width: 6,
     height: 140,
-    backgroundColor: "#2867FF",
+    backgroundColor: colors.primaryDark,
     borderRadius: 4,
   },
 
-  /* Blue location marker */
   onWayUserMarker: {
     position: "absolute",
     left: 148,
@@ -416,20 +344,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
-  ambulanceMarker: {
-    position: "absolute",
-    right: 27,
-    top: 164,
-    width: 45,
-    height: 45,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  /* =========================
-     ON WAY BADGE
-  ========================= */
 
   onWayBadge: {
     position: "absolute",
@@ -447,39 +361,19 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 
-  /* =========================
-     REQUEST SCREEN
-  ========================= */
-
   bottomCard: {
     marginHorizontal: 14,
     marginTop: 10,
     paddingTop: 10,
     paddingBottom: 20,
-    backgroundColor: "#FFFFFF",
-  },
-
-  primaryButton: {
-    height: 60,
-    borderRadius: 13,
-    backgroundColor: "#2867FF",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 7,
-  },
-
-  primaryButtonText: {
-    color: "#FFFFFF",
-    fontSize: 15,
-    fontWeight: "700",
+    backgroundColor: colors.white,
   },
 
   emergencyButton: {
     height: 60,
     marginTop: 12,
     borderRadius: 13,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.white,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -487,21 +381,17 @@ const styles = StyleSheet.create({
   },
 
   emergencyText: {
-    color: "#2867FF",
+    color: colors.primaryDark,
     fontSize: 15,
     fontWeight: "700",
   },
 
-  /* =========================
-     CONFIRM CARD
-  ========================= */
-
-  confirmCard: {
+  bottomSheet: {
     position: "absolute",
     left: 12,
     right: 12,
     bottom: 0,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.white,
     borderTopLeftRadius: 22,
     borderTopRightRadius: 22,
     paddingHorizontal: 18,
@@ -513,12 +403,12 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 16,
     fontWeight: "700",
-    color: "#011133",
+    color: colors.textPrimary,
   },
 
   divider: {
     height: 1,
-    backgroundColor: "#E8ECF2",
+    backgroundColor: colors.borderLight,
     marginVertical: 15,
   },
 
@@ -529,34 +419,16 @@ const styles = StyleSheet.create({
   },
 
   addressText: {
+    flex: 1,
     marginLeft: 12,
-    color: "#8A919E",
+    color: colors.textSecondary,
     fontSize: 13,
     lineHeight: 19,
-    flex: 1,
-  },
-
-  /* =========================
-     ON WAY CARD
-  ========================= */
-
-  onWayCard: {
-    position: "absolute",
-    left: 12,
-    right: 12,
-    bottom: 0,
-    backgroundColor: "#FFFFFF",
-    borderTopLeftRadius: 22,
-    borderTopRightRadius: 22,
-    paddingHorizontal: 18,
-    paddingTop: 22,
-    paddingBottom: 22,
-    elevation: 10,
   },
 
   confirmedAddress: {
     marginTop: 10,
-    color: "#9A9FA8",
+    color: colors.textSecondary,
     fontSize: 12,
     lineHeight: 18,
   },
@@ -580,7 +452,7 @@ const styles = StyleSheet.create({
   },
 
   driverButtonText: {
-    color: "#FFFFFF",
+    color: colors.white,
     fontSize: 15,
     fontWeight: "700",
   },

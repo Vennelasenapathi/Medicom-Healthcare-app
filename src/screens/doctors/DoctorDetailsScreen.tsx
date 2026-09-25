@@ -12,6 +12,7 @@ import DoctorProfileCard from "@/components/doctors/DoctorProfileCard";
 import AppointmentCalendar from "@/components/doctors/AppointmentCalendar";
 import ReviewList from "@/components/doctors/ReviewList";
 import { colors } from "@/constants/colors";
+import { globalStyles } from "@/constants/Styles";
 
 export default function DoctorDetailsScreen({
   navigation,
@@ -42,8 +43,8 @@ export default function DoctorDetailsScreen({
 
   if (!doctor) {
     return (
-      <View style={styles.empty}>
-        <Text style={styles.emptyText}>
+      <View style={globalStyles.empty}>
+        <Text style={globalStyles.emptyText}>
           Doctor details not found
         </Text>
       </View>
@@ -51,9 +52,18 @@ export default function DoctorDetailsScreen({
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <BackButton onPress={() => navigation.goBack()} />
+    <View
+      style={[
+        globalStyles.container,
+        styles.container,
+      ]}
+    >
+      {/* HEADER */}
+
+      <View style={globalStyles.header}>
+        <BackButton
+          onPress={() => navigation.goBack()}
+        />
 
         <Text style={styles.headerTitle}>
           Doctor's Details
@@ -68,12 +78,15 @@ export default function DoctorDetailsScreen({
       >
         <DoctorProfileCard doctor={doctor} />
 
+        {/* TABS */}
+
         <View style={styles.tabs}>
           <Text
             onPress={() => setTab("Consultation")}
             style={[
               styles.tab,
-              tab === "Consultation" && styles.activeTab,
+              tab === "Consultation" &&
+                styles.activeTab,
             ]}
           >
             Consultation
@@ -89,6 +102,8 @@ export default function DoctorDetailsScreen({
             Reviews
           </Text>
         </View>
+
+        {/* CONSULTATION */}
 
         {tab === "Consultation" ? (
           <>
@@ -122,17 +137,8 @@ export default function DoctorDetailsScreen({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     paddingHorizontal: 18,
     backgroundColor: colors.white,
-  },
-
-  header: {
-    height: 105,
-    paddingTop: 40,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
   },
 
   headerTitle: {
@@ -179,16 +185,5 @@ const styles = StyleSheet.create({
 
   disabledButton: {
     opacity: 0.45,
-  },
-
-  empty: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  emptyText: {
-    fontSize: 16,
-    color: colors.textSecondary,
   },
 });

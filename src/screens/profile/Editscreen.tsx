@@ -9,37 +9,26 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Formik } from "formik";
-import * as Yup from "yup";
 
 import AppButton from "@/components/common/AppButton";
 import InputField from "@/components/common/InputField";
 import DateOfBirthField from "@/components/signupcomponents/DateofBirthField";
 import { colors } from "@/constants/colors";
-import {profileSchema} from "@/validations/profilevalidation";
+import { globalStyles } from "@/constants/Styles";
+import { profileSchema } from "@/validations/profilevalidation";
 
-
-export default function EditProfileScreen({
-  navigation,
-}: any) {
+export default function EditProfileScreen({ navigation }: any) {
   return (
-    <View style={styles.container}>
-
-      {/* HEADER */}
-      <View style={styles.header}>
+    <View style={globalStyles.container}>
+      <View style={[globalStyles.header, styles.header]}>
         <Pressable
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
-          <Ionicons
-            name="chevron-back"
-            size={22}
-            color={colors.white}
-          />
+          <Ionicons name="chevron-back" size={22} color={colors.white} />
         </Pressable>
 
-        <Text style={styles.headerTitle}>
-          Profile
-        </Text>
+        <Text style={styles.headerTitle}>Profile</Text>
         <View style={styles.headerSpace} />
       </View>
 
@@ -53,10 +42,7 @@ export default function EditProfileScreen({
         validationSchema={profileSchema}
         onSubmit={(values) => {
           console.log("Updated Profile:", values);
-
-          navigation.navigate("Profile", {
-            updatedProfile: values,
-          });
+          navigation.navigate("Profile", { updatedProfile: values });
         }}
       >
         {({
@@ -74,44 +60,25 @@ export default function EditProfileScreen({
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={styles.scroll}
           >
-
-            {/* PROFILE IMAGE */}
             <View style={styles.profileSection}>
               <View style={styles.imageContainer}>
-
                 <Image
-                  source={require(
-                    "../../../assets/images/medicom/Image.png"
-                  )}
+                  source={require("../../../assets/images/medicom/Image.png")}
                   style={styles.avatar}
                 />
 
                 <Pressable style={styles.editIcon}>
-                  <Ionicons
-                    name="camera"
-                    size={15}
-                    color={colors.white}
-                  />
+                  <Ionicons name="camera" size={15} color={colors.white} />
                 </Pressable>
-
               </View>
 
-              {/* NAME CHANGES WHILE TYPING */}
-              <Text style={styles.profileName}>
-                {values.fullName}
-              </Text>
-
-              <Text style={styles.profileSubText}>
+              <Text style={styles.profileName}>{values.fullName}</Text>
+              <Text style={globalStyles.smallText}>
                 Edit your personal information
               </Text>
             </View>
 
-            {/* FULL NAME */}
-            <View style={styles.fieldContainer}>
-              <Text style={styles.label}>
-                Full Name
-              </Text>
-
+            <ProfileField label="Full Name">
               <InputField
                 icon="person-outline"
                 value={values.fullName}
@@ -121,14 +88,9 @@ export default function EditProfileScreen({
                 error={errors.fullName}
                 touched={touched.fullName}
               />
-            </View>
+            </ProfileField>
 
-            {/* PHONE */}
-            <View style={styles.fieldContainer}>
-              <Text style={styles.label}>
-                Phone Number
-              </Text>
-
+            <ProfileField label="Phone Number">
               <InputField
                 icon="call-outline"
                 value={values.phone}
@@ -139,14 +101,9 @@ export default function EditProfileScreen({
                 error={errors.phone}
                 touched={touched.phone}
               />
-            </View>
+            </ProfileField>
 
-            {/* EMAIL */}
-            <View style={styles.fieldContainer}>
-              <Text style={styles.label}>
-                Email
-              </Text>
-
+            <ProfileField label="Email">
               <InputField
                 icon="mail-outline"
                 value={values.email}
@@ -159,36 +116,29 @@ export default function EditProfileScreen({
                 error={errors.email}
                 touched={touched.email}
               />
-            </View>
+            </ProfileField>
 
-            {/* DATE OF BIRTH */}
-            <View style={styles.fieldContainer}>
-              <Text style={styles.label}>
-                Date of Birth
-              </Text>
+            <ProfileField label="Date of Birth">
               <DateOfBirthField
                 value={values.dob}
                 touched={touched.dob}
                 error={errors.dob}
-                onChange={(date) => setFieldValue("dob", date) }
-                onBlur={() => setFieldTouched("dob", true) }
+                onChange={(date) => setFieldValue("dob", date)}
+                onBlur={() => setFieldTouched("dob", true)}
               />
-            </View>
+            </ProfileField>
 
-            {/* UPDATE BUTTON */}
             <View style={styles.buttonContainer}>
               <AppButton
                 title="Update Profile"
                 onPress={() => {
-                  setFieldTouched("fullName", true);
-                  setFieldTouched("phone", true);
-                  setFieldTouched("email", true);
-                  setFieldTouched("dob", true);
+                  ["fullName", "phone", "email", "dob"].forEach((field) =>
+                    setFieldTouched(field, true)
+                  );
                   handleSubmit();
                 }}
               />
             </View>
-            <View style={styles.bottomSpace} />
           </ScrollView>
         )}
       </Formik>
@@ -196,21 +146,26 @@ export default function EditProfileScreen({
   );
 }
 
+function ProfileField({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <View style={styles.fieldContainer}>
+      <Text style={styles.label}>{label}</Text>
+      {children}
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.white,
-  },
-
-  /* HEADER */
-
   header: {
     height: 95,
     paddingHorizontal: 18,
     paddingTop: 30,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
   },
 
   backButton: {
@@ -232,14 +187,10 @@ const styles = StyleSheet.create({
     width: 42,
   },
 
-  /* SCROLL */
-
   scroll: {
     paddingHorizontal: 20,
     paddingBottom: 40,
   },
-
-  /* PROFILE */
 
   profileSection: {
     alignItems: "center",
@@ -265,46 +216,32 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
+    borderWidth: 2,
+    borderColor: colors.white,
     backgroundColor: colors.primaryDark,
     alignItems: "center",
     justifyContent: "center",
-    borderWidth: 2,
-    borderColor: colors.white,
   },
 
   profileName: {
+    marginTop: 12,
     fontSize: 18,
     fontWeight: "700",
     color: colors.textPrimary,
-    marginTop: 12,
   },
-
-  profileSubText: {
-    fontSize: 13,
-    color: "#999",
-    marginTop: 4,
-  },
-
-  /* FIELDS */
 
   fieldContainer: {
     marginBottom: 18,
   },
 
   label: {
+    marginBottom: 8,
     fontSize: 14,
     fontWeight: "600",
     color: colors.textPrimary,
-    marginBottom: 8,
   },
-
-  /* BUTTON */
 
   buttonContainer: {
     marginTop: 8,
-  },
-
-  bottomSpace: {
-    height: 30,
   },
 });

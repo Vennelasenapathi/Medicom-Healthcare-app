@@ -12,6 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import BackButton from "@/components/home/BackButton";
 import AppButton from "@/components/common/AppButton";
 import { colors } from "@/constants/colors";
+import { globalStyles } from "@/constants/Styles";
 
 export default function AppointmentDetails({
   appointment,
@@ -35,46 +36,32 @@ export default function AppointmentDetails({
 
   const handleJoin = () => {
     if (appointment.type === "Chat Consultation") {
-      navigation.navigate("Chat", {
-        doctor,
-        consultation,
-      });
+      navigation.navigate("Chat", { doctor, consultation });
     } else if (appointment.type === "Video Consultation") {
-      navigation.navigate("VideoCall", {
-        doctor,
-        consultation,
-      });
+      navigation.navigate("VideoCall", { doctor, consultation });
     } else {
-      navigation.navigate("AudioCall", {
-        doctor,
-        consultation,
-      });
+      navigation.navigate("AudioCall", { doctor, consultation });
     }
   };
 
   return (
-    <View style={styles.container}>
+    <View style={globalStyles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scroll}
       >
-        {/* HEADER */}
+        {/* Header */}
         <View style={styles.header}>
           <BackButton onPress={onBack} />
 
-          <Text style={styles.title}>
-            Appointment Details
-          </Text>
+          <Text style={globalStyles.title}>Appointment Details</Text>
 
-          <View style={{ width: 40 }} />
+          <View style={styles.headerSpace} />
         </View>
 
-        {/* DOCTOR */}
+        {/* Doctor */}
         <View style={styles.doctorCard}>
-          <Image
-            source={appointment.image}
-            style={styles.doctorImage}
-          />
+          <Image source={appointment.image} style={styles.doctorImage} />
 
           <View style={styles.doctorInfo}>
             <Text style={styles.doctorName}>
@@ -89,7 +76,7 @@ export default function AppointmentDetails({
               <Ionicons
                 name="checkmark-circle"
                 size={15}
-                color="#20B486"
+                color={colors.success}
               />
 
               <Text style={styles.status}>
@@ -99,12 +86,12 @@ export default function AppointmentDetails({
           </View>
         </View>
 
-        {/* APPOINTMENT INFORMATION */}
+        {/* Appointment Information */}
         <Text style={styles.sectionTitle}>
           Appointment Information
         </Text>
 
-        <View style={styles.card}>
+        <View style={styles.infoCard}>
           <View style={styles.row}>
             <View style={styles.iconBox}>
               <Ionicons
@@ -116,10 +103,7 @@ export default function AppointmentDetails({
 
             <View style={styles.rowInfo}>
               <Text style={styles.label}>Date</Text>
-
-              <Text style={styles.value}>
-                {appointment.date}
-              </Text>
+              <Text style={styles.value}>{appointment.date}</Text>
             </View>
           </View>
 
@@ -134,10 +118,7 @@ export default function AppointmentDetails({
 
             <View style={styles.rowInfo}>
               <Text style={styles.label}>Time</Text>
-
-              <Text style={styles.value}>
-                {appointment.time}
-              </Text>
+              <Text style={styles.value}>{appointment.time}</Text>
             </View>
           </View>
 
@@ -161,7 +142,7 @@ export default function AppointmentDetails({
             </View>
           </View>
 
-          <View style={styles.row}>
+          <View style={styles.lastRow}>
             <View style={styles.iconBox}>
               <Ionicons
                 name="document-text-outline"
@@ -176,14 +157,13 @@ export default function AppointmentDetails({
               </Text>
 
               <Text style={styles.value}>
-                {appointment.reason ||
-                  "General Consultation"}
+                {appointment.reason || "General Consultation"}
               </Text>
             </View>
           </View>
         </View>
 
-        {/* ACTIONS */}
+        {/* Actions */}
         <View style={styles.actions}>
           <AppButton
             title="Join Consultation"
@@ -213,7 +193,7 @@ export default function AppointmentDetails({
               <Ionicons
                 name="trash-outline"
                 size={20}
-                color="#FF4D4F"
+                color={colors.error}
               />
 
               <Text style={styles.deleteText}>
@@ -228,13 +208,8 @@ export default function AppointmentDetails({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.white,
-    paddingHorizontal: 14,
-  },
-
   scroll: {
+    paddingHorizontal: 14,
     paddingBottom: 30,
   },
 
@@ -246,10 +221,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
 
-  title: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: colors.textPrimary,
+  headerSpace: {
+    width: 40,
   },
 
   doctorCard: {
@@ -293,7 +266,7 @@ const styles = StyleSheet.create({
   status: {
     marginLeft: 5,
     fontSize: 10,
-    color: "#20B486",
+    color: colors.success,
     fontWeight: "600",
   },
 
@@ -305,16 +278,19 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
   },
 
-  card: {
+  infoCard: {
     padding: 14,
     borderRadius: 12,
     backgroundColor: "#F8FAFC",
   },
 
   row: {
-    flexDirection: "row",
-    alignItems: "center",
+    ...globalStyles.row,
     marginBottom: 18,
+  },
+
+  lastRow: {
+    ...globalStyles.row,
   },
 
   iconBox: {
@@ -375,6 +351,6 @@ const styles = StyleSheet.create({
     marginLeft: 6,
     fontSize: 11,
     fontWeight: "600",
-    color: "#FF4D4F",
+    color: colors.error,
   },
 });

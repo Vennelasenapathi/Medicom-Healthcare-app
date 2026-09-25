@@ -8,46 +8,20 @@ import {
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
 import BottomTabBar from "@/components/Bottombar/BottomBar";
 import { colors } from "@/constants/colors";
-
-const chats = [
-  {
-    id: 1,
-    name: "Dr. Eshan Khan",
-    message: "How are you feeling today?",
-    time: "10:30 AM",
-    image: require("../../../assets/images/medicom/topdoctor1.png"),
-    unread: 2,
-  },
-  {
-    id: 2,
-    name: "Dr. Siri Sharma",
-    message: "Please continue the medication.",
-    time: "Yesterday",
-    image: require("../../../assets/images/medicom/topdoctor2.png"),
-    unread: 1,
-  },
-  {
-    id: 3,
-    name: "Dr. Jasmin",
-    message: "Your report looks good.",
-    time: "Monday",
-    image: require("../../../assets/images/medicom/topdoctor5.png"),
-    unread: 0,
-  },
-];
+import { globalStyles } from "@/constants/Styles";
+import { chats } from "@/data/chats";
 
 export default function ChatListScreen({ navigation }: any) {
   return (
-    <View style={styles.container}>
-
+    <View style={[globalStyles.container, styles.screen]}>
       {/* HEADER */}
       <View style={styles.header}>
         <View>
           <Text style={styles.title}>My Messages</Text>
-          <Text style={styles.subtitle}>
+
+          <Text style={globalStyles.subtitle}>
             Chat with your doctors
           </Text>
         </View>
@@ -66,7 +40,7 @@ export default function ChatListScreen({ navigation }: any) {
         <Ionicons
           name="search-outline"
           size={18}
-          color="#A5AAB3"
+          color={colors.textSecondary}
         />
 
         <Text style={styles.searchText}>
@@ -166,31 +140,20 @@ function ChatItem({ chat, onPress }: any) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.white,
+  screen: {
     paddingHorizontal: 18,
   },
 
-  /* HEADER */
   header: {
     paddingTop: 52,
     paddingBottom: 18,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    ...globalStyles.spaceBetween,
   },
 
   title: {
     fontSize: 25,
     fontWeight: "800",
     color: colors.textPrimary,
-  },
-
-  subtitle: {
-    marginTop: 5,
-    fontSize: 14,
-    color: colors.textSecondary,
   },
 
   searchButton: {
@@ -202,23 +165,20 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  /* SEARCH */
   searchBox: {
     height: 48,
     borderRadius: 12,
     backgroundColor: colors.background,
     paddingHorizontal: 15,
-    flexDirection: "row",
-    alignItems: "center",
+    ...globalStyles.row,
   },
 
   searchText: {
     marginLeft: 9,
     fontSize: 13,
-    color: "#A5AAB3",
+    color: colors.textSecondary,
   },
 
-  /* FILTERS */
   filters: {
     height: 48,
     marginTop: 14,
@@ -254,13 +214,11 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
   },
 
-  /* LIST */
   list: {
     paddingTop: 18,
     paddingBottom: 110,
   },
 
-  /* CHAT ITEM */
   chatItem: {
     minHeight: 96,
     marginBottom: 12,
@@ -270,8 +228,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.borderLight,
     backgroundColor: colors.white,
-    flexDirection: "row",
-    alignItems: "center",
+    ...globalStyles.row,
   },
 
   avatar: {

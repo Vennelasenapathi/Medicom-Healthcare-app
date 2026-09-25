@@ -1,65 +1,24 @@
 import React, { useEffect, useState } from "react";
 import {
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   View,
-  Pressable,
 } from "react-native";
 
 import BottomTabBar from "@/components/Bottombar/BottomBar";
-import { colors } from "@/constants/colors";
 import AppointmentCard from "@/components/appointments/AppointmentCard";
+import AppointmentResultModal from "@/components/appointments/AppointmentResultModal";
+import { colors } from "@/constants/colors";
+import { globalStyles } from "@/constants/Styles";
+import { Appointment, initialAppointments } from "@/data/Appointments";
+
 import AppointmentDetails from "./AppointmentDetails";
 import RescheduleAppointment from "./RescheduleAppointment";
-import AppointmentResultModal from "@/components/appointments/AppointmentResultModal";
 
 type Tab = "Upcoming" | "Completed" | "Cancelled";
 type Screen = "list" | "details" | "reschedule";
-
-export type Appointment = {
-  id: number;
-  doctor: string;
-  specialty: string;
-  date: string;
-  time: string;
-  type: string;
-  status: string;
-  image: any;
-};
-
-const initialAppointments: Appointment[] = [
-  {
-    id: 1,
-    doctor: "Dr. Eshan Khan",
-    specialty: "Brain & Spine Specialist",
-    date: "15 September 2026",
-    time: "10:00 AM",
-    type: "Video Consultation",
-    status: "Confirmed",
-    image: require("../../../assets/images/medicom/topdoctor1.png"),
-  },
-  {
-    id: 2,
-    doctor: "Dr. Siri Sharma",
-    specialty: "Pediatric Neurologist",
-    date: "16 September 2026",
-    time: "01:00 PM",
-    type: "Video Consultation",
-    status: "Confirmed",
-    image: require("../../../assets/images/medicom/topdoctor2.png"),
-  },
-  {
-    id: 3,
-    doctor: "Dr. Jasmin",
-    specialty: "Opthalmologist",
-    date: "17 September 2026",
-    time: "04:00 PM",
-    type: "Video Consultation",
-    status: "Confirmed",
-    image: require("../../../assets/images/medicom/topdoctor5.png"),
-  },
-];
 
 export default function AppointmentsScreen({
   navigation,
@@ -67,52 +26,41 @@ export default function AppointmentsScreen({
 }: any) {
   const [screen, setScreen] = useState<Screen>("list");
   const [tab, setTab] = useState<Tab>("Upcoming");
-  const [appointments, setAppointments] = useState<Appointment[]>(initialAppointments);
+  const [appointments, setAppointments] =
+    useState<Appointment[]>(initialAppointments);
   const [cancelled, setCancelled] = useState<Appointment[]>([]);
   const [selected, setSelected] = useState<Appointment | null>(null);
   const [resultVisible, setResultVisible] = useState(false);
-  const [resultType, setResultType] = useState<"cancelled" | "rescheduled">("cancelled");
+  const [resultType, setResultType] =
+    useState<"cancelled" | "rescheduled">("cancelled");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("10:00 AM");
 
   /* ADD RECENT BOOKING */
-
   useEffect(() => {
     const newAppointment = route?.params?.newAppointment;
-
     if (!newAppointment) return;
 
     setAppointments((prev) => {
-      // Prevent duplicate appointment
-      const alreadyExists = prev.some(
-        (item) => item.id === newAppointment.id
-      );
-
-      if (alreadyExists) {
+      if (prev.some((item) => item.id === newAppointment.id)) {
         return prev;
       }
 
       return [newAppointment, ...prev];
     });
 
-    // Remove the parameter after adding it
-    navigation.setParams({
-      newAppointment: undefined,
-    });
-
+    navigation.setParams({ newAppointment: undefined });
     setTab("Upcoming");
     setScreen("list");
   }, [route?.params?.newAppointment]);
 
   /* OPEN DETAILS */
-
   const openDetails = (item: Appointment) => {
     setSelected(item);
     setScreen("details");
   };
 
-  /* DELETE APPOINTMENT */
-
+  /* DELETE */
   const deleteAppointment = () => {
     if (!selected) return;
 
@@ -122,10 +70,7 @@ export default function AppointmentsScreen({
 
     setCancelled((prev) => [
       ...prev,
-      {
-        ...selected,
-        status: "Cancelled",
-      },
+      { ...selected, status: "Cancelled" },
     ]);
 
     setTab("Cancelled");
@@ -135,18 +80,13 @@ export default function AppointmentsScreen({
   };
 
   /* RESCHEDULE */
-
   const confirmReschedule = () => {
     if (!selected || !date) return;
 
     setAppointments((prev) =>
       prev.map((item) =>
         item.id === selected.id
-          ? {
-              ...item,
-              date,
-              time,
-            }
+          ? { ...item, date, time }
           : item
       )
     );
@@ -157,13 +97,10 @@ export default function AppointmentsScreen({
     setResultVisible(true);
   };
 
-  /* CURRENT LIST */
-
   const currentList =
     tab === "Cancelled" ? cancelled : appointments;
 
-  /* DETAILS SCREEN */
-
+  /* DETAILS */
   if (screen === "details" && selected) {
     return (
       <AppointmentDetails
@@ -180,8 +117,7 @@ export default function AppointmentsScreen({
     );
   }
 
-  /* RESCHEDULE SCREEN */
-
+  /* RESCHEDULE */
   if (screen === "reschedule" && selected) {
     return (
       <RescheduleAppointment
@@ -196,47 +132,36 @@ export default function AppointmentsScreen({
     );
   }
 
-  /* LIST SCREEN */
-
   return (
-    <View style={styles.container}>
-
-      <Text style={styles.title}>
-        My Appointments
-      </Text>
+    <View style={[globalStyles.container, styles.screen]}>
+      <Text style={styles.title}>My Appointments</Text>
 
       {/* TABS */}
-
       <View style={styles.tabs}>
-        {(
-          [
-            "Upcoming",
-            "Completed",
-            "Cancelled",
-          ] as Tab[]
-        ).map((item) => (
-          <Pressable
-            key={item}
-            onPress={() => setTab(item)}
-            style={[
-              styles.tab,
-              tab === item && styles.activeTab,
-            ]}
-          >
-            <Text
+        {(["Upcoming", "Completed", "Cancelled"] as Tab[]).map(
+          (item) => (
+            <Pressable
+              key={item}
+              onPress={() => setTab(item)}
               style={[
-                styles.tabText,
-                tab === item && styles.activeText,
+                styles.tab,
+                tab === item && styles.activeTab,
               ]}
             >
-              {item}
-            </Text>
-          </Pressable>
-        ))}
+              <Text
+                style={[
+                  styles.tabText,
+                  tab === item && styles.activeText,
+                ]}
+              >
+                {item}
+              </Text>
+            </Pressable>
+          )
+        )}
       </View>
 
-      {/* APPOINTMENT LIST */}
-
+      {/* APPOINTMENTS */}
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.list}
@@ -256,8 +181,8 @@ export default function AppointmentsScreen({
             />
           ))
         ) : (
-          <View style={styles.empty}>
-            <Text style={styles.emptyText}>
+          <View style={globalStyles.empty}>
+            <Text style={globalStyles.emptyText}>
               No {tab.toLowerCase()} appointments
             </Text>
           </View>
@@ -265,14 +190,12 @@ export default function AppointmentsScreen({
       </ScrollView>
 
       {/* BOTTOM BAR */}
-
       <BottomTabBar
         navigation={navigation}
         activeTab="Appointments"
       />
 
       {/* RESULT POPUP */}
-
       <AppointmentResultModal
         visible={resultVisible}
         type={resultType}
@@ -288,9 +211,7 @@ export default function AppointmentsScreen({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.white,
+  screen: {
     paddingHorizontal: 14,
   },
 
@@ -335,15 +256,5 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 90,
     gap: 15,
-  },
-
-  empty: {
-    alignItems: "center",
-    paddingTop: 100,
-  },
-
-  emptyText: {
-    fontSize: 15,
-    color: colors.textSecondary,
   },
 });

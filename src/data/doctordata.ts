@@ -40,3 +40,22 @@ export const doctors = [
     image: require("../../assets/images/medicom/topdoctor1.png"),
   },
 ];
+
+export const previousDoctors = [
+    {
+      name: "Dr. Eshan Khan",
+      image: require("../../assets/images/medicom/topdoctor1.png"),
+    },
+    {
+      name: "Dr. Rama Divja",
+      image: require("../../assets/images/medicom/topdoctor4.png"),
+    },
+    {
+      name: "Dr. Jazmine Yale",
+      image: require("../../assets/images/medicom/topdoctor2.png"),
+    },
+    {
+      name: "Dr. Siri Sharma",
+      image: require("../../assets/images/medicom/topdoctor5.png"),
+    },
+  ];

@@ -7,15 +7,11 @@ import {
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
 import { colors } from "@/constants/colors";
+import { globalStyles } from "@/constants/Styles";
 
-export default function VideoCallScreen({
-  navigation,
-  route,
-}: any) {
+export default function VideoCallScreen({navigation, route,}: any) {
   const doctor = route?.params?.doctor;
-
   const [muted, setMuted] = useState(false);
   const [speaker, setSpeaker] = useState(true);
   const [cameraOff, setCameraOff] = useState(false);
@@ -46,12 +42,10 @@ export default function VideoCallScreen({
   };
 
   return (
-    <View style={styles.container}>
-
+    <View style={[globalStyles.container, styles.container]}>
       {/* DOCTOR VIDEO AREA */}
 
       <View style={styles.videoContainer}>
-
         {doctor?.image ? (
           <Image
             source={doctor.image}
@@ -75,7 +69,6 @@ export default function VideoCallScreen({
         {/* TOP AREA */}
 
         <View style={styles.topBar}>
-
           <Pressable
             style={styles.backButton}
             onPress={() => navigation.goBack()}
@@ -88,19 +81,17 @@ export default function VideoCallScreen({
           </Pressable>
 
           <View style={styles.callInfo}>
-
             <Text style={styles.doctorName}>
               {doctor?.name || "Dr. Eshan Khan"}
             </Text>
 
-            <View style={styles.statusRow}>
+            <View style={globalStyles.row}>
               <View style={styles.liveDot} />
 
               <Text style={styles.callStatus}>
                 Connected
               </Text>
             </View>
-
           </View>
 
           <View style={styles.timer}>
@@ -108,13 +99,11 @@ export default function VideoCallScreen({
               {minutes}:{remainingSeconds}
             </Text>
           </View>
-
         </View>
 
         {/* SELF CAMERA */}
 
         <View style={styles.selfCamera}>
-
           {cameraOff ? (
             <View style={styles.cameraOff}>
               <Ionicons
@@ -132,7 +121,6 @@ export default function VideoCallScreen({
               />
             </View>
           )}
-
         </View>
 
         {/* DOCTOR NAME */}
@@ -143,14 +131,14 @@ export default function VideoCallScreen({
           </Text>
 
           <Text style={styles.specialty}>
-            {doctor?.specialty || "Brain & Spine Specialist"}
+            {doctor?.specialty ||
+              "Brain & Spine Specialist"}
           </Text>
         </View>
 
         {/* CONTROLS */}
 
-        <View style={styles.controls}>
-
+        <View style={[globalStyles.row, styles.controls]}>
           {/* MUTE */}
 
           <Pressable
@@ -161,11 +149,7 @@ export default function VideoCallScreen({
             onPress={() => setMuted(!muted)}
           >
             <Ionicons
-              name={
-                muted
-                  ? "mic-off"
-                  : "mic"
-              }
+              name={muted ? "mic-off" : "mic"}
               size={23}
               color={colors.white}
             />
@@ -178,9 +162,7 @@ export default function VideoCallScreen({
               styles.controlButton,
               cameraOff && styles.activeControl,
             ]}
-            onPress={() =>
-              setCameraOff(!cameraOff)
-            }
+            onPress={() => setCameraOff(!cameraOff)}
           >
             <Ionicons
               name={
@@ -200,9 +182,7 @@ export default function VideoCallScreen({
               styles.controlButton,
               speaker && styles.activeControl,
             ]}
-            onPress={() =>
-              setSpeaker(!speaker)
-            }
+            onPress={() => setSpeaker(!speaker)}
           >
             <Ionicons
               name={
@@ -227,18 +207,14 @@ export default function VideoCallScreen({
               color={colors.white}
             />
           </Pressable>
-
         </View>
-
       </View>
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#101522",
   },
 
@@ -278,8 +254,7 @@ const styles = StyleSheet.create({
     top: 45,
     left: 16,
     right: 16,
-    flexDirection: "row",
-    alignItems: "center",
+    ...globalStyles.row,
   },
 
   backButton: {
@@ -300,12 +275,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "700",
     color: colors.white,
-  },
-
-  statusRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 3,
   },
 
   liveDot: {
@@ -390,9 +359,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 35,
-    flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center",
     gap: 14,
   },
 

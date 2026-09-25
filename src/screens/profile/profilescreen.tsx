@@ -10,6 +10,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 
 import { colors } from "@/constants/colors";
+import { globalStyles } from "@/constants/styles";
 import BottomTabBar from "@/components/Bottombar/BottomBar";
 
 export default function ProfileScreen({ navigation, route }: any) {
@@ -17,34 +18,33 @@ export default function ProfileScreen({ navigation, route }: any) {
   const [profileName, setProfileName] = useState("Vennela");
 
   useEffect(() => {
-    const updatedName =
-      route?.params?.updatedProfile?.fullName;
-
-    if (updatedName) {
-      setProfileName(updatedName);
-    }
+    const name = route?.params?.updatedProfile?.fullName;
+    if (name) setProfileName(name);
   }, [route?.params?.updatedProfile?.fullName]);
 
   const menuItems = [
-    {
-      icon: "person-outline",
-      title: "Profile",
-    },
-    {
-      icon: "settings-outline",
-      title: "Settings",
-    },
-    {
-      icon: "log-out-outline",
-      title: "Logout",
-    },
+    { icon: "person-outline", title: "Profile" },
+    { icon: "settings-outline", title: "Settings" },
+    { icon: "log-out-outline", title: "Logout" },
   ];
 
-  return (
-    <View style={styles.container}>
+  const handleMenu = (title: string) => {
+    if (title === "Profile") navigation.navigate("EditProfile");
+    else if (title === "Settings") navigation.navigate("Settings");
+    else setLogoutVisible(true);
+  };
 
-      {/* HEADER */}
-      <View style={styles.header}>
+  const handleLogout = () => {
+    setLogoutVisible(false);
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "Login" }],
+    });
+  };
+
+  return (
+    <View style={globalStyles.container}>
+      <View style={[globalStyles.header, styles.header]}>
         <Pressable
           style={styles.backButton}
           onPress={() => navigation.goBack()}
@@ -56,53 +56,32 @@ export default function ProfileScreen({ navigation, route }: any) {
           />
         </Pressable>
 
-        <Text style={styles.headerTitle}>
-          My Profile
-        </Text>
-
+        <Text style={styles.headerTitle}>My Profile</Text>
         <View style={styles.headerSpace} />
       </View>
 
-      {/* PROFILE */}
       <View style={styles.profile}>
         <Image
-          source={require(
-            "../../../assets/images/medicom/Image.png"
-          )}
+          source={require("../../../assets/images/medicom/Image.png")}
           style={styles.avatar}
         />
-
-        <Text style={styles.name}>
-          {profileName}
-        </Text>
+        <Text style={styles.name}>{profileName}</Text>
       </View>
 
-      {/* MENU */}
       <View style={styles.menu}>
         {menuItems.map((item) => (
           <Pressable
             key={item.title}
-            style={styles.menuItem}
-            onPress={() => {
-              if (item.title === "Profile") {
-                navigation.navigate("EditProfile");
-              } else if (item.title === "Settings") {
-                navigation.navigate("Settings");
-              } else {
-                setLogoutVisible(true);
-              }
-            }}
+            style={[globalStyles.spaceBetween, styles.menuItem]}
+            onPress={() => handleMenu(item.title)}
           >
-            <View style={styles.menuLeft}>
+            <View style={globalStyles.row}>
               <Ionicons
                 name={item.icon as any}
                 size={16}
                 color={colors.primaryDark}
               />
-
-              <Text style={styles.menuText}>
-                {item.title}
-              </Text>
+              <Text style={styles.menuText}>{item.title}</Text>
             </View>
 
             <Ionicons
@@ -114,24 +93,19 @@ export default function ProfileScreen({ navigation, route }: any) {
         ))}
       </View>
 
-      {/* REUSABLE BOTTOM BAR */}
       <BottomTabBar
         navigation={navigation}
         activeTab="Profile"
       />
 
-      {/* LOGOUT MODAL */}
       <Modal
         visible={logoutVisible}
         transparent
         animationType="fade"
-        onRequestClose={() =>
-          setLogoutVisible(false)
-        }
+        onRequestClose={() => setLogoutVisible(false)}
       >
         <View style={styles.overlay}>
           <View style={styles.modal}>
-
             <View style={styles.checkCircle}>
               <Ionicons
                 name="checkmark"
@@ -141,56 +115,32 @@ export default function ProfileScreen({ navigation, route }: any) {
             </View>
 
             <Text style={styles.modalTitle}>
-              Are you sure to log out of{"\n"}
-              your account?
+              Are you sure to log out of{"\n"}your account?
             </Text>
 
             <Pressable
-              style={styles.logoutButton}
-              onPress={() => {
-                setLogoutVisible(false);
-
-                navigation.reset({
-                  index: 0,
-                  routes: [{ name: "Login" }],
-                });
-              }}
+              style={globalStyles.button}
+              onPress={handleLogout}
             >
-              <Text style={styles.logoutText}>
-                Log Out
-              </Text>
+              <Text style={globalStyles.buttonText}>Log Out</Text>
             </Pressable>
 
             <Pressable
               style={styles.cancelButton}
-              onPress={() =>
-                setLogoutVisible(false)
-              }
+              onPress={() => setLogoutVisible(false)}
             >
-              <Text style={styles.cancelText}>
-                Back
-              </Text>
+              <Text style={styles.cancelText}>Back</Text>
             </Pressable>
-
           </View>
         </View>
       </Modal>
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.white,
-  },
-
   header: {
     height: 100,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
     paddingHorizontal: 10,
     paddingTop: 50,
   },
@@ -228,10 +178,10 @@ const styles = StyleSheet.create({
   },
 
   name: {
+    marginTop: 10,
     fontSize: 16,
     fontWeight: "700",
     color: colors.textPrimary,
-    marginTop: 10,
   },
 
   menu: {
@@ -243,18 +193,10 @@ const styles = StyleSheet.create({
     height: 39,
     borderBottomWidth: 1,
     borderBottomColor: "#F0F0F0",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-
-  menuLeft: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 15,
   },
 
   menuText: {
+    marginLeft: 15,
     fontSize: 16,
     color: "#888",
   },
@@ -269,63 +211,47 @@ const styles = StyleSheet.create({
   modal: {
     width: 327,
     height: 414,
-    backgroundColor: colors.white,
-    borderRadius: 12,
     padding: 18,
+    borderRadius: 12,
     alignItems: "center",
+    backgroundColor: colors.white,
   },
 
   checkCircle: {
     width: 102,
     height: 102,
     marginTop: 30,
+    marginBottom: 12,
     borderRadius: 51,
-    backgroundColor: "#F2F6FF",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 12,
+    backgroundColor: "#F2F6FF",
   },
 
   modalTitle: {
-    textAlign: "center",
+    marginTop: 12,
+    marginBottom: 14,
     fontSize: 21,
     lineHeight: 26,
     fontWeight: "700",
-    marginTop: 12,
+    textAlign: "center",
     color: colors.textPrimary,
-    marginBottom: 14,
-  },
-
-  logoutButton: {
-    width: "100%",
-    height: 48,
-    borderRadius: 6,
-    backgroundColor: colors.primaryDark,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 35,
-  },
-
-  logoutText: {
-    color: colors.white,
-    fontSize: 16,
-    fontWeight: "700",
   },
 
   cancelButton: {
     width: "100%",
     height: 48,
-    borderRadius: 6,
+    marginTop: 10,
     borderWidth: 1,
+    borderRadius: 6,
     borderColor: colors.primaryDark,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 10,
   },
 
   cancelText: {
-    color: colors.primaryDark,
     fontSize: 16,
     fontWeight: "700",
+    color: colors.primaryDark,
   },
 });

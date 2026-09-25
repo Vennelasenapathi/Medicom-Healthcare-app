@@ -9,9 +9,8 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 
 import { colors } from "@/constants/colors";
-import { globalStyles } from "@/constants/Styles";
 
-export default function AudioCallScreen({ navigation }: any) {
+export default function DriverAudioCallScreen({navigation,}: any) {
   const [seconds, setSeconds] = useState(0);
 
   /* CALL TIMER */
@@ -33,43 +32,45 @@ export default function AudioCallScreen({ navigation }: any) {
     );
     const secs = totalSeconds % 60;
 
-    return [hours, minutes, secs]
-      .map((value) => String(value).padStart(2, "0"))
+    return [hours, minutes, secs].map((value) =>
+        String(value).padStart(2, "0")
+      )
       .join(":");
   };
 
   /* END CALL */
 
-  const endCall = () => {
-    navigation.navigate("Home");
-  };
+  const endCall = () => {navigation.goBack();};
 
   return (
     <ImageBackground
-      source={require(
-        "../../../assets/images/medicom/topdoctor5.png"
-      )}
-      style={globalStyles.container}
+      source={require( "../../../assets/images/medicom/ambulancebackground.png" )}
+      style={styles.container}
       blurRadius={8}
     >
       <View style={styles.overlay}>
-        {/* AVATAR */}
+
+        {/* DRIVER AVATAR */}
 
         <View style={styles.avatar}>
           <Ionicons
-            name="person"
-            size={35}
-            color={colors.textSecondary}
+            name="car"
+            size={38}
+            color={colors.primaryDark}
           />
         </View>
 
-        {/* DOCTOR NAME */}
+        {/* DRIVER NAME */}
 
         <Text style={styles.name}>
-          Dr. Azim Khan
+          Ambulance Driver
         </Text>
 
-        {/* LIVE TIMER */}
+        <Text style={styles.status}>
+          Connected
+        </Text>
+
+        {/* CALL TIMER */}
 
         <Text style={styles.timer}>
           {formatTime(seconds)}
@@ -78,10 +79,13 @@ export default function AudioCallScreen({ navigation }: any) {
         {/* CONTROLS */}
 
         <View style={styles.controls}>
+
+          {/* SPEAKER */}
+
           <Pressable style={styles.smallButton}>
             <Ionicons
               name="volume-medium"
-              size={18}
+              size={23}
               color={colors.white}
             />
           </Pressable>
@@ -94,87 +98,130 @@ export default function AudioCallScreen({ navigation }: any) {
           >
             <Ionicons
               name="call"
-              size={22}
+              size={27}
               color={colors.white}
             />
           </Pressable>
+
+          {/* MICROPHONE */}
 
           <Pressable style={styles.smallButton}>
             <Ionicons
               name="mic"
-              size={18}
+              size={23}
               color={colors.white}
             />
           </Pressable>
+
         </View>
+
+        <Text style={styles.message}>
+          You are connected to your ambulance driver
+        </Text>
 
         <Text style={styles.swipe}>
           Swipe back to menu
         </Text>
+
       </View>
     </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+
   overlay: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "rgba(0,0,0,0.35)",
+    backgroundColor: "rgba(0,0,0,0.45)",
   },
 
+  /* DRIVER ICON */
+
   avatar: {
-    width: 70,
-    height: 70,
-    borderRadius: 40,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
     backgroundColor: colors.white,
     alignItems: "center",
     justifyContent: "center",
   },
 
+  /* NAME */
+
   name: {
-    marginTop: 10,
-    fontSize: 14,
+    marginTop: 18,
+    fontSize: 22,
     fontWeight: "700",
     color: colors.white,
   },
 
+  status: {
+    marginTop: 7,
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#BFFFC8",
+  },
+
+  /* TIMER */
+
   timer: {
-    marginTop: 70,
-    fontSize: 18,
+    marginTop: 65,
+    fontSize: 22,
     fontWeight: "600",
     color: colors.white,
   },
 
+  /* CONTROLS */
+
   controls: {
-    marginTop: 18,
-    gap: 15,
-    ...globalStyles.row,
+    marginTop: 25,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 22,
   },
 
   smallButton: {
-    width: 38,
-    height: 38,
-    borderRadius: 20,
-    backgroundColor: "rgba(255,255,255,0.4)",
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor:
+      "rgba(255,255,255,0.35)",
     alignItems: "center",
     justifyContent: "center",
   },
 
   endCall: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: "#FF0000",
+    width: 68,
+    height: 68,
+    borderRadius: 34,
+    backgroundColor: "#FF3035",
     alignItems: "center",
     justifyContent: "center",
+    transform: [
+      {
+        rotate: "135deg",
+      },
+    ],
+  },
+
+  message: {
+    marginTop: 35,
+    paddingHorizontal: 30,
+    textAlign: "center",
+    fontSize: 13,
+    lineHeight: 19,
+    color: "#FFFFFF",
   },
 
   swipe: {
     position: "absolute",
-    bottom: 25,
-    fontSize: 8,
+    bottom: 28,
+    fontSize: 9,
     color: colors.white,
   },
 });

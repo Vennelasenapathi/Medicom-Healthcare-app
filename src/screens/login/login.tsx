@@ -10,7 +10,6 @@ import {
   View,
 } from "react-native";
 import { Formik } from "formik";
-
 import AppButton from "@/components/common/AppButton";
 import InputField from "@/components/common/InputField";
 import PasswordField from "@/components/common/PasswordField";

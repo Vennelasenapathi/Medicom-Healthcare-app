@@ -9,18 +9,25 @@ import {
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+
 import BackButton from "@/components/home/BackButton";
 import { colors } from "@/constants/colors";
+import { globalStyles } from "@/constants/Styles";
 import { doctors } from "@/data/doctordata";
 
 export default function SpecialtyDoctorsScreen({
   navigation,
 }: any) {
   return (
-    <View style={styles.container}>
-
+    <View
+      style={[
+        globalStyles.container,
+        styles.container,
+      ]}
+    >
       {/* HEADER */}
-      <View style={styles.header}>
+
+      <View style={globalStyles.header}>
         <BackButton
           onPress={() => navigation.goBack()}
         />
@@ -33,11 +40,17 @@ export default function SpecialtyDoctorsScreen({
       </View>
 
       {/* SEARCH */}
-      <View style={styles.search}>
+
+      <View
+        style={[
+          globalStyles.row,
+          styles.search,
+        ]}
+      >
         <TextInput
           placeholder="Search within Neurologists..."
           placeholderTextColor="#999"
-          style={styles.input}
+          style={globalStyles.input}
         />
 
         <Ionicons
@@ -48,8 +61,8 @@ export default function SpecialtyDoctorsScreen({
       </View>
 
       {/* FILTERS */}
-      <View style={styles.filters}>
 
+      <View style={styles.filters}>
         <Pressable style={styles.activeFilter}>
           <Text style={styles.activeFilterText}>
             Available Today
@@ -67,17 +80,16 @@ export default function SpecialtyDoctorsScreen({
             High Rated
           </Text>
         </Pressable>
-
       </View>
 
       {/* DOCTOR LIST */}
+
       <FlatList
         data={doctors}
         keyExtractor={(item) => String(item.id)}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.list}
         renderItem={({ item }) => (
-
           <Pressable
             style={styles.card}
             onPress={() =>
@@ -86,16 +98,16 @@ export default function SpecialtyDoctorsScreen({
               })
             }
           >
-
             {/* DOCTOR IMAGE */}
+
             <Image
               source={item.image}
               style={styles.image}
             />
 
             {/* DOCTOR INFORMATION */}
-            <View style={styles.info}>
 
+            <View style={styles.info}>
               <Text style={styles.name}>
                 {item.name}
               </Text>
@@ -109,9 +121,19 @@ export default function SpecialtyDoctorsScreen({
               </Text>
 
               {/* RATING + LOCATION */}
-              <View style={styles.bottomRow}>
 
-                <View style={styles.ratingBox}>
+              <View
+                style={[
+                  globalStyles.row,
+                  styles.bottomRow,
+                ]}
+              >
+                <View
+                  style={[
+                    globalStyles.row,
+                    styles.ratingBox,
+                  ]}
+                >
                   <Ionicons
                     name="star"
                     size={15}
@@ -130,43 +152,31 @@ export default function SpecialtyDoctorsScreen({
                 <Text style={styles.distance}>
                   📍 {item.distance}
                 </Text>
-
               </View>
-
             </View>
 
             {/* ARROW */}
+
             <Ionicons
               name="chevron-forward"
               size={24}
               color="#999"
               style={styles.arrow}
             />
-
           </Pressable>
         )}
       />
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     paddingHorizontal: 16,
     backgroundColor: colors.white,
   },
 
   /* HEADER */
-
-  header: {
-    height: 110,
-    paddingTop: 40,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
 
   title: {
     fontSize: 23,
@@ -186,15 +196,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E2E7EF",
     borderRadius: 13,
-    flexDirection: "row",
-    alignItems: "center",
     backgroundColor: colors.white,
-  },
-
-  input: {
-    flex: 1,
-    fontSize: 16,
-    color: colors.textPrimary,
   },
 
   /* FILTERS */
@@ -291,13 +293,9 @@ const styles = StyleSheet.create({
 
   bottomRow: {
     marginTop: 10,
-    flexDirection: "row",
-    alignItems: "center",
   },
 
   ratingBox: {
-    flexDirection: "row",
-    alignItems: "center",
     paddingHorizontal: 8,
     paddingVertical: 5,
     borderRadius: 7,

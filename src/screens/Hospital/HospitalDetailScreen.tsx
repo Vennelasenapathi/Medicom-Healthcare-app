@@ -9,34 +9,9 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
+import { doctors } from "@/data/doctordata";
 import { colors } from "@/constants/colors";
-
-const doctors = [
-  {
-    id: 1,
-    name: "Dr. Siri Sharma",
-    specialty: "Neurologist",
-    experience: "10+ Yrs Exp",
-    rating: "4.8",
-    image: require("../../../assets/images/medicom/topdoctor2.png"),
-  },
-  {
-    id: 2,
-    name: "Dr. Eshan Khan",
-    specialty: "Senior Neurologist",
-    experience: "10 Yrs Exp",
-    rating: "4.2",
-    image: require("../../../assets/images/medicom/topdoctor1.png"),
-  },
-  {
-    id: 3,
-    name: "Dr. Rama Divija",
-    specialty: "Neurologist",
-    experience: "5 Yrs Exp",
-    rating: "4.1",
-    image: require("../../../assets/images/medicom/topdoctor5.png"),
-  },
-];
+import { globalStyles } from "@/constants/Styles";
 
 export default function HospitalDetailsScreen({
   navigation,
@@ -45,9 +20,9 @@ export default function HospitalDetailsScreen({
   const hospital = route?.params?.hospital;
 
   return (
-    <View style={styles.container}>
+    <View style={[globalStyles.container, styles.container]}>
       {/* HEADER */}
-      <View style={styles.header}>
+      <View style={[globalStyles.header, styles.header]}>
         <Pressable
           style={styles.backButton}
           onPress={() => navigation.goBack()}
@@ -85,12 +60,17 @@ export default function HospitalDetailsScreen({
               {hospital?.name || "City Neuro Hospital"}
             </Text>
 
-            <Text style={styles.hospitalType}>
+            <Text style={globalStyles.smallText}>
               Multi-specialty Hospital
             </Text>
 
-            <View style={styles.profileRow}>
-              <View style={styles.rating}>
+            <View style={[globalStyles.row, styles.profileRow]}>
+              <View
+                style={[
+                  globalStyles.row,
+                  styles.rating,
+                ]}
+              >
                 <Ionicons
                   name="star"
                   size={15}
@@ -108,12 +88,17 @@ export default function HospitalDetailsScreen({
                 color="#777F8C"
               />
 
-              <Text style={styles.away}>
+              <Text style={globalStyles.smallText}>
                 800m away
               </Text>
             </View>
 
-            <View style={styles.emergency}>
+            <View
+              style={[
+                globalStyles.row,
+                styles.emergency,
+              ]}
+            >
               <View style={styles.redDot} />
 
               <Text style={styles.emergencyText}>
@@ -150,12 +135,21 @@ export default function HospitalDetailsScreen({
         </ScrollView>
 
         {/* DOCTORS */}
-        <View style={styles.doctorHeader}>
+        <View
+          style={[
+            globalStyles.spaceBetween,
+            styles.doctorHeader,
+          ]}
+        >
           <Text style={styles.sectionTitle}>
             Doctors At This Hospital
           </Text>
 
-          <Pressable onPress={() => navigation.navigate("TopDoctors")}>
+          <Pressable
+            onPress={() =>
+              navigation.navigate("TopDoctors")
+            }
+          >
             <Text style={styles.viewAll}>
               View All
             </Text>
@@ -190,7 +184,12 @@ export default function HospitalDetailsScreen({
                 </Text>
               </View>
 
-              <View style={styles.doctorRating}>
+              <View
+                style={[
+                  globalStyles.row,
+                  styles.doctorRating,
+                ]}
+              >
                 <Ionicons
                   name="star"
                   size={15}
@@ -227,10 +226,15 @@ export default function HospitalDetailsScreen({
         </Pressable>
 
         <Pressable
-          style={styles.bookButton}
-          onPress={() =>navigation.navigate("TopDoctors")}
+          style={[
+            globalStyles.button,
+            styles.bookButton,
+          ]}
+          onPress={() =>
+            navigation.navigate("TopDoctors")
+          }
         >
-          <Text style={styles.bookText}>
+          <Text style={globalStyles.buttonText}>
             Book Appointment
           </Text>
 
@@ -253,7 +257,12 @@ function Specialty({
   title: string;
 }) {
   return (
-    <View style={styles.specialty}>
+    <View
+      style={[
+        globalStyles.row,
+        styles.specialty,
+      ]}
+    >
       <Ionicons
         name={icon}
         size={20}
@@ -269,7 +278,6 @@ function Specialty({
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: colors.white,
   },
 
@@ -277,9 +285,6 @@ const styles = StyleSheet.create({
     height: 115,
     paddingHorizontal: 20,
     paddingTop: 50,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
   },
 
   backButton: {
@@ -314,7 +319,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 11,
     flexDirection: "row",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.white,
     elevation: 2,
     shadowColor: "#000",
     shadowOpacity: 0.05,
@@ -344,21 +349,11 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
   },
 
-  hospitalType: {
-    fontSize: 12,
-    color: "#858C97",
-    marginTop: 5,
-  },
-
   profileRow: {
-    flexDirection: "row",
-    alignItems: "center",
     marginTop: 10,
   },
 
   rating: {
-    flexDirection: "row",
-    alignItems: "center",
     backgroundColor: "#E8F7F1",
     paddingHorizontal: 8,
     paddingVertical: 5,
@@ -373,15 +368,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 
-  away: {
-    fontSize: 11,
-    color: "#777F8C",
-    marginLeft: 5,
-  },
-
   emergency: {
-    flexDirection: "row",
-    alignItems: "center",
     marginTop: 10,
   },
 
@@ -419,8 +406,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7F8FA",
     borderWidth: 1,
     borderColor: "#E4E8ED",
-    flexDirection: "row",
-    alignItems: "center",
     gap: 8,
   },
 
@@ -432,9 +417,7 @@ const styles = StyleSheet.create({
 
   /* DOCTORS */
   doctorHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    marginTop: 0,
   },
 
   viewAll: {
@@ -445,6 +428,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 13,
     paddingVertical: 8,
     borderRadius: 7,
+    marginTop: 24,
   },
 
   doctorList: {
@@ -455,7 +439,7 @@ const styles = StyleSheet.create({
   doctorCard: {
     minHeight: 92,
     borderRadius: 13,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: colors.white,
     elevation: 3,
     shadowColor: "#000",
     shadowOpacity: 0.07,
@@ -494,12 +478,10 @@ const styles = StyleSheet.create({
   },
 
   doctorRating: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
     marginRight: 10,
     alignSelf: "flex-start",
     marginTop: 16,
+    gap: 4,
   },
 
   doctorRatingText: {
@@ -540,16 +522,7 @@ const styles = StyleSheet.create({
     flex: 1.2,
     height: 58,
     borderRadius: 12,
-    backgroundColor: colors.primaryDark,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
     gap: 8,
-  },
-
-  bookText: {
-    fontSize: 13,
-    fontWeight: "700",
-    color: colors.white,
+    flexDirection: "row",
   },
 });

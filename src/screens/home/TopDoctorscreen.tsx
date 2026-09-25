@@ -9,33 +9,13 @@ import {
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+
 import { colors } from "@/constants/colors";
+import { globalStyles } from "@/constants/Styles";
+import { doctors } from "@/data/doctordata";
 
 export default function TopDoctorsScreen({ navigation }: any) {
   const [searchText, setSearchText] = useState("");
-
-  const doctors = [
-    {
-      name: "Dr. Eshan Khan",
-      specialty: "Ophthalmologist",
-      image: require("../../../assets/images/medicom/topdoctor1.png"),
-    },
-    {
-      name: "Dr. Siri Sharma",
-      specialty: "Orthodontist",
-      image: require("../../../assets/images/medicom/topdoctor2.png"),
-    },
-    {
-      name: "Dr. Jasmin",
-      specialty: "Ophthalmologist",
-      image: require("../../../assets/images/medicom/topdoctor5.png"),
-    },
-    {
-      name: "Dr. Rama Divija",
-      specialty: "Ophthalmologist",
-      image: require("../../../assets/images/medicom/topdoctor4.png"),
-    },
-  ];
 
   const search = searchText.trim().toLowerCase();
 
@@ -46,10 +26,9 @@ export default function TopDoctorsScreen({ navigation }: any) {
   );
 
   return (
-    <View style={styles.container}>
-
+    <View style={[globalStyles.container, styles.container]}>
       {/* HEADER */}
-      <View style={styles.header}>
+      <View style={[globalStyles.header, styles.header]}>
         <Pressable
           onPress={() => navigation.goBack()}
           style={styles.back}
@@ -67,7 +46,12 @@ export default function TopDoctorsScreen({ navigation }: any) {
       </View>
 
       {/* SEARCH */}
-      <View style={styles.search}>
+      <View
+        style={[
+          globalStyles.row,
+          styles.search,
+        ]}
+      >
         <Ionicons
           name="search-outline"
           size={20}
@@ -97,9 +81,12 @@ export default function TopDoctorsScreen({ navigation }: any) {
 
       {/* RESULT COUNT */}
       {searchText.length > 0 && (
-        <Text style={styles.resultText}>
+        <Text style={globalStyles.smallText}>
           {filteredDoctors.length}{" "}
-          {filteredDoctors.length === 1 ? "doctor" : "doctors"} found
+          {filteredDoctors.length === 1
+            ? "doctor"
+            : "doctors"}{" "}
+          found
         </Text>
       )}
 
@@ -113,6 +100,12 @@ export default function TopDoctorsScreen({ navigation }: any) {
             <Pressable
               key={doctor.name}
               style={styles.card}
+              onPress={() =>
+                navigation.navigate(
+                  "DoctorDetails",
+                  { doctor }
+                )
+              }
             >
               {/* IMAGE */}
               <Image
@@ -122,16 +115,21 @@ export default function TopDoctorsScreen({ navigation }: any) {
 
               {/* DETAILS */}
               <View style={styles.details}>
-                <Text style={styles.name}>
+                <Text style={globalStyles.title}>
                   {doctor.name}
                 </Text>
 
-                <Text style={styles.specialty}>
+                <Text style={globalStyles.smallText}>
                   {doctor.specialty}
                 </Text>
 
                 {/* RATING */}
-                <View style={styles.rating}>
+                <View
+                  style={[
+                    globalStyles.row,
+                    styles.rating,
+                  ]}
+                >
                   <Ionicons
                     name="star"
                     size={13}
@@ -144,14 +142,19 @@ export default function TopDoctorsScreen({ navigation }: any) {
                 </View>
 
                 {/* DISTANCE */}
-                <View style={styles.distance}>
+                <View
+                  style={[
+                    globalStyles.row,
+                    styles.distance,
+                  ]}
+                >
                   <Ionicons
                     name="location-outline"
                     size={13}
                     color={colors.textSecondary}
                   />
 
-                  <Text style={styles.distanceText}>
+                  <Text style={globalStyles.smallText}>
                     800m away
                   </Text>
                 </View>
@@ -167,7 +170,7 @@ export default function TopDoctorsScreen({ navigation }: any) {
           ))
         ) : (
           /* NO RESULTS */
-          <View style={styles.noResults}>
+          <View style={globalStyles.empty}>
             <View style={styles.noResultsIcon}>
               <Ionicons
                 name="search-outline"
@@ -180,7 +183,7 @@ export default function TopDoctorsScreen({ navigation }: any) {
               No doctors found
             </Text>
 
-            <Text style={styles.noResultsText}>
+            <Text style={globalStyles.emptyText}>
               Try searching with a doctor name{"\n"}
               or specialization.
             </Text>
@@ -193,18 +196,13 @@ export default function TopDoctorsScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     marginTop: 30,
     backgroundColor: colors.white,
   },
 
   header: {
-    height: 90,
     paddingTop: 42,
     paddingHorizontal: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
   },
 
   back: {
@@ -234,8 +232,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 8,
     backgroundColor: colors.background,
-    flexDirection: "row",
-    alignItems: "center",
   },
 
   searchInput: {
@@ -248,8 +244,6 @@ const styles = StyleSheet.create({
   resultText: {
     marginHorizontal: 16,
     marginTop: 8,
-    fontSize: 12,
-    color: colors.textSecondary,
   },
 
   list: {
@@ -281,26 +275,12 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
 
-  name: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: colors.textPrimary,
-  },
-
-  specialty: {
-    marginTop: 5,
-    fontSize: 12,
-    color: colors.textSecondary,
-  },
-
   rating: {
     marginTop: 14,
     paddingHorizontal: 4,
     borderRadius: 3,
     alignSelf: "flex-start",
     backgroundColor: "#E8F8F4",
-    flexDirection: "row",
-    alignItems: "center",
   },
 
   ratingText: {
@@ -311,20 +291,6 @@ const styles = StyleSheet.create({
 
   distance: {
     marginTop: 7,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-
-  distanceText: {
-    marginLeft: 2,
-    fontSize: 12,
-    color: colors.textSecondary,
-  },
-
-  noResults: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingTop: 80,
   },
 
   noResultsIcon: {
@@ -341,13 +307,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "700",
     color: colors.textPrimary,
-  },
-
-  noResultsText: {
-    marginTop: 7,
-    fontSize: 12,
-    lineHeight: 18,
-    textAlign: "center",
-    color: colors.textSecondary,
   },
 });

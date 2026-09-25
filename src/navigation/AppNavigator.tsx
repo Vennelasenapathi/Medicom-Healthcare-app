@@ -1,5 +1,4 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
 import Onboarding from "@/screens/onboarding/onboarding";
 import Auth from "@/screens/onboarding/auth";
 import Login from "@/screens/login/login";
@@ -28,6 +27,7 @@ import HospitalDetailsScreen from "@/screens/Hospital/HospitalDetailScreen";
 import PharmacyScreen from "@/screens/Pharmacy/PharmacyScreen";
 import DrugDetailsScreen from "@/screens/Pharmacy/DrugDetailsScreen";
 import CartScreen from "@/screens/Pharmacy/CartScreen";
+import DriverAudioCallScreen from "@/screens/Ambulance/DriverAudioCall";
 
 const Stack = createNativeStackNavigator();
 
@@ -67,6 +67,7 @@ export default function AppNavigator() {
       <Stack.Screen name="Pharmacy" component={PharmacyScreen}/>
       <Stack.Screen name="DrugDetails" component={DrugDetailsScreen}/>
       <Stack.Screen name="Cart" component={CartScreen}/>
+      <Stack.Screen name="Drivercall" component={DriverAudioCallScreen}/>
     </Stack.Navigator>
   );
 }

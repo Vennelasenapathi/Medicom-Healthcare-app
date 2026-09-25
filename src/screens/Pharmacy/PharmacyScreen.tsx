@@ -10,70 +10,24 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "@/constants/colors";
-
-const products = [
-  {
-    id: 1,
-    name: "Konidin",
-    price: "₹99",
-    quantity: "3pcs",
-    image: require("../../../assets/images/medicom/medicine2.png"),
-  },
-  {
-    id: 2,
-    name: "Bodrex Herbal",
-    price: "₹589",
-    quantity: "100ml",
-    image: require("../../../assets/images/medicom/medicine4.png"),
-  },
-  {
-    id: 3,
-    name: "Panadol",
-    price: "₹399",
-    quantity: "100ml",
-    image: require("../../../assets/images/medicom/medicine5.png"),
-  },
-  {
-    id: 4,
-    name: "Calvit-L",
-    price: "₹299",
-    quantity: "5pcs",
-    image: require("../../../assets/images/medicom/medicine1.png"),
-  },
-  {
-    id: 5,
-    name: "Bodrex Herbal",
-    price: "₹589",
-    quantity: "5pcs",
-    image: require("../../../assets/images/medicom/medicine3.png"),
-  },
-];
+import { globalStyles } from "@/constants/Styles";
+import { products } from "@/data/medicines";
 
 export default function PharmacyScreen({ navigation }: any) {
-  const openDrug = (product: any) => {
-    navigation.navigate("DrugDetails", {
-      product,
-    });
-  };
+  const openDrug = (product: any) =>
+    navigation.navigate("DrugDetails", { product });
 
   return (
-    <View style={styles.container}>
-      {/* HEADER */}
-      <View style={styles.header}>
+    <View style={globalStyles.container}>
+      <View style={[globalStyles.header, styles.header]}>
         <Pressable
           style={styles.backButton}
           onPress={() => navigation.goBack()}
         >
-          <Ionicons
-            name="chevron-back"
-            size={29}
-            color="#fff"
-          />
+          <Ionicons name="chevron-back" size={29} color={colors.white} />
         </Pressable>
 
-        <Text style={styles.headerTitle}>
-          Pharmacy
-        </Text>
+        <Text style={styles.headerTitle}>Pharmacy</Text>
 
         <Pressable
           style={styles.cartButton}
@@ -91,14 +45,12 @@ export default function PharmacyScreen({ navigation }: any) {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scroll}
       >
-        {/* SEARCH */}
-        <View style={styles.searchContainer}>
+        <View style={[globalStyles.row, styles.searchContainer]}>
           <TextInput
             placeholder="Search medicines or categories"
             placeholderTextColor="#9CA3AF"
             style={styles.searchInput}
           />
-
           <Ionicons
             name="search-outline"
             size={27}
@@ -106,37 +58,23 @@ export default function PharmacyScreen({ navigation }: any) {
           />
         </View>
 
-        {/* OFFER */}
         <View style={styles.offerCard}>
-          <View style={styles.offerContent}>
-            <Text style={styles.offerSmall}>
-              Limited-time offer
-            </Text>
+          <Text style={styles.offerSmall}>Limited-time offer</Text>
+          <Text style={styles.offerTitle}>
+            Quality medicines,{"\n"}delivered to your door
+          </Text>
 
-            <Text style={styles.offerTitle}>
-              Quality medicines,{"\n"}
-              delivered to your door
-            </Text>
-
-            <Pressable style={styles.shopButton}>
-              <Text style={styles.shopButtonText}>
-                Shop Medicines
-              </Text>
-
-              <Ionicons
-                name="chevron-forward"
-                size={18}
-                color="#fff"
-              />
-            </Pressable>
-          </View>
+          <Pressable style={styles.shopButton}>
+            <Text style={styles.shopButtonText}>Shop Medicines</Text>
+            <Ionicons
+              name="chevron-forward"
+              size={18}
+              color={colors.white}
+            />
+          </Pressable>
         </View>
 
-        {/* POPULAR PRODUCTS */}
-        <SectionHeader
-          title="Popular Products"
-          onPress={() => {}}
-        />
+        <SectionHeader title="Popular Products" />
 
         <ScrollView
           horizontal
@@ -152,11 +90,7 @@ export default function PharmacyScreen({ navigation }: any) {
           ))}
         </ScrollView>
 
-        {/* DISCOUNTED MEDICINES */}
-        <SectionHeader
-          title="Discounted Medicines"
-          onPress={() => {}}
-        />
+        <SectionHeader title="Discounted Medicines" />
 
         <View style={styles.grid}>
           {products.slice(3).map((product) => (
@@ -172,49 +106,27 @@ export default function PharmacyScreen({ navigation }: any) {
   );
 }
 
-/* =====================================================
-   SECTION HEADER
-===================================================== */
-
-function SectionHeader({
-  title,
-  onPress,
-}: {
-  title: string;
-  onPress: () => void;
-}) {
+function SectionHeader({ title }: { title: string }) {
   return (
-    <View style={styles.sectionHeader}>
-      <Text style={styles.sectionTitle}>
-        {title}
-      </Text>
+    <View style={[globalStyles.spaceBetween, styles.sectionHeader]}>
+      <Text style={styles.sectionTitle}>{title}</Text>
 
-      <Pressable
-        onPress={onPress}
-        style={styles.seeAll}
-      >
-        <Text style={styles.seeAllText}>
-          See All
-        </Text>
+      <Pressable style={styles.seeAll}>
+        <Text style={styles.seeAllText}>See All</Text>
       </Pressable>
     </View>
   );
 }
 
-/* =====================================================
-   PRODUCT CARD
-===================================================== */
-
-function ProductCard({ product, onPress, }: {
+function ProductCard({
+  product,
+  onPress,
+}: {
   product: any;
   onPress: () => void;
 }) {
   return (
-    <Pressable
-      style={styles.productCard}
-      onPress={onPress}
-    >
-      {/* IMAGE */}
+    <Pressable style={styles.productCard} onPress={onPress}>
       <View style={styles.imageContainer}>
         <Image
           source={product.image}
@@ -222,55 +134,31 @@ function ProductCard({ product, onPress, }: {
           resizeMode="contain"
         />
 
-        <View style={styles.heart}>
-          <Ionicons
-            name="heart"
-            size={21}
-            color="#FF5A6B"
-          />
-        </View>
+        <Ionicons
+          name="heart"
+          size={21}
+          color="#FF5A6B"
+          style={styles.heart}
+        />
       </View>
 
-      {/* NAME */}
-      <Text
-        style={styles.productName}
-        numberOfLines={1}
-      >
+      <Text style={styles.productName} numberOfLines={1}>
         {product.name}
       </Text>
 
-      {/* PRICE + QUANTITY */}
-      <View style={styles.productBottom}>
-        <Text style={styles.price}>
-          {product.price}
-        </Text>
-
-        <Text style={styles.quantity}>
-          {product.quantity}
-        </Text>
+      <View style={[globalStyles.spaceBetween, styles.productBottom]}>
+        <Text style={styles.price}>{product.price}</Text>
+        <Text style={globalStyles.smallText}>{product.quantity}</Text>
       </View>
     </Pressable>
   );
 }
-/* =====================================================
-   STYLES
-===================================================== */
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-
-  /* HEADER */
-
   header: {
     height: 115,
     paddingHorizontal: 22,
     paddingTop: 42,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
   },
 
   backButton: {
@@ -296,24 +184,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  /* MAIN SCROLL */
-
   scroll: {
     paddingHorizontal: 20,
     paddingBottom: 50,
   },
 
-  /* SEARCH */
-
   searchContainer: {
     height: 60,
-    borderRadius: 14,
+    paddingHorizontal: 18,
     borderWidth: 1,
     borderColor: "#E7EBF2",
-    paddingHorizontal: 18,
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#fff",
+    borderRadius: 14,
+    backgroundColor: colors.white,
   },
 
   searchInput: {
@@ -323,26 +205,20 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
   },
 
-  /* OFFER */
-
   offerCard: {
     height: 155,
     marginTop: 20,
-    borderRadius: 17,
-    backgroundColor: "#DCE7FF",
-    overflow: "hidden",
-  },
-
-  offerContent: {
     paddingHorizontal: 21,
     paddingVertical: 18,
+    borderRadius: 17,
+    backgroundColor: "#DCE7FF",
   },
 
   offerSmall: {
-    fontSize: 12,
-    color: colors.primaryDark,
     marginBottom: 7,
+    fontSize: 12,
     fontWeight: "600",
+    color: colors.primaryDark,
   },
 
   offerTitle: {
@@ -353,31 +229,26 @@ const styles = StyleSheet.create({
   },
 
   shopButton: {
-    marginTop: 12,
     height: 38,
+    marginTop: 12,
     paddingHorizontal: 16,
     borderRadius: 9,
-    backgroundColor: colors.primaryDark,
     alignSelf: "flex-start",
     flexDirection: "row",
     alignItems: "center",
     gap: 5,
+    backgroundColor: colors.primaryDark,
   },
 
   shopButtonText: {
-    color: "#fff",
     fontSize: 12,
     fontWeight: "700",
+    color: colors.white,
   },
-
-  /* SECTION HEADER */
 
   sectionHeader: {
     marginTop: 28,
     marginBottom: 15,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
   },
 
   sectionTitle: {
@@ -387,34 +258,28 @@ const styles = StyleSheet.create({
   },
 
   seeAll: {
-    backgroundColor: "#EAF0FF",
     paddingHorizontal: 15,
     paddingVertical: 8,
     borderRadius: 9,
+    backgroundColor: "#EAF0FF",
   },
 
   seeAllText: {
     fontSize: 11,
-    color: colors.primaryDark,
     fontWeight: "700",
+    color: colors.primaryDark,
   },
-
-  /* HORIZONTAL PRODUCTS */
 
   horizontalList: {
     gap: 16,
     paddingRight: 8,
   },
 
-  /* GRID */
-
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 16,
   },
-
-  /* PRODUCT CARD */
 
   productCard: {
     width: 145,
@@ -426,10 +291,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#E8ECF2",
     borderRadius: 14,
-    backgroundColor: "#fff",
-    position: "relative",
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: colors.white,
   },
 
   productImage: {
@@ -452,19 +316,11 @@ const styles = StyleSheet.create({
 
   productBottom: {
     marginTop: 7,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
   },
 
   price: {
     fontSize: 15,
     fontWeight: "700",
     color: colors.primaryDark,
-  },
-
-  quantity: {
-    fontSize: 11,
-    color: "#9CA3AF",
   },
 });

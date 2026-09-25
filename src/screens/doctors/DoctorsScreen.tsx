@@ -12,7 +12,7 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 import BottomTabBar from "@/components/Bottombar/BottomBar";
 import { colors } from "@/constants/colors";
-import { doctors } from "@/data/doctordata";
+import { doctors,previousDoctors } from "@/data/doctordata";
 
 const specialties = [
   { title: "Neuro\nCare", icon: "brain" },
@@ -29,25 +29,6 @@ export default function DoctorsScreen({ navigation }: any) {
   const [search, setSearch] = useState("");
 
   const recommendedDoctor = doctors[2];
-
-  const previousDoctors = [
-    {
-      name: "Dr. Eshan Khan",
-      image: require("../../../assets/images/medicom/topdoctor1.png"),
-    },
-    {
-      name: "Dr. Rama Divja",
-      image: require("../../../assets/images/medicom/topdoctor4.png"),
-    },
-    {
-      name: "Dr. Jazmine Yale",
-      image: require("../../../assets/images/medicom/topdoctor2.png"),
-    },
-    {
-      name: "Dr. Siri Sharma",
-      image: require("../../../assets/images/medicom/topdoctor5.png"),
-    },
-  ];
 
   return (
     <View style={styles.container}>
