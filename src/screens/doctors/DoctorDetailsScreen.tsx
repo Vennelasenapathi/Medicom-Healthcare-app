@@ -5,7 +5,6 @@ import {
   Text,
   View,
 } from "react-native";
-
 import BackButton from "@/components/home/BackButton";
 import AppButton from "@/components/common/AppButton";
 import DoctorProfileCard from "@/components/doctors/DoctorProfileCard";
@@ -122,7 +121,7 @@ export default function DoctorDetailsScreen({
               ]}
             >
               <AppButton
-                title="Book Appointment ›"
+                title="Book Appointment "
                 onPress={handleBook}
               />
             </View>

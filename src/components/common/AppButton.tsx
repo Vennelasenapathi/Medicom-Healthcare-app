@@ -1,31 +1,35 @@
+
 import React from "react";
 import {
   Pressable,
+  StyleProp,
   StyleSheet,
   Text,
+  ViewStyle,
 } from "react-native";
-import {colors} from "@/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
+
+import { colors } from "@/constants/colors";
 
 type AppButtonProps = {
   title: string;
   onPress: () => void;
   showArrow?: boolean;
+  style?: StyleProp<ViewStyle>;
 };
 
 export default function AppButton({
   title,
   onPress,
   showArrow = true,
+  style,
 }: AppButtonProps) {
   return (
     <Pressable
       onPress={onPress}
-      style={styles.button}
+      style={[styles.button, style]}
     >
-      <Text style={styles.text}>
-        {title}
-      </Text>
+      <Text style={styles.text}>{title}</Text>
 
       {showArrow && (
         <Ionicons
@@ -54,7 +58,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: colors.white,
-    
   },
 
   icon: {

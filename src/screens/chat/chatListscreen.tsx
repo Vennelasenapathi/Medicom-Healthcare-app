@@ -17,13 +17,10 @@ export default function ChatListScreen({ navigation }: any) {
   return (
     <View style={[globalStyles.container, styles.screen]}>
       {/* HEADER */}
-      <View style={styles.header}>
+      <View style={[globalStyles.spaceBetween, styles.header]}>
         <View>
           <Text style={styles.title}>My Messages</Text>
-
-          <Text style={globalStyles.subtitle}>
-            Chat with your doctors
-          </Text>
+          <Text style={globalStyles.subtitle}>Chat with your doctors</Text>
         </View>
 
         <Pressable style={styles.searchButton}>
@@ -42,32 +39,11 @@ export default function ChatListScreen({ navigation }: any) {
           size={18}
           color={colors.textSecondary}
         />
-
-        <Text style={styles.searchText}>
-          Search...
-        </Text>
+        <Text style={styles.searchText}>Search...</Text>
       </Pressable>
 
-      {/* FILTER */}
-      <View style={styles.filters}>
-        <Pressable style={styles.activeFilter}>
-          <Text style={styles.activeFilterText}>
-            All
-          </Text>
-        </Pressable>
-
-        <Pressable style={styles.filter}>
-          <Text style={styles.filterText}>
-            Group
-          </Text>
-        </Pressable>
-
-        <Pressable style={styles.filter}>
-          <Text style={styles.filterText}>
-            Private
-          </Text>
-        </Pressable>
-      </View>
+      {/* FILTERS */}
+      
 
       {/* CHAT LIST */}
       <ScrollView
@@ -86,7 +62,6 @@ export default function ChatListScreen({ navigation }: any) {
           />
         ))}
       </ScrollView>
-
       <BottomTabBar
         navigation={navigation}
         activeTab="Chat"
@@ -98,35 +73,22 @@ export default function ChatListScreen({ navigation }: any) {
 function ChatItem({ chat, onPress }: any) {
   return (
     <Pressable
-      style={styles.chatItem}
+      style={[globalStyles.row, styles.chatItem]}
       onPress={onPress}
     >
-      {/* DOCTOR IMAGE */}
       <Image
         source={chat.image}
         style={styles.avatar}
       />
-
-      {/* MESSAGE */}
       <View style={styles.chatInfo}>
-        <Text style={styles.name}>
-          {chat.name}
-        </Text>
-
-        <Text
-          style={styles.message}
-          numberOfLines={1}
-        >
+        <Text style={styles.name}>{chat.name}</Text>
+        <Text style={styles.message} numberOfLines={1}>
           {chat.message}
         </Text>
       </View>
 
-      {/* TIME + UNREAD */}
       <View style={styles.right}>
-        <Text style={styles.time}>
-          {chat.time}
-        </Text>
-
+        <Text style={styles.time}>{chat.time}</Text>
         {chat.unread > 0 && (
           <View style={styles.badge}>
             <Text style={styles.badgeText}>
@@ -147,7 +109,6 @@ const styles = StyleSheet.create({
   header: {
     paddingTop: 52,
     paddingBottom: 18,
-    ...globalStyles.spaceBetween,
   },
 
   title: {
@@ -167,9 +128,9 @@ const styles = StyleSheet.create({
 
   searchBox: {
     height: 48,
+    paddingHorizontal: 15,
     borderRadius: 12,
     backgroundColor: colors.background,
-    paddingHorizontal: 15,
     ...globalStyles.row,
   },
 
@@ -190,28 +151,23 @@ const styles = StyleSheet.create({
 
   filter: {
     flex: 1,
+    borderRadius: 9,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 9,
   },
 
   activeFilter: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 9,
     backgroundColor: colors.white,
-  },
-
-  activeFilterText: {
-    fontSize: 12,
-    fontWeight: "700",
-    color: colors.primaryDark,
   },
 
   filterText: {
     fontSize: 12,
     color: colors.textSecondary,
+  },
+
+  activeFilterText: {
+    fontWeight: "700",
+    color: colors.primaryDark,
   },
 
   list: {
@@ -228,7 +184,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.borderLight,
     backgroundColor: colors.white,
-    ...globalStyles.row,
   },
 
   avatar: {
@@ -278,8 +233,8 @@ const styles = StyleSheet.create({
   },
 
   badgeText: {
-    color: colors.white,
     fontSize: 11,
     fontWeight: "700",
+    color: colors.white,
   },
 });

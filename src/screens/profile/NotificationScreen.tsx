@@ -9,9 +9,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "@/constants/colors";
 
-export default function NotificationSettingsScreen({
-  navigation,
-}: any) {
+export default function NotificationSettingsScreen({navigation,}: any) {
   const [general, setGeneral] = useState(true);
   const [sound, setSound] = useState(false);
   const [callSound, setCallSound] = useState(true);

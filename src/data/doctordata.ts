@@ -4,7 +4,8 @@ export const doctors = [
     name: "Dr. Eshan Khan",
     specialty: "Senior Neurologist",
     experience: "10 Yrs Exp.",
-    rating: "4.0",
+    rating: "5.0",
+    gender:"male",
     reviews: "100 reviews",
     distance: "800m away",
     image: require("../../assets/images/medicom/topdoctor1.png"),
@@ -14,7 +15,8 @@ export const doctors = [
     name: "Dr. Siri Sharma",
     specialty: "Pediatric Neurologist",
     experience: "11 Yrs Exp.",
-    rating: "4.0",
+    rating: "4.5",
+    gender:"female",
     reviews: "100 reviews",
     distance: "800m away",
     image: require("../../assets/images/medicom/topdoctor2.png"),
@@ -25,6 +27,7 @@ export const doctors = [
     specialty: "Brain & Spine Specialist",
     experience: "10 Yrs Exp.",
     rating: "4.2",
+    gender:"female",
     reviews: "100 reviews",
     distance: "800m away",
     image: require("../../assets/images/medicom/topdoctor5.png"),
@@ -35,9 +38,10 @@ export const doctors = [
     specialty: "Neurologist",
     experience: "15 Yrs Exp.",
     rating: "4.0",
+    gender:"female",
     reviews: "100 reviews",
     distance: "800m away",
-    image: require("../../assets/images/medicom/topdoctor1.png"),
+    image: require("../../assets/images/medicom/topdoctor4.png"),
   },
 ];
 
@@ -59,3 +63,15 @@ export const previousDoctors = [
       image: require("../../assets/images/medicom/topdoctor5.png"),
     },
   ];
+
+
+export const specialties = [
+  { title: "Neuro\nCare", icon: "brain" },
+  { title: "Surgeon", icon: "needle" },
+  { title: "Genomics", icon: "dna" },
+  { title: "Bone &\nJoint", icon: "bone" },
+  { title: "Covid-19", icon: "virus-outline" },
+  { title: "General", icon: "stethoscope" },
+  { title: "Dentist", icon: "tooth-outline" },
+  { title: "Lungs\nSpecialist", icon: "lungs" },
+];

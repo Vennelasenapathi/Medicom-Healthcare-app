@@ -6,35 +6,34 @@ import {
   Text,
   View,
 } from "react-native";
-
 import BottomTabBar from "@/components/Bottombar/BottomBar";
 import AppointmentCard from "@/components/appointments/AppointmentCard";
 import AppointmentResultModal from "@/components/appointments/AppointmentResultModal";
 import { colors } from "@/constants/colors";
 import { globalStyles } from "@/constants/Styles";
 import { Appointment, initialAppointments } from "@/data/Appointments";
-
 import AppointmentDetails from "./AppointmentDetails";
 import RescheduleAppointment from "./RescheduleAppointment";
 
 type Tab = "Upcoming" | "Completed" | "Cancelled";
 type Screen = "list" | "details" | "reschedule";
 
-export default function AppointmentsScreen({
-  navigation,
-  route,
-}: any) {
+export default function AppointmentsScreen({navigation,route,}: any) {
   const [screen, setScreen] = useState<Screen>("list");
   const [tab, setTab] = useState<Tab>("Upcoming");
   const [appointments, setAppointments] =
     useState<Appointment[]>(initialAppointments);
+
   const [cancelled, setCancelled] = useState<Appointment[]>([]);
   const [selected, setSelected] = useState<Appointment | null>(null);
   const [resultVisible, setResultVisible] = useState(false);
   const [resultType, setResultType] =
     useState<"cancelled" | "rescheduled">("cancelled");
+
   const [date, setDate] = useState("");
   const [time, setTime] = useState("10:00 AM");
+
+  
 
   /* ADD RECENT BOOKING */
   useEffect(() => {
@@ -45,7 +44,6 @@ export default function AppointmentsScreen({
       if (prev.some((item) => item.id === newAppointment.id)) {
         return prev;
       }
-
       return [newAppointment, ...prev];
     });
 
@@ -171,12 +169,14 @@ export default function AppointmentsScreen({
             <AppointmentCard
               key={item.id}
               appointment={item}
+               navigation={navigation}
               onPress={() => openDetails(item)}
               onReschedule={() => {
                 setSelected(item);
                 setDate(item.date);
                 setTime(item.time);
                 setScreen("reschedule");
+               
               }}
             />
           ))

@@ -14,9 +14,31 @@ export default function AppointmentCard({
   appointment,
   onPress,
   onReschedule,
+  navigation,
 }: any) {
-  const cancelled =
-    appointment.status === "Cancelled";
+  const cancelled = appointment.status === "Cancelled";
+ const doctor = {
+    name: appointment.doctor,
+    specialty: appointment.specialty,
+    image: appointment.image,
+  };
+
+  const consultation = {
+    type: appointment.type,
+    date: appointment.date,
+    time: appointment.time,
+    reason: appointment.reason || "General Consultation",
+  };
+
+    const handleJoin = () => {
+    const screen =
+      appointment.type === "Chat Consultation"
+        ? "Chat"
+        : appointment.type === "Video Consultation"
+        ? "VideoCall" : "AudioCall";
+        
+    navigation.navigate(screen, { doctor, consultation });
+  };
 
   return (
     <View style={styles.card}>
@@ -74,7 +96,7 @@ export default function AppointmentCard({
         <View style={styles.actions}>
           <Pressable
             style={styles.joinButton}
-            onPress={() => {}}
+            onPress={handleJoin}
           >
             <Text style={styles.joinText}>
               Join Consultation

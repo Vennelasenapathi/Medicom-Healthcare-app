@@ -9,62 +9,39 @@ import {
   View,
 } from "react-native";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
-
+import BackButton from "@/components/home/BackButton";
 import BottomTabBar from "@/components/Bottombar/BottomBar";
 import { colors } from "@/constants/colors";
-import { doctors,previousDoctors } from "@/data/doctordata";
-
-const specialties = [
-  { title: "Neuro\nCare", icon: "brain" },
-  { title: "Surgeon", icon: "needle" },
-  { title: "Genomics", icon: "dna" },
-  { title: "Bone &\nJoint", icon: "bone" },
-  { title: "Covid-19", icon: "virus-outline" },
-  { title: "General", icon: "stethoscope" },
-  { title: "Dentist", icon: "tooth-outline" },
-  { title: "Lungs\nSpecialist", icon: "lungs" },
-];
+import { globalStyles } from "@/constants/Styles";
+import {doctors,previousDoctors,specialties,} from "@/data/doctordata";
 
 export default function DoctorsScreen({ navigation }: any) {
   const [search, setSearch] = useState("");
-
   const recommendedDoctor = doctors[2];
 
   return (
-    <View style={styles.container}>
+    <View style={globalStyles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={styles.scroll}
         keyboardShouldPersistTaps="handled"
       >
-        {/* HEADER */}
-        <View style={styles.header}>
-          <Pressable
-            style={styles.backButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Ionicons
-              name="chevron-back"
-              size={24}
-              color={colors.white}
-            />
-          </Pressable>
-
-          <Text style={styles.title}>Explore Doctors</Text>
-
+        {/* Header */}
+        <View style={[globalStyles.spaceBetween, styles.header]}>
+          <BackButton onPress={() => navigation.goBack()} />
+          <Text style={globalStyles.title}>Explore Doctors</Text>
           <View style={styles.headerSpace} />
         </View>
 
-        {/* SEARCH */}
+        {/* Search */}
         <View style={styles.searchBox}>
           <TextInput
             value={search}
             onChangeText={setSearch}
             placeholder="Find a doctor..."
             placeholderTextColor="#999"
-            style={styles.input}
+            style={globalStyles.input}
           />
-
           <Ionicons
             name="search-outline"
             size={24}
@@ -72,86 +49,76 @@ export default function DoctorsScreen({ navigation }: any) {
           />
         </View>
 
-        {/* SPECIALTY HEADER */}
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Browse By Specialty</Text>
-
+        {/* Specialty Header */}
+        <View style={[globalStyles.sectionHeader, styles.sectionHeader]}>
+          <Text style={globalStyles.sectionTitle}>
+            Browse By Specialty
+          </Text>
           <Pressable
-            style={styles.seeAllButton}
+            style={globalStyles.smallButton}
             onPress={() => navigation.navigate("SpecialtyDoctors")}
           >
             <Text style={styles.seeAllText}>See All</Text>
           </Pressable>
         </View>
 
-        {/* SPECIALTIES */}
+        {/* Specialties */}
         <View style={styles.specialtyGrid}>
           {specialties.map((item) => (
             <Pressable
               key={item.title}
               style={styles.specialtyItem}
-              onPress={() =>
-                navigation.navigate("SpecialtyDoctors")
-              }
+              onPress={() => navigation.navigate("SpecialtyDoctors")}
             >
-              <View style={styles.specialtyIconBox}>
+              <View style={[styles.specialtyIcon, globalStyles.center]}>
                 <MaterialCommunityIcons
                   name={item.icon as any}
                   size={31}
                   color={colors.primaryDark}
                 />
               </View>
-
-              <Text style={styles.specialtyName}>
-                {item.title}
-              </Text>
+              <Text style={styles.specialtyName}> {item.title} </Text>
             </Pressable>
           ))}
         </View>
 
-        {/* RECOMMENDED */}
-        <View style={styles.recommendedHeader}>
-          <Text style={styles.sectionTitle}>
-            Recommended For You
-          </Text>
-        </View>
+        {/* Recommended */}
+        <Text style={[globalStyles.sectionTitle,styles.recommendedTitle,]}>
+          Recommended For You
+        </Text>
 
         <Pressable
-          style={styles.recommendedCard}
+          style={[globalStyles.outlinedCard, globalStyles.horizontalCard, styles.doctorCard]}
           onPress={() =>
-            navigation.navigate("DoctorDetails", {
-              doctor: recommendedDoctor,
-            })
+            navigation.navigate("DoctorDetails", {doctor: recommendedDoctor,})
           }
         >
           <Image
             source={recommendedDoctor.image}
-            style={styles.recommendedImage}
+            style={styles.doctorImage}
           />
 
-          <View style={styles.recommendedInfo}>
-            <Text style={styles.recommendedName}>
+          <View style={styles.doctorInfo}>
+            <Text style={styles.doctorName}>
               {recommendedDoctor.name}
             </Text>
 
-            <Text style={styles.recommendedSpecialty}>
+            <Text style={styles.doctorSpecialty}>
               {recommendedDoctor.specialty}
             </Text>
 
-            <View style={styles.ratingRow}>
+            <View style={[globalStyles.row, styles.ratingRow]}>
               <View style={styles.ratingBox}>
                 <Text style={styles.star}>★</Text>
                 <Text style={styles.ratingText}>
                   {recommendedDoctor.rating}
                 </Text>
               </View>
-
               <Ionicons
                 name="location"
                 size={13}
                 color="#555"
               />
-
               <Text style={styles.distance}>
                 {recommendedDoctor.distance}
               </Text>
@@ -159,50 +126,41 @@ export default function DoctorsScreen({ navigation }: any) {
           </View>
         </Pressable>
 
-        {/* PAGE INDICATOR */}
-        <View style={styles.dots}>
+        {/* Dots */}
+        <View style={[globalStyles.row, styles.dots]}>
           <View style={styles.activeDot} />
           <View style={styles.dot} />
           <View style={styles.dot} />
         </View>
 
-        {/* PREVIOUSLY CONSULTED */}
-        <Text style={styles.previousTitle}>
+        {/* Previous Doctors */}
+        <Text style={[globalStyles.sectionTitle,styles.previousTitle,]}>
           Previously Consulted
         </Text>
 
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.previousScroll}
         >
           {previousDoctors.map((doctor) => (
             <Pressable
               key={doctor.name}
               style={styles.previousDoctor}
               onPress={() =>
-                navigation.navigate("DoctorDetails", {
-                  doctor,
-                })
+                navigation.navigate("DoctorDetails", { doctor })
               }
             >
               <Image
                 source={doctor.image}
                 style={styles.previousImage}
               />
-
-              <Text
-                style={styles.previousName}
-                numberOfLines={1}
-              >
+              <Text style={styles.previousName} numberOfLines={1}>
                 {doctor.name}
               </Text>
             </Pressable>
           ))}
         </ScrollView>
       </ScrollView>
-
-      {/* BOTTOM NAVIGATION */}
       <BottomTabBar
         navigation={navigation}
         activeTab="Home"
@@ -212,94 +170,33 @@ export default function DoctorsScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.white,
-  },
-
-  scrollContent: {
+  scroll: {
     paddingHorizontal: 20,
     paddingTop: 32,
     paddingBottom: 100,
   },
 
-  /* HEADER */
-
-  header: {
-    height: 48,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-
-  backButton: {
-    width: 46,
-    height: 46,
-    borderRadius: 10,
-    backgroundColor: colors.primaryDark,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  title: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: colors.textPrimary,
-  },
-
-  headerSpace: {
-    width: 46,
-  },
-
-  /* SEARCH */
+  header: { height: 48,},
+  headerSpace: { width: 46,},
 
   searchBox: {
     height: 50,
     marginTop: 18,
     paddingHorizontal: 15,
     borderWidth: 1,
-    borderColor: "#F0F1F5",
+    borderColor: colors.borderLight,
     borderRadius: 12,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: colors.white,
   },
 
-  input: {
-    flex: 1,
-    fontSize: 14,
-    color: colors.textPrimary,
-  },
-
-  /* SECTION */
-
-  sectionHeader: {
-    marginTop: 29,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-
-  sectionTitle: {
-    fontSize: 15,
-    fontWeight: "700",
-    color: colors.textPrimary,
-  },
-
-  seeAllButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 7,
-    borderRadius: 6,
-    backgroundColor: "#E8EEFF",
-  },
+  sectionHeader: {marginTop: 29, },
 
   seeAllText: {
     fontSize: 12,
     fontWeight: "600",
     color: colors.textPrimary,
   },
-
-  /* SPECIALTY */
 
   specialtyGrid: {
     marginTop: 14,
@@ -314,23 +211,13 @@ const styles = StyleSheet.create({
     marginBottom: 17,
   },
 
-  specialtyIconBox: {
+  specialtyIcon: {
     width: 62,
     height: 62,
     borderRadius: 13,
     borderWidth: 1,
-    borderColor: "#ECEEF3",
-    backgroundColor: colors.white,
-    alignItems: "center",
-    justifyContent: "center",
-
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.04,
-    shadowRadius: 5,
+    borderColor: colors.borderLight,
+    backgroundColor:colors.white,
     elevation: 1,
   },
 
@@ -341,140 +228,114 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     fontWeight: "500",
     textAlign: "center",
-    color: "#41485A",
+    color: colors.textSecondary,
   },
 
-  /* RECOMMENDED */
-
-  recommendedHeader: {
+  recommendedTitle: {
     marginTop: 5,
     marginBottom: 11,
   },
 
-  recommendedCard: {
+  doctorCard: {
     height: 125,
     padding: 7,
-    borderWidth: 1,
-    borderColor: "#E8EAF0",
     borderRadius: 15,
-    flexDirection: "row",
-    backgroundColor: colors.white,
   },
 
-  recommendedImage: {
+  doctorImage: {
     width: 108,
     height: 109,
     borderRadius: 10,
-    resizeMode: "cover",
   },
 
-  recommendedInfo: {
+  doctorInfo: {
     flex: 1,
     marginLeft: 15,
     justifyContent: "center",
   },
 
-  recommendedName: {
+  doctorName: {
     fontSize: 17,
     fontWeight: "700",
     color: colors.textPrimary,
   },
 
-  recommendedSpecialty: {
+  doctorSpecialty: {
     marginTop: 3,
     fontSize: 13,
-    color: "#8B8F99",
+    color: colors.textSecondary,
   },
 
-  ratingRow: {
-    marginTop: 10,
-    flexDirection: "row",
-    alignItems: "center",
-  },
+  ratingRow: { marginTop: 10, },
 
   ratingBox: {
     height: 22,
     paddingHorizontal: 7,
+    marginRight: 9,
     borderRadius: 4,
     backgroundColor: "#E6F5F3",
     flexDirection: "row",
     alignItems: "center",
-    marginRight: 9,
   },
 
   star: {
+    marginRight: 3,
     fontSize: 12,
     color: "#00A99D",
-    marginRight: 3,
   },
 
   ratingText: {
     fontSize: 11,
-    color: "#00A99D",
     fontWeight: "600",
+    color: "#00A99D",
   },
 
   distance: {
     marginLeft: 4,
     fontSize: 11,
-    color: "#777C87",
+    color: colors.textSecondary,
   },
-
-  /* DOTS */
 
   dots: {
     marginTop: 10,
-    flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center",
   },
 
   activeDot: {
     width: 20,
     height: 5,
+    marginHorizontal: 2,
     borderRadius: 4,
     backgroundColor: colors.primaryDark,
-    marginHorizontal: 2,
   },
 
   dot: {
     width: 10,
     height: 5,
+    marginHorizontal: 2,
     borderRadius: 4,
     backgroundColor: "#C9D8FF",
-    marginHorizontal: 2,
   },
-
-  /* PREVIOUS */
 
   previousTitle: {
     marginTop: 15,
     marginBottom: 11,
-    fontSize: 15,
-    fontWeight: "700",
-    color: colors.textPrimary,
-  },
-
-  previousScroll: {
-    paddingRight: 0,
   },
 
   previousDoctor: {
     width: 100,
     marginRight: 1,
-    
   },
 
   previousImage: {
     width: 100,
     height: 100,
     borderRadius: 8,
-    resizeMode: "cover",
   },
 
   previousName: {
     marginTop: 7,
     fontSize: 11,
-    color: "#777B86",
+    color: colors.textSecondary,
   },
 });

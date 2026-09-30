@@ -8,11 +8,49 @@ import {
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
 import BackButton from "@/components/home/BackButton";
 import AppButton from "@/components/common/AppButton";
 import { colors } from "@/constants/colors";
 import { globalStyles } from "@/constants/Styles";
+
+const InfoRow = ({
+  icon,
+  label,
+  value,
+  last = false,
+}: {
+  icon: any;
+  label: string;
+  value: string;
+  last?: boolean;
+}) => (
+  <View style={[globalStyles.row, !last && styles.infoRow]}>
+    <View style={[styles.iconBox, globalStyles.center]}>
+      <Ionicons name={icon} size={20} color={colors.primaryDark} />
+    </View>
+    <View style={styles.rowInfo}>
+      <Text style={globalStyles.label}>{label}</Text>
+      <Text style={globalStyles.value}>{value}</Text>
+    </View>
+  </View>
+);
+
+const ActionButton = ({
+  icon,
+  text,
+  color,
+  onPress,
+}: {
+  icon: any;
+  text: string;
+  color: string;
+  onPress: () => void;
+}) => (
+  <Pressable style={styles.actionButton} onPress={onPress}>
+    <Ionicons name={icon} size={20} color={color} />
+    <Text style={[styles.actionText, { color }]}>{text}</Text>
+  </Pressable>
+);
 
 export default function AppointmentDetails({
   appointment,
@@ -35,13 +73,14 @@ export default function AppointmentDetails({
   };
 
   const handleJoin = () => {
-    if (appointment.type === "Chat Consultation") {
-      navigation.navigate("Chat", { doctor, consultation });
-    } else if (appointment.type === "Video Consultation") {
-      navigation.navigate("VideoCall", { doctor, consultation });
-    } else {
-      navigation.navigate("AudioCall", { doctor, consultation });
-    }
+    const screen =
+      appointment.type === "Chat Consultation"
+        ? "Chat"
+        : appointment.type === "Video Consultation"
+        ? "VideoCall"
+        : "AudioCall";
+
+    navigation.navigate(screen, { doctor, consultation });
   };
 
   return (
@@ -51,155 +90,81 @@ export default function AppointmentDetails({
         contentContainerStyle={styles.scroll}
       >
         {/* Header */}
-        <View style={styles.header}>
+        <View style={[globalStyles.header, styles.header]}>
           <BackButton onPress={onBack} />
-
           <Text style={globalStyles.title}>Appointment Details</Text>
-
           <View style={styles.headerSpace} />
         </View>
 
         {/* Doctor */}
-        <View style={styles.doctorCard}>
+        <View style={[globalStyles.outlinedCard, styles.doctorCard]}>
           <Image source={appointment.image} style={styles.doctorImage} />
 
           <View style={styles.doctorInfo}>
-            <Text style={styles.doctorName}>
-              {appointment.doctor}
-            </Text>
-
+            <Text style={globalStyles.text}>{appointment.doctor}</Text>
             <Text style={styles.specialty}>
               {appointment.specialty}
             </Text>
-
-            <View style={styles.statusRow}>
+            <View style={[globalStyles.row, styles.statusRow]}>
               <Ionicons
                 name="checkmark-circle"
                 size={15}
                 color={colors.success}
               />
-
-              <Text style={styles.status}>
-                {appointment.status}
-              </Text>
+              <Text style={styles.status}>{appointment.status}</Text>
             </View>
           </View>
         </View>
 
-        {/* Appointment Information */}
-        <Text style={styles.sectionTitle}>
+        {/* Information */}
+        <Text style={[globalStyles.sectionTitle, styles.sectionTitle]}>
           Appointment Information
         </Text>
 
-        <View style={styles.infoCard}>
-          <View style={styles.row}>
-            <View style={styles.iconBox}>
-              <Ionicons
-                name="calendar-outline"
-                size={20}
-                color={colors.primaryDark}
-              />
-            </View>
+        <View style={globalStyles.summaryCard}>
+          <InfoRow
+            icon="calendar-outline"
+            label="Date"
+            value={appointment.date}
+          />
 
-            <View style={styles.rowInfo}>
-              <Text style={styles.label}>Date</Text>
-              <Text style={styles.value}>{appointment.date}</Text>
-            </View>
-          </View>
+          <InfoRow
+            icon="time-outline"
+            label="Time"
+            value={appointment.time}
+          />
 
-          <View style={styles.row}>
-            <View style={styles.iconBox}>
-              <Ionicons
-                name="time-outline"
-                size={20}
-                color={colors.primaryDark}
-              />
-            </View>
+          <InfoRow
+            icon="videocam-outline"
+            label="Consultation Type"
+            value={appointment.type}
+          />
 
-            <View style={styles.rowInfo}>
-              <Text style={styles.label}>Time</Text>
-              <Text style={styles.value}>{appointment.time}</Text>
-            </View>
-          </View>
-
-          <View style={styles.row}>
-            <View style={styles.iconBox}>
-              <Ionicons
-                name="videocam-outline"
-                size={20}
-                color={colors.primaryDark}
-              />
-            </View>
-
-            <View style={styles.rowInfo}>
-              <Text style={styles.label}>
-                Consultation Type
-              </Text>
-
-              <Text style={styles.value}>
-                {appointment.type}
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.lastRow}>
-            <View style={styles.iconBox}>
-              <Ionicons
-                name="document-text-outline"
-                size={20}
-                color={colors.primaryDark}
-              />
-            </View>
-
-            <View style={styles.rowInfo}>
-              <Text style={styles.label}>
-                Consultation Reason
-              </Text>
-
-              <Text style={styles.value}>
-                {appointment.reason || "General Consultation"}
-              </Text>
-            </View>
-          </View>
+          <InfoRow
+            icon="document-text-outline"
+            label="Consultation Reason"
+            value={appointment.reason || "General Consultation"}
+            last
+          />
         </View>
 
         {/* Actions */}
         <View style={styles.actions}>
-          <AppButton
-            title="Join Consultation"
-            onPress={handleJoin}
-          />
+          <AppButton title="Join Consultation" onPress={handleJoin} />
 
           <View style={styles.secondaryActions}>
-            <Pressable
-              style={styles.actionButton}
+            <ActionButton
+              icon="create-outline"
+              text="Reschedule"
+              color={colors.primaryDark}
               onPress={onReschedule}
-            >
-              <Ionicons
-                name="create-outline"
-                size={20}
-                color={colors.primaryDark}
-              />
-
-              <Text style={styles.actionText}>
-                Reschedule
-              </Text>
-            </Pressable>
-
-            <Pressable
-              style={styles.actionButton}
+            />
+            <ActionButton
+              icon="trash-outline"
+              text="Cancel Appointment"
+              color={colors.error}
               onPress={onDelete}
-            >
-              <Ionicons
-                name="trash-outline"
-                size={20}
-                color={colors.error}
-              />
-
-              <Text style={styles.deleteText}>
-                Cancel Appointment
-              </Text>
-            </Pressable>
+            />
           </View>
         </View>
       </ScrollView>
@@ -214,11 +179,7 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    height: 92,
     paddingTop: 35,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
   },
 
   headerSpace: {
@@ -228,9 +189,6 @@ const styles = StyleSheet.create({
   doctorCard: {
     flexDirection: "row",
     padding: 12,
-    borderWidth: 1,
-    borderColor: colors.borderLight,
-    borderRadius: 12,
   },
 
   doctorImage: {
@@ -245,12 +203,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  doctorName: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: colors.textPrimary,
-  },
-
   specialty: {
     marginTop: 5,
     fontSize: 11,
@@ -258,39 +210,23 @@ const styles = StyleSheet.create({
   },
 
   statusRow: {
-    flexDirection: "row",
-    alignItems: "center",
     marginTop: 7,
   },
 
   status: {
     marginLeft: 5,
     fontSize: 10,
-    color: colors.success,
     fontWeight: "600",
+    color: colors.success,
   },
 
   sectionTitle: {
     marginTop: 22,
     marginBottom: 10,
-    fontSize: 14,
-    fontWeight: "700",
-    color: colors.textPrimary,
   },
 
-  infoCard: {
-    padding: 14,
-    borderRadius: 12,
-    backgroundColor: "#F8FAFC",
-  },
-
-  row: {
-    ...globalStyles.row,
+  infoRow: {
     marginBottom: 18,
-  },
-
-  lastRow: {
-    ...globalStyles.row,
   },
 
   iconBox: {
@@ -298,25 +234,11 @@ const styles = StyleSheet.create({
     height: 38,
     borderRadius: 8,
     backgroundColor: "#EAF0FF",
-    alignItems: "center",
-    justifyContent: "center",
   },
 
   rowInfo: {
     flex: 1,
     marginLeft: 12,
-  },
-
-  label: {
-    fontSize: 10,
-    color: colors.textSecondary,
-  },
-
-  value: {
-    marginTop: 3,
-    fontSize: 12,
-    fontWeight: "600",
-    color: colors.textPrimary,
   },
 
   actions: {
@@ -344,13 +266,5 @@ const styles = StyleSheet.create({
     marginLeft: 6,
     fontSize: 11,
     fontWeight: "600",
-    color: colors.primaryDark,
-  },
-
-  deleteText: {
-    marginLeft: 6,
-    fontSize: 11,
-    fontWeight: "600",
-    color: colors.error,
   },
 });

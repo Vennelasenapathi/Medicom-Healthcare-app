@@ -17,6 +17,7 @@ import SuccessModal from "@/components/common/SuccessModal";
 import ForgotPasswordFlow from "@/screens/forgot-password/forgotpasswordflow";
 import { loginValidationSchema } from "@/validations/loginvalidation";
 import { colors } from "@/constants/colors";
+import { globalStyles } from "@/constants/Styles";
 
 export default function Login({ navigation }: any) {
   const [emailError, setEmailError] = useState(false);
@@ -26,34 +27,25 @@ export default function Login({ navigation }: any) {
   const [forgotPasswordVisible, setForgotPasswordVisible] = useState(false);
 
   const login = (email: string, password: string) => {
-    const correctEmail = "vennela@medicom.com";
-    const correctPassword = "12345678";
-
     const validEmail =
-      email.trim().toLowerCase() === correctEmail;
-    const validPassword = password === correctPassword;
+      email.trim().toLowerCase() === "vennela@medicom.com";
+    const validPassword = password === "12345678";
 
     setEmailError(!validEmail);
     setPasswordError(!validPassword);
 
-    if (validEmail && validPassword) {
-      setSuccess(true);
-    }
+    if (validEmail && validPassword) setSuccess(true);
   };
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
-      behavior={
-        Platform.OS === "ios" ? "padding" : undefined
-      }
+      style={globalStyles.container}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={loginValidationSchema}
-        onSubmit={(values) =>
-          login(values.email, values.password)
-        }
+        onSubmit={(values) => login(values.email, values.password)}
       >
         {({
           values,
@@ -67,31 +59,25 @@ export default function Login({ navigation }: any) {
           <ScrollView
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.scrollContent}
+            contentContainerStyle={styles.scroll}
           >
             <View style={styles.content}>
+              <Image
+                source={require("../../../assets/images/medicom/Logo2.png")}
+                style={styles.logo}
+                resizeMode="contain"
+              />
 
-              {/* LOGO */}
-              <View style={styles.logoContainer}>
-                <Image
-                  source={require("../../../assets/images/medicom/Logo2.png")}
-                  style={styles.logo}
-                  resizeMode="contain"
-                />
-              </View>
-
-              {/* HEADING */}
               <View style={styles.heading}>
-                <Text style={styles.title}>
+                <Text style={globalStyles.title}>
                   Log in to your account
                 </Text>
-                <Text style={styles.subtitle}>
+                <Text style={globalStyles.subtitle}>
                   Your journey to better health starts here!
                 </Text>
               </View>
 
-              {/* EMAIL */}
-              <View style={styles.emailContainer}>
+              <View style={styles.email}>
                 <InputField
                   icon="mail-outline"
                   value={values.email}
@@ -110,14 +96,13 @@ export default function Login({ navigation }: any) {
                 />
 
                 {emailError && !errors.email && (
-                  <Text style={styles.errorText}>
+                  <Text style={globalStyles.errorText}>
                     *That email isn't correct
                   </Text>
                 )}
               </View>
 
-              {/* PASSWORD */}
-              <View style={styles.passwordContainer}>
+              <View style={styles.password}>
                 <PasswordField
                   value={values.password}
                   onChangeText={(text) => {
@@ -131,7 +116,7 @@ export default function Login({ navigation }: any) {
                 />
 
                 {passwordError && !errors.password && (
-                  <Text style={styles.errorText}>
+                  <Text style={globalStyles.errorText}>
                     *That password isn't correct
                   </Text>
                 )}
@@ -140,14 +125,11 @@ export default function Login({ navigation }: any) {
                   <Pressable
                     onPress={() => setForgotPasswordVisible(true)}
                   >
-                    <Text style={styles.forgotPassword}>
-                      Forgot Password?
-                    </Text>
+                    <Text style={styles.forgot}>Forgot Password?</Text>
                   </Pressable>
                 )}
               </View>
 
-              {/* LOGIN */}
               <AppButton
                 title="Login"
                 onPress={() => {
@@ -158,18 +140,14 @@ export default function Login({ navigation }: any) {
                 }}
               />
 
-              {/* SIGN UP */}
-              <View style={styles.signupContainer}>
+              <View style={[globalStyles.row, styles.signup]}>
                 <Text style={styles.signupText}>
                   Don't have an account?{" "}
                 </Text>
-
                 <Pressable
                   onPress={() => navigation.navigate("Signup")}
                 >
-                  <Text style={styles.signupButton}>
-                    Sign Up
-                  </Text>
+                  <Text style={styles.signupButton}>Sign Up</Text>
                 </Pressable>
               </View>
             </View>
@@ -177,83 +155,49 @@ export default function Login({ navigation }: any) {
         )}
       </Formik>
 
-      {/* SUCCESS */}
       {success && (
         <SuccessModal
-        visible={successVisible}
+          visible={successVisible}
           title="Welcome back!"
           description={"You've successfully logged into the\nMedicom app."}
           buttonTitle="Go to Home"
           onPress={() => navigation.replace("Home")}
         />
       )}
+
       <ForgotPasswordFlow
         visible={forgotPasswordVisible}
-        onClose={() =>
-          setForgotPasswordVisible(false)
-        }
+        onClose={() => setForgotPasswordVisible(false)}
       />
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FFFFFF",
-  },
-
-  scrollContent: {
+  scroll: {
     flexGrow: 1,
   },
-
   content: {
     flex: 1,
     paddingHorizontal: 24,
     paddingTop: 125,
   },
-
-  logoContainer: {
-    alignItems: "center",
-  },
-
   logo: {
     width: 68,
     height: 68,
+    alignSelf: "center",
   },
-
   heading: {
     marginTop: 32,
     alignItems: "center",
   },
-
-  title: {
-    fontSize: 22,
-    fontWeight: "700",
-    color: colors.textPrimary,
-  },
-
-  subtitle: {
-    marginTop: 4,
-    fontSize: 14,
-    color: colors.textSecondary,
-  },
-
-  emailContainer: {
+  email: {
     marginTop: 40,
   },
-
-  passwordContainer: {
+  password: {
     marginTop: 16,
   },
-
-  errorText: {
-    marginTop: 4,
-    fontSize: 12,
-    color: colors.error,
-  },
-
-  forgotPassword: {
+  forgot: {
     marginTop: 28,
     marginBottom: 20,
     textAlign: "right",
@@ -261,18 +205,14 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: colors.primaryDark,
   },
-
-  signupContainer: {
-    marginTop: 28,
-    flexDirection: "row",
+  signup: {
     justifyContent: "center",
+    marginTop: 28,
   },
-
   signupText: {
     fontSize: 13,
     color: colors.textGray,
   },
-
   signupButton: {
     fontSize: 13,
     fontWeight: "500",

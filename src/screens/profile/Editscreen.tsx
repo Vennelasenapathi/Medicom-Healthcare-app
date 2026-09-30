@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Formik } from "formik";
-
 import AppButton from "@/components/common/AppButton";
 import InputField from "@/components/common/InputField";
 import DateOfBirthField from "@/components/signupcomponents/DateofBirthField";

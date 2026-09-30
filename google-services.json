@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "747100486996",
+    "project_id": "myreactnativeapp-7e23b",
+    "storage_bucket": "myreactnativeapp-7e23b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:747100486996:android:44bcec920da255dba11cc1",
+        "android_client_info": {
+          "package_name": "com.vennelas.MyReactNativeApp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClqMbY9mht6CQ_hZELzOrsr6LS1g93Xt4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

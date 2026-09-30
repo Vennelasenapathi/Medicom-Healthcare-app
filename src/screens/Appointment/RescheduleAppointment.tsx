@@ -5,12 +5,12 @@ import {
   Text,
   View,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-
 import AppButton from "@/components/common/AppButton";
 import BackButton from "@/components/home/BackButton";
+import Calendar from "@/components/common/Calendar";
 import { colors } from "@/constants/colors";
 import { globalStyles } from "@/constants/Styles";
+import { months, times } from "@/data/Appointments";
 
 export default function RescheduleAppointment({
   date,
@@ -22,33 +22,30 @@ export default function RescheduleAppointment({
 }: any) {
   const today = new Date();
 
-  const months = [
-    "January", "February", "March", "April",
-    "May", "June", "July", "August",
-    "September", "October", "November", "December",
-  ];
-
-  const [month, setMonth] = useState(today.getMonth());
-  const [year, setYear] = useState(today.getFullYear());
+  const [month, setMonth] = useState(today.getMonth() );
+  const [year, setYear] = useState( today.getFullYear());
 
   useEffect(() => {
     if (!date) return;
 
     const parts = date.split(" ");
+
     if (parts.length !== 3) return;
 
-    const selectedMonth = months.indexOf(parts[1]);
+    const selectedMonth = months.indexOf(
+      parts[1]
+    );
+
     const selectedYear = Number(parts[2]);
 
-    if (selectedMonth !== -1 && !isNaN(selectedYear)) {
+    if (
+      selectedMonth !== -1 &&
+      !isNaN(selectedYear)
+    ) {
       setMonth(selectedMonth);
       setYear(selectedYear);
     }
   }, [date]);
-
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const firstDay = new Date(year, month, 1).getDay();
-  const monthName = months[month];
 
   const currentMonth =
     month === today.getMonth() &&
@@ -74,70 +71,20 @@ export default function RescheduleAppointment({
     }
   };
 
-  const isPast = (day: number) => {
-    const selectedDate = new Date(year, month, day);
-    const currentDate = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate()
-    );
-
-    return selectedDate < currentDate;
-  };
-
-  const calendar = [];
-
-  for (let i = 0; i < firstDay; i++) {
-    calendar.push(
-      <View key={`empty-${i}`} style={styles.day} />
-    );
-  }
-
-  for (let day = 1; day <= daysInMonth; day++) {
-    const disabled = isPast(day);
-    const selected =
-      date === `${day} ${monthName} ${year}` && !disabled;
-
-    calendar.push(
-      <Pressable
-        key={day}
-        disabled={disabled}
-        onPress={() =>
-          setDate(`${day} ${monthName} ${year}`)
-        }
+  return (
+    <View
+      style={[
+        globalStyles.container,
+        styles.screen,
+      ]}
+    >
+      {/* HEADER */}
+      <View
         style={[
-          styles.day,
-          selected && styles.selectedDay,
+          globalStyles.spaceBetween,
+          styles.header,
         ]}
       >
-        <Text
-          style={[
-            styles.dayText,
-            disabled && styles.disabled,
-            selected && styles.selectedText,
-          ]}
-        >
-          {day}
-        </Text>
-      </Pressable>
-    );
-  }
-
-  const times = [
-    "09:00 AM",
-    "10:00 AM",
-    "11:00 AM",
-    "12:00 PM",
-    "01:00 PM",
-    "02:00 PM",
-    "03:00 PM",
-    "04:00 PM",
-  ];
-
-  return (
-    <View style={[globalStyles.container, styles.screen]}>
-      {/* HEADER */}
-      <View style={styles.header}>
         <BackButton onPress={onBack} />
 
         <Text style={styles.title}>
@@ -148,56 +95,19 @@ export default function RescheduleAppointment({
       </View>
 
       {/* DATE */}
-      <Text style={styles.label}>Choose Date</Text>
+      <Text style={styles.label}>
+        Choose Date
+      </Text>
 
-      <View style={styles.calendar}>
-        <View style={styles.monthHeader}>
-          <Pressable
-            disabled={currentMonth}
-            onPress={previousMonth}
-          >
-            <Ionicons
-              name="chevron-back"
-              size={18}
-              color={
-                currentMonth
-                  ? "#CCC"
-                  : colors.textPrimary
-              }
-            />
-          </Pressable>
-
-          <Text style={styles.month}>
-            {monthName} {year}
-          </Text>
-
-          <Pressable onPress={nextMonth}>
-            <Ionicons
-              name="chevron-forward"
-              size={18}
-              color={colors.textPrimary}
-            />
-          </Pressable>
-        </View>
-
-        <View style={styles.week}>
-          {[
-            "Sun",
-            "Mon",
-            "Tue",
-            "Wed",
-            "Thu",
-            "Fri",
-            "Sat",
-          ].map((day) => (
-            <Text key={day} style={styles.weekText}>
-              {day}
-            </Text>
-          ))}
-        </View>
-
-        <View style={styles.grid}>{calendar}</View>
-      </View>
+      <Calendar
+        date={date}
+        month={month}
+        year={year}
+        currentMonth={currentMonth}
+        onDateChange={setDate}
+        onPreviousMonth={previousMonth}
+        onNextMonth={nextMonth}
+      />
 
       {/* TIME */}
       <Text style={styles.label}>
@@ -205,25 +115,31 @@ export default function RescheduleAppointment({
       </Text>
 
       <View style={styles.times}>
-        {times.map((item) => (
-          <Pressable
-            key={item}
-            onPress={() => setTime(item)}
-            style={[
-              styles.time,
-              time === item && styles.selectedTime,
-            ]}
-          >
-            <Text
+        {times.map((item) => {
+          const selected = time === item;
+
+          return (
+            <Pressable
+              key={item}
+              onPress={() => setTime(item)}
               style={[
-                styles.timeText,
-                time === item && styles.selectedTimeText,
+                styles.time,
+                selected &&
+                  styles.selectedTime,
               ]}
             >
-              {item}
-            </Text>
-          </Pressable>
-        ))}
+              <Text
+                style={[
+                  styles.timeText,
+                  selected &&
+                    styles.selectedTimeText,
+                ]}
+              >
+                {item}
+              </Text>
+            </Pressable>
+          );
+        })}
       </View>
 
       {/* CONFIRM */}
@@ -245,9 +161,6 @@ const styles = StyleSheet.create({
   header: {
     height: 95,
     paddingTop: 38,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
   },
 
   headerSpace: {
@@ -266,74 +179,6 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: "600",
     color: colors.textPrimary,
-  },
-
-  calendar: {
-    padding: 12,
-    borderWidth: 1,
-    borderRadius: 10,
-    borderColor: colors.borderLight,
-  },
-
-  monthHeader: {
-    height: 35,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-
-  month: {
-    fontSize: 14,
-    fontWeight: "700",
-    color: colors.textPrimary,
-  },
-
-  week: {
-    flexDirection: "row",
-    marginTop: 8,
-    marginBottom: 5,
-  },
-
-  weekText: {
-    width: "14.28%",
-    textAlign: "center",
-    fontSize: 9,
-    color: colors.textSecondary,
-  },
-
-  grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-  },
-
-  day: {
-    width: "14.28%",
-    height: 36,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  dayText: {
-    width: 29,
-    height: 29,
-    textAlign: "center",
-    textAlignVertical: "center",
-    fontSize: 10,
-    color: colors.textPrimary,
-  },
-
-  selectedDay: {
-    backgroundColor: colors.primaryDark,
-    borderRadius: 15,
-  },
-
-  selectedText: {
-    color: colors.white,
-    fontWeight: "700",
-  },
-
-  disabled: {
-    color: "#D0D0D0",
   },
 
   times: {
@@ -360,7 +205,6 @@ const styles = StyleSheet.create({
   },
 
   selectedTimeText: {
-    fontSize: 10,
     fontWeight: "600",
     color: colors.white,
   },

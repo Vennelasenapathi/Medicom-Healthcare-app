@@ -9,16 +9,13 @@ import {
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
 import { colors } from "@/constants/colors";
 import { globalStyles } from "@/constants/Styles";
 import { doctors } from "@/data/doctordata";
 
 export default function TopDoctorsScreen({ navigation }: any) {
   const [searchText, setSearchText] = useState("");
-
   const search = searchText.trim().toLowerCase();
-
   const filteredDoctors = doctors.filter(
     (doctor) =>
       doctor.name.toLowerCase().includes(search) ||
@@ -28,30 +25,17 @@ export default function TopDoctorsScreen({ navigation }: any) {
   return (
     <View style={[globalStyles.container, styles.container]}>
       {/* HEADER */}
-      <View style={[globalStyles.header, styles.header]}>
-        <Pressable
-          onPress={() => navigation.goBack()}
-          style={styles.back}
-        >
-          <Ionicons
-            name="chevron-back"
-            size={19}
-            color={colors.white}
-          />
+      <View style={[globalStyles.header, ]}>
+        <Pressable onPress={() => navigation.goBack()} style={styles.back}>
+          <Ionicons name="chevron-back" size={19} color={colors.white} />
         </Pressable>
 
-        <Text style={styles.title}>Top Doctors</Text>
-
+        <Text style={globalStyles.title}>Top Doctors</Text>
         <View style={styles.headerSpace} />
       </View>
 
       {/* SEARCH */}
-      <View
-        style={[
-          globalStyles.row,
-          styles.search,
-        ]}
-      >
+      <View style={[globalStyles.row, styles.search]}>
         <Ionicons
           name="search-outline"
           size={20}
@@ -81,12 +65,9 @@ export default function TopDoctorsScreen({ navigation }: any) {
 
       {/* RESULT COUNT */}
       {searchText.length > 0 && (
-        <Text style={globalStyles.smallText}>
+        <Text style={[globalStyles.smallText, styles.resultText]}>
           {filteredDoctors.length}{" "}
-          {filteredDoctors.length === 1
-            ? "doctor"
-            : "doctors"}{" "}
-          found
+          {filteredDoctors.length === 1 ? "doctor" : "doctors"} found
         </Text>
       )}
 
@@ -99,68 +80,43 @@ export default function TopDoctorsScreen({ navigation }: any) {
           filteredDoctors.map((doctor) => (
             <Pressable
               key={doctor.name}
-              style={styles.card}
+              style={[globalStyles.outlinedCard, styles.card]}
               onPress={() =>
-                navigation.navigate(
-                  "DoctorDetails",
-                  { doctor }
-                )
+                navigation.navigate("DoctorDetails", { doctor })
               }
             >
-              {/* IMAGE */}
-              <Image
-                source={doctor.image}
-                style={styles.image}
-              />
+              <Image source={doctor.image} style={styles.image} />
 
-              {/* DETAILS */}
               <View style={styles.details}>
-                <Text style={globalStyles.title}>
-                  {doctor.name}
-                </Text>
+                <Text style={globalStyles.title}>{doctor.name}</Text>
 
                 <Text style={globalStyles.smallText}>
                   {doctor.specialty}
                 </Text>
 
                 {/* RATING */}
-                <View
-                  style={[
-                    globalStyles.row,
-                    styles.rating,
-                  ]}
-                >
+                <View style={[globalStyles.row, styles.rating]}>
                   <Ionicons
                     name="star"
                     size={13}
                     color={colors.star}
                   />
-
                   <Text style={styles.ratingText}>
                     4.0 (100 reviews)
                   </Text>
                 </View>
 
                 {/* DISTANCE */}
-                <View
-                  style={[
-                    globalStyles.row,
-                    styles.distance,
-                  ]}
-                >
+                <View style={[globalStyles.row, styles.distance]}>
                   <Ionicons
                     name="location-outline"
                     size={13}
                     color={colors.textSecondary}
                   />
-
-                  <Text style={globalStyles.smallText}>
-                    800m away
-                  </Text>
+                  <Text style={globalStyles.smallText}>800m away</Text>
                 </View>
               </View>
 
-              {/* ARROW */}
               <Ionicons
                 name="chevron-forward"
                 size={16}
@@ -169,7 +125,6 @@ export default function TopDoctorsScreen({ navigation }: any) {
             </Pressable>
           ))
         ) : (
-          /* NO RESULTS */
           <View style={globalStyles.empty}>
             <View style={styles.noResultsIcon}>
               <Ionicons
@@ -179,9 +134,7 @@ export default function TopDoctorsScreen({ navigation }: any) {
               />
             </View>
 
-            <Text style={styles.noResultsTitle}>
-              No doctors found
-            </Text>
+            <Text style={styles.noResultsTitle}>No doctors found</Text>
 
             <Text style={globalStyles.emptyText}>
               Try searching with a doctor name{"\n"}
@@ -200,10 +153,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
 
-  header: {
-    paddingTop: 42,
-    paddingHorizontal: 10,
-  },
+  // header: {
+  //   paddingTop: 42,
+  // },
 
   back: {
     width: 46,
@@ -212,12 +164,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primaryDark,
     alignItems: "center",
     justifyContent: "center",
-  },
-
-  title: {
-    fontSize: 21,
-    fontWeight: "700",
-    color: colors.textPrimary,
   },
 
   headerSpace: {
@@ -256,9 +202,6 @@ const styles = StyleSheet.create({
     height: 150,
     padding: 5,
     borderRadius: 8,
-    borderWidth: 1,
-    borderColor: colors.borderLight,
-    backgroundColor: colors.white,
     flexDirection: "row",
     alignItems: "center",
   },

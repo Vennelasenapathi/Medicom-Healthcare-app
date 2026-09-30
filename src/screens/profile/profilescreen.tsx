@@ -8,9 +8,8 @@ import {
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
 import { colors } from "@/constants/colors";
-import { globalStyles } from "@/constants/styles";
+import { globalStyles } from "@/constants/Styles";
 import BottomTabBar from "@/components/Bottombar/BottomBar";
 
 export default function ProfileScreen({ navigation, route }: any) {

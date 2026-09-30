@@ -63,7 +63,7 @@ export default function Signup({ navigation }: any) {
             !errors[field] &&
             String(values[field]).length > 0;
 
-          const touchAllFields = () =>
+          const touchAll = () =>
             Object.keys(values).forEach((field) =>
               setFieldTouched(field as any, true)
             );
@@ -73,97 +73,76 @@ export default function Signup({ navigation }: any) {
               <ScrollView
                 showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps="handled"
-                contentContainerStyle={styles.scrollContent}
+                contentContainerStyle={styles.scroll}
               >
                 <View style={styles.content}>
-                  <View style={styles.logoContainer}>
-                    <Image
-                      source={require("../../../assets/images/medicom/Logo2.png")}
-                      style={styles.logo}
-                      resizeMode="contain"
-                    />
-                  </View>
+                  <Image
+                    source={require("../../../assets/images/medicom/Logo2.png")}
+                    style={styles.logo}
+                    resizeMode="contain"
+                  />
 
-                  <View style={styles.header}>
-                    <ScreenHeader
-                      title="Create Your Account"
-                      subtitle="Create an account to get started"
-                    />
-                  </View>
+                  <ScreenHeader
+                    title="Create Your Account"
+                    subtitle="Create an account to get started"
+                  />
 
-                  <FormField>
-                    <InputField
-                      icon="person-outline"
-                      value={values.name}
-                      onChangeText={(text) => setFieldValue("name", text)}
-                      onBlur={() => setFieldTouched("name", true)}
-                      placeholder="Enter your name"
-                      touched={touched.name}
-                      error={errors.name}
-                      valid={valid("name")}
-                      autoCapitalize="words"
-                    />
-                  </FormField>
+                  <InputField
+                    icon="person-outline"
+                    value={values.name}
+                    onChangeText={(v) => setFieldValue("name", v)}
+                    onBlur={() => setFieldTouched("name", true)}
+                    placeholder="Enter your name"
+                    touched={touched.name}
+                    error={errors.name}
+                    valid={valid("name")}
+                    autoCapitalize="words"
+                  />
 
-                  <FormField>
-                    <InputField
-                      icon="mail-outline"
-                      value={values.email}
-                      onChangeText={(text) => setFieldValue("email", text)}
-                      onBlur={() => setFieldTouched("email", true)}
-                      placeholder="Enter your email"
-                      touched={touched.email}
-                      error={errors.email}
-                      valid={valid("email")}
-                      keyboardType="email-address"
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                    />
-                  </FormField>
+                  <InputField
+                    icon="mail-outline"
+                    value={values.email}
+                    onChangeText={(v) => setFieldValue("email", v)}
+                    onBlur={() => setFieldTouched("email", true)}
+                    placeholder="Enter your email"
+                    touched={touched.email}
+                    error={errors.email}
+                    valid={valid("email")}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                  />
 
-                  <FormField>
-                    <PasswordField
-                      value={values.password}
-                      onChangeText={(text) =>
-                        setFieldValue("password", text)
-                      }
-                      onBlur={() => setFieldTouched("password", true)}
-                      touched={touched.password}
-                      error={errors.password}
-                    />
-                  </FormField>
+                  <PasswordField
+                    value={values.password}
+                    onChangeText={(v) => setFieldValue("password", v)}
+                    onBlur={() => setFieldTouched("password", true)}
+                    touched={touched.password}
+                    error={errors.password}
+                  />
 
-                  <FormField>
-                    <DateOfBirthField
-                      value={values.dob}
-                      touched={touched.dob}
-                      error={errors.dob}
-                      onChange={(date) => setFieldValue("dob", date)}
-                      onBlur={() => setFieldTouched("dob", true)}
-                    />
-                  </FormField>
+                  <DateOfBirthField
+                    value={values.dob}
+                    touched={touched.dob}
+                    error={errors.dob}
+                    onChange={(v) => setFieldValue("dob", v)}
+                    onBlur={() => setFieldTouched("dob", true)}
+                  />
 
-                  <FormField>
-                    <GenderSelector
-                      value={values.gender}
-                      onChange={(value) =>
-                        setFieldValue("gender", value)
-                      }
-                      touched={touched.gender}
-                      error={errors.gender}
-                    />
-                  </FormField>
+                  <GenderSelector
+                    value={values.gender}
+                    onChange={(v) => setFieldValue("gender", v)}
+                    touched={touched.gender}
+                    error={errors.gender}
+                  />
 
-                  <View style={styles.row}>
+                  <View style={[globalStyles.row, styles.measurements]}>
                     <View style={styles.half}>
                       <InputField
                         icon="resize-outline"
                         value={values.height}
-                        onChangeText={(text) =>
-                          setFieldValue(
-                            "height",
-                            text.replace(/[^0-9.]/g, "")
-                          )
+                        onChangeText={(v) => 
+                          setFieldValue("height", v.replace(/[^0-9.]/g, ""))
                         }
                         onBlur={() => setFieldTouched("height", true)}
                         placeholder="Height"
@@ -178,11 +157,8 @@ export default function Signup({ navigation }: any) {
                       <InputField
                         icon="scale-outline"
                         value={values.weight}
-                        onChangeText={(text) =>
-                          setFieldValue(
-                            "weight",
-                            text.replace(/[^0-9.]/g, "")
-                          )
+                        onChangeText={(v) =>
+                          setFieldValue("weight", v.replace(/[^0-9.]/g, ""))
                         }
                         onBlur={() => setFieldTouched("weight", true)}
                         placeholder="Weight"
@@ -196,20 +172,15 @@ export default function Signup({ navigation }: any) {
 
                   <Pressable
                     style={styles.terms}
-                    onPress={() =>
-                      setFieldValue("terms", !values.terms)
-                    }
+                    onPress={() => setFieldValue("terms", !values.terms)}
                   >
                     <View
-                      style={[
-                        styles.checkbox,
+                      style={[ styles.checkbox,
                         {
                           borderColor: values.terms
-                            ? colors.primaryDark
-                            : colors.border,
+                            ? colors.primaryDark: colors.border,
                           backgroundColor: values.terms
-                            ? colors.primaryDark
-                            : colors.white,
+                            ? colors.primaryDark : colors.white,
                         },
                       ]}
                     >
@@ -221,7 +192,6 @@ export default function Signup({ navigation }: any) {
                         />
                       )}
                     </View>
-
                     <Text style={styles.termsText}>
                       I confirm that the information provided is accurate.
                     </Text>
@@ -231,7 +201,7 @@ export default function Signup({ navigation }: any) {
                     title="Sign Up"
                     onPress={() => {
                       setSuccessVisible(true);
-                      touchAllFields();
+                      touchAll();
                       handleSubmit();
                     }}
                   />
@@ -240,10 +210,7 @@ export default function Signup({ navigation }: any) {
                     <Text style={globalStyles.smallText}>
                       Already have an account?{" "}
                     </Text>
-
-                    <Pressable
-                      onPress={() => navigation.navigate("Login")}
-                    >
+                    <Pressable onPress={() => navigation.navigate("Login")}>
                       <Text style={styles.loginText}>Log In</Text>
                     </Pressable>
                   </View>
@@ -267,41 +234,25 @@ export default function Signup({ navigation }: any) {
   );
 }
 
-function FormField({ children }: { children: React.ReactNode }) {
-  return <View style={styles.field}>{children}</View>;
-}
-
 const styles = StyleSheet.create({
-  scrollContent: {
+  scroll: {
     flexGrow: 1,
     paddingBottom: 30,
   },
 
   content: {
-    flex: 1,
     paddingHorizontal: 32,
     paddingTop: 100,
-  },
-
-  logoContainer: {
-    alignItems: "center",
   },
 
   logo: {
     width: 68,
     height: 68,
+    alignSelf: "center",
+    marginBottom: 10,
   },
 
-  header: {
-    alignItems: "center",
-  },
-
-  field: {
-    marginTop: 12,
-  },
-
-  row: {
-    flexDirection: "row",
+  measurements: {
     gap: 12,
     marginTop: 12,
   },

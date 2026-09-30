@@ -40,7 +40,7 @@ export default function DriverAudioCallScreen({navigation,}: any) {
 
   /* END CALL */
 
-  const endCall = () => {navigation.goBack();};
+  const endCall = () => {navigation.navigate("Home");};
 
   return (
     <ImageBackground

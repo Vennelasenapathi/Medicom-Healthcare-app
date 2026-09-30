@@ -43,3 +43,30 @@ export const initialAppointments: Appointment[] = [
     image: require("../../assets/images/medicom/topdoctor5.png"),
   },
 ];
+
+export  const months = [
+    "January", "February", "March", "April",
+    "May", "June", "July", "August",
+    "September", "October", "November", "December",
+  ];
+
+export const times = [
+    "09:00 AM",
+    "10:00 AM",
+    "11:00 AM",
+    "12:00 PM",
+    "01:00 PM",
+    "02:00 PM",
+    "03:00 PM",
+    "04:00 PM",
+];
+
+export const weeks=[
+  "Sun",
+            "Mon",
+            "Tue",
+            "Wed",
+            "Thu",
+            "Fri",
+            "Sat",
+]

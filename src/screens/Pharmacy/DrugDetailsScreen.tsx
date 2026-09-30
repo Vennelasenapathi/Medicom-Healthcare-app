@@ -8,8 +8,10 @@ import {
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import AppButton from "@/components/common/AppButton";
 import { colors } from "@/constants/colors";
 import { globalStyles } from "@/constants/Styles";
+import MiniProduct from "@/components/Pharmacy/DrugMiniCard";
 
 export default function DrugDetailsScreen({ navigation, route }: any) {
   const product = route.params?.product || {
@@ -35,25 +37,7 @@ export default function DrugDetailsScreen({ navigation, route }: any) {
 
   return (
     <View style={globalStyles.container}>
-      <View style={[globalStyles.header, styles.header]}>
-        <Pressable style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Ionicons name="chevron-back" size={27} color={colors.white} />
-        </Pressable>
-
-        <Text style={styles.title}>Drugs Detail</Text>
-
-        <Pressable
-          style={styles.cartButton}
-          onPress={() => navigation.navigate("Cart")}
-        >
-          <Ionicons
-            name="cart-outline"
-            size={27}
-            color={colors.primaryDark}
-          />
-        </Pressable>
-      </View>
-
+      <Header navigation={navigation} />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scroll}
@@ -68,7 +52,7 @@ export default function DrugDetailsScreen({ navigation, route }: any) {
             style={styles.productImage}
             resizeMode="contain"
           />
-
+          
           <View style={styles.dots}>
             <View style={[styles.dot, styles.activeDot]} />
             <View style={styles.dot} />
@@ -83,23 +67,15 @@ export default function DrugDetailsScreen({ navigation, route }: any) {
           </View>
 
           <View style={styles.counter}>
-            <Pressable
-              style={styles.counterButton}
-              onPress={() => setQuantity((q) => Math.max(1, q - 1))}
-            >
+            <Pressable onPress={() => setQuantity((q) => Math.max(1, q - 1))} >
               <Ionicons
                 name="remove"
                 size={20}
                 color={colors.primaryDark}
               />
             </Pressable>
-
-            <Text style={styles.quantityText}>{quantity}</Text>
-
-            <Pressable
-              style={styles.counterButton}
-              onPress={() => setQuantity((q) => q + 1)}
-            >
+            <Text style={styles.quantity}>{quantity}</Text>
+            <Pressable onPress={() => setQuantity((q) => q + 1)}>
               <Ionicons name="add" size={20} color={colors.primaryDark} />
             </Pressable>
           </View>
@@ -116,13 +92,12 @@ export default function DrugDetailsScreen({ navigation, route }: any) {
               />
             ))}
             <Ionicons name="star-outline" size={18} color="#FFB800" />
-            <Text style={styles.ratingText}>4.0</Text>
+            <Text style={styles.rating}>4.0</Text>
           </View>
-
           <Text style={styles.price}>{product.price}</Text>
         </View>
 
-        <Text style={styles.aboutTitle}>About</Text>
+        <Text style={styles.about}>About</Text>
 
         <Text style={styles.description}>
           Bodrex Herbal is used for temporary relief from common cold and
@@ -133,10 +108,11 @@ export default function DrugDetailsScreen({ navigation, route }: any) {
           <Pressable style={styles.addButton} onPress={goToCart}>
             <Text style={styles.addText}>Add to cart</Text>
           </Pressable>
-
-          <Pressable style={globalStyles.button} onPress={goToCart}>
-            <Text style={globalStyles.buttonText}>Buy now</Text>
-          </Pressable>
+          <AppButton
+            title="Buy now"
+            onPress={goToCart}
+            style={styles.buyButton}
+          />
         </View>
 
         <View style={[globalStyles.spaceBetween, styles.moreHeader]}>
@@ -163,34 +139,30 @@ export default function DrugDetailsScreen({ navigation, route }: any) {
   );
 }
 
-function MiniProduct({
-  name,
-  price,
-  image,
-}: {
-  name: string;
-  price: string;
-  image: any;
-}) {
+function Header({ navigation }: any) {
   return (
-    <View style={styles.miniProduct}>
-      <View style={styles.miniImage}>
-        <Image
-          source={image}
-          style={styles.miniImageActual}
-          resizeMode="contain"
+    <View style={[globalStyles.header, styles.header]}>
+      <Pressable style={styles.back} onPress={() => navigation.goBack()}>
+        <Ionicons name="chevron-back" size={27} color={colors.white} />
+      </Pressable>
+      <Text style={globalStyles.title}>Drugs Detail</Text>
+      <Pressable
+        style={styles.cart}
+        onPress={() => navigation.navigate("Cart")}
+      >
+        <Ionicons
+          name="cart-outline"
+          size={27}
+          color={colors.primaryDark}
         />
-      </View>
-      <Text style={styles.miniName}>{name}</Text>
-      <Text style={styles.miniPrice}>{price}</Text>
+      </Pressable>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  header: { height: 105, paddingHorizontal: 20, paddingTop: 38 },
-
-  backButton: {
+  header: { height: 105, paddingTop: 38 },
+  back: {
     width: 44,
     height: 44,
     borderRadius: 11,
@@ -198,32 +170,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
-  cartButton: {
+  cart: {
     width: 44,
     height: 44,
     alignItems: "center",
     justifyContent: "center",
   },
-
-  title: {
-    fontSize: 21,
-    fontWeight: "700",
-    color: colors.textPrimary,
-  },
-
-  scroll: {
-    paddingHorizontal: 18,
-    paddingBottom: 40,
-  },
+  scroll: { paddingHorizontal: 18, paddingBottom: 40 },
 
   imageSection: {
     height: 270,
     alignItems: "center",
     justifyContent: "center",
-    position: "relative",
   },
-
   favorite: {
     position: "absolute",
     right: 5,
@@ -235,100 +194,71 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     elevation: 3,
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 5,
   },
-
-  productImage: {
-    width: 220,
-    height: 210,
-  },
-
+  productImage: { width: 220, height: 210 },
   dots: {
     position: "absolute",
     bottom: 8,
     flexDirection: "row",
-    alignItems: "center",
     gap: 6,
   },
-
   dot: {
     width: 7,
     height: 7,
     borderRadius: 4,
     backgroundColor: "#C9D8FF",
   },
-
   activeDot: {
     width: 20,
     backgroundColor: colors.primaryDark,
   },
 
-  productInfo: {
-    marginTop: 18,
-  },
-
+  productInfo: { marginTop: 18 },
   productName: {
     fontSize: 18,
     fontWeight: "700",
     color: colors.textPrimary,
   },
-
   counter: {
     height: 44,
     minWidth: 105,
     paddingHorizontal: 8,
     borderWidth: 1,
-    borderColor: "#E6EAF0",
+    borderColor: colors.borderLight,
     borderRadius: 10,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
-
-  counterButton: {
-    width: 30,
-    height: 30,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  quantityText: {
+  quantity: {
     fontSize: 15,
     fontWeight: "600",
     color: colors.textPrimary,
   },
 
-  ratingPrice: {
-    marginTop: 14,
-  },
-
-  ratingText: {
+  ratingPrice: { marginTop: 14 },
+  rating: {
     marginLeft: 5,
     fontSize: 13,
-    fontWeight: "500",
     color: colors.textPrimary,
   },
-
   price: {
     fontSize: 21,
     fontWeight: "700",
     color: colors.textPrimary,
   },
 
-  aboutTitle: {
+  about: {
     marginTop: 25,
     fontSize: 16,
     fontWeight: "700",
     color: colors.textPrimary,
   },
-
   description: {
     marginTop: 9,
     fontSize: 13,
     lineHeight: 21,
-    color: "#8E949E",
+    color: colors.textSecondary,
   },
 
   buttons: {
@@ -336,7 +266,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 12,
   },
-
   addButton: {
     flex: 1,
     height: 56,
@@ -346,30 +275,29 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
   addText: {
     fontSize: 14,
     fontWeight: "700",
     color: colors.primaryDark,
   },
-
-  moreHeader: {
-    marginTop: 28,
+  buyButton: {
+    flex: 1,
+    height: 56,
+    borderRadius: 14,
   },
 
+  moreHeader: { marginTop: 28 },
   moreTitle: {
     fontSize: 16,
     fontWeight: "700",
     color: colors.textPrimary,
   },
-
   seeAll: {
     paddingHorizontal: 12,
     paddingVertical: 7,
     borderRadius: 7,
     backgroundColor: "#EAF0FF",
   },
-
   seeAllText: {
     fontSize: 9,
     fontWeight: "700",
@@ -380,37 +308,5 @@ const styles = StyleSheet.create({
     marginTop: 12,
     flexDirection: "row",
     gap: 12,
-  },
-
-  miniProduct: {
-    width: 125,
-  },
-
-  miniImage: {
-    height: 110,
-    borderWidth: 1,
-    borderColor: "#EDF0F4",
-    borderRadius: 11,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-
-  miniImageActual: {
-    width: 90,
-    height: 90,
-  },
-
-  miniName: {
-    marginTop: 7,
-    fontSize: 11,
-    fontWeight: "600",
-    color: colors.textPrimary,
-  },
-
-  miniPrice: {
-    marginTop: 3,
-    fontSize: 11,
-    fontWeight: "700",
-    color: colors.primaryDark,
   },
 });
