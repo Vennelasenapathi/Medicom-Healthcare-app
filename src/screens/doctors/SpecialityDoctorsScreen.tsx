@@ -18,8 +18,7 @@ import { doctors } from "@/data/doctordata";
 type FilterType = "Available Today" | "Female" | "High Rated";
 
 export default function SpecialtyDoctorsScreen({ navigation }: any) {
-  const [filter, setFilter] =
-    useState<FilterType>("Available Today");
+  const [filter, setFilter] = useState<FilterType>("Available Today");
   const [search, setSearch] = useState("");
 
   const filteredDoctors = useMemo(() => {
@@ -46,7 +45,6 @@ export default function SpecialtyDoctorsScreen({ navigation }: any) {
           doctor.specialty.toLowerCase().includes(value)
       );
     }
-
     return result;
   }, [filter, search]);
 

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {
   Image,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -57,6 +58,8 @@ export default function ChatScreen({ navigation, route }: any) {
     },
   ]);
 
+  
+
   const sendMessage = () => {
     const text = input.trim();
     if (!text) return;
@@ -81,10 +84,12 @@ export default function ChatScreen({ navigation, route }: any) {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={globalStyles.container}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-    >
+    
+<KeyboardAvoidingView
+  style={globalStyles.container}
+  behavior={Platform.OS === "ios" ? "padding" : undefined}
+>
+
       <View style={styles.header}>
         <Pressable style={styles.back} onPress={() => navigation.goBack()}>
           <Ionicons name="chevron-back" size={28} color={colors.white} />
@@ -228,10 +233,11 @@ const styles = StyleSheet.create({
   },
 
   messages: {
-    paddingHorizontal: 17,
-    paddingTop: 22,
-    paddingBottom: 35,
-  },
+  flex: 1,
+  paddingHorizontal: 17,
+  paddingTop: 22,
+  paddingBottom: 35,
+},
 
   today: {
     alignSelf: "center",

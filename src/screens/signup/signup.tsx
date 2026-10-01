@@ -87,47 +87,51 @@ export default function Signup({ navigation }: any) {
                     subtitle="Create an account to get started"
                   />
 
-                  <InputField
-                    icon="person-outline"
-                    value={values.name}
-                    onChangeText={(v) => setFieldValue("name", v)}
-                    onBlur={() => setFieldTouched("name", true)}
-                    placeholder="Enter your name"
-                    touched={touched.name}
-                    error={errors.name}
-                    valid={valid("name")}
-                    autoCapitalize="words"
-                  />
+                  <View style={styles.inputFields}>
 
-                  <InputField
-                    icon="mail-outline"
-                    value={values.email}
-                    onChangeText={(v) => setFieldValue("email", v)}
-                    onBlur={() => setFieldTouched("email", true)}
-                    placeholder="Enter your email"
-                    touched={touched.email}
-                    error={errors.email}
-                    valid={valid("email")}
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                  />
+                    <InputField
+                      icon="person-outline"
+                      value={values.name}
+                      onChangeText={(v) => setFieldValue("name", v)}
+                      onBlur={() => setFieldTouched("name", true)}
+                      placeholder="Enter your name"
+                      touched={touched.name}
+                      error={errors.name}
+                      valid={valid("name")}
+                      autoCapitalize="words"
+                    />
 
-                  <PasswordField
-                    value={values.password}
-                    onChangeText={(v) => setFieldValue("password", v)}
-                    onBlur={() => setFieldTouched("password", true)}
-                    touched={touched.password}
-                    error={errors.password}
-                  />
+                    <InputField
+                      icon="mail-outline"
+                      value={values.email}
+                      onChangeText={(v) => setFieldValue("email", v)}
+                      onBlur={() => setFieldTouched("email", true)}
+                      placeholder="Enter your email"
+                      touched={touched.email}
+                      error={errors.email}
+                      valid={valid("email")}
+                      keyboardType="email-address"
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                    />
 
-                  <DateOfBirthField
-                    value={values.dob}
-                    touched={touched.dob}
-                    error={errors.dob}
-                    onChange={(v) => setFieldValue("dob", v)}
-                    onBlur={() => setFieldTouched("dob", true)}
-                  />
+                    <PasswordField
+                      value={values.password}
+                      onChangeText={(v) => setFieldValue("password", v)}
+                      onBlur={() => setFieldTouched("password", true)}
+                      touched={touched.password}
+                      error={errors.password}
+                    />
+
+                    <DateOfBirthField
+                      value={values.dob}
+                      touched={touched.dob}
+                      error={errors.dob}
+                      onChange={(v) => setFieldValue("dob", v)}
+                      onBlur={() => setFieldTouched("dob", true)}
+                    />
+
+                  </View>
 
                   <GenderSelector
                     value={values.gender}
@@ -141,7 +145,7 @@ export default function Signup({ navigation }: any) {
                       <InputField
                         icon="resize-outline"
                         value={values.height}
-                        onChangeText={(v) => 
+                        onChangeText={(v) =>
                           setFieldValue("height", v.replace(/[^0-9.]/g, ""))
                         }
                         onBlur={() => setFieldTouched("height", true)}
@@ -175,13 +179,13 @@ export default function Signup({ navigation }: any) {
                     onPress={() => setFieldValue("terms", !values.terms)}
                   >
                     <View
-                      style={[ styles.checkbox,
-                        {
-                          borderColor: values.terms
-                            ? colors.primaryDark: colors.border,
-                          backgroundColor: values.terms
-                            ? colors.primaryDark : colors.white,
-                        },
+                      style={[styles.checkbox,
+                      {
+                        borderColor: values.terms
+                          ? colors.primaryDark : colors.border,
+                        backgroundColor: values.terms
+                          ? colors.primaryDark : colors.white,
+                      },
                       ]}
                     >
                       {values.terms && (
@@ -237,24 +241,30 @@ export default function Signup({ navigation }: any) {
 const styles = StyleSheet.create({
   scroll: {
     flexGrow: 1,
-    paddingBottom: 30,
+    paddingBottom: 35,
   },
 
   content: {
-    paddingHorizontal: 32,
-    paddingTop: 100,
+    paddingHorizontal: 20,
+    paddingTop: 70,
   },
 
   logo: {
-    width: 68,
-    height: 68,
+    width: 78,
+    height: 78,
     alignSelf: "center",
+    marginBottom: 14,
+  },
+
+  inputFields: {
+    marginTop: 20,
     marginBottom: 10,
+    gap: 14,
   },
 
   measurements: {
-    gap: 12,
-    marginTop: 12,
+    gap: 14,
+    marginTop: 16,
   },
 
   half: {
@@ -262,16 +272,16 @@ const styles = StyleSheet.create({
   },
 
   terms: {
-    marginTop: 16,
+    marginTop: 18,
     flexDirection: "row",
     alignItems: "flex-start",
   },
 
   checkbox: {
-    width: 20,
-    height: 20,
+    width: 22,
+    height: 22,
     marginBottom: 16,
-    borderRadius: 4,
+    borderRadius: 5,
     borderWidth: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -279,20 +289,20 @@ const styles = StyleSheet.create({
 
   termsText: {
     flex: 1,
-    marginLeft: 8,
-    fontSize: 12,
-    lineHeight: 16,
+    marginLeft: 9,
+    fontSize: 13,
+    lineHeight: 18,
     color: colors.textSecondary,
   },
 
   loginRow: {
-    marginTop: 16,
+    marginTop: 20,
     justifyContent: "center",
   },
 
   loginText: {
-    fontSize: 14,
-    fontWeight: "500",
+    fontSize: 15,
+    fontWeight: "600",
     color: colors.primaryDark,
   },
 });

@@ -15,7 +15,7 @@ import { globalStyles } from "@/constants/Styles";
 import AppButton from "@/components/common/AppButton";
 import DoctorCard from "@/components/doctors/DoctorCard";
 
-export default function HospitalDetailsScreen({navigation,route,}: any) {
+export default function HospitalDetailsScreen({ navigation, route, }: any) {
   const hospital = route?.params?.hospital;
   return (
     <View style={[globalStyles.container, styles.container]}>
@@ -102,7 +102,16 @@ export default function HospitalDetailsScreen({navigation,route,}: any) {
 
       {/* BOTTOM BUTTONS */}
       <View style={styles.bottomActions}>
-        <Pressable style={styles.callButton}>
+        <Pressable
+          style={styles.callButton}
+          onPress={() =>
+            navigation.navigate("AudioCall", {
+              hospital,
+              name: hospital?.name || "City Neuro Hospital",
+              type: "hospital",
+            })
+          }
+        >
           <Ionicons
             name="call-outline"
             size={19}
@@ -129,7 +138,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 50,
   },
-  
+
   back: {
     width: 46,
     height: 46,

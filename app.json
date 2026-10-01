@@ -13,6 +13,7 @@
     "android": {
       "package": "com.vennelas.MyReactNativeApp",
       "googleServicesFile": "./google-services.json",
+      "softwareKeyboardLayoutMode": "resize",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -46,6 +47,7 @@
       "eas": {
         "projectId": "59027b8f-2187-4d14-bf48-eeeae404d58a"
       }
-    }
+    },
+    "owner": "vennelas"
   }
 }

@@ -11,8 +11,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { colors } from "@/constants/colors";
 import { globalStyles } from "@/constants/Styles";
 
-export default function AudioCallScreen({ navigation }: any) {
+export default function AudioCallScreen({ navigation,route }: any) {
   const [seconds, setSeconds] = useState(0);
+  const { doctor, hospital, name, type } = route?.params || {};
+
+  const callerName =
+    type === "hospital"
+      ? name || hospital?.name || "Hospital"
+      : doctor?.name || "Dr. Azim Khan";
 
   /* CALL TIMER */
 
@@ -66,7 +72,7 @@ export default function AudioCallScreen({ navigation }: any) {
         {/* DOCTOR NAME */}
 
         <Text style={styles.name}>
-          Dr. Azim Khan
+          {callerName}
         </Text>
 
         {/* LIVE TIMER */}

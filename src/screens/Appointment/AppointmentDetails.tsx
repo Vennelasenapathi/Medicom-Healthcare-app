@@ -179,7 +179,7 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    paddingTop: 35,
+    paddingTop: 45,
   },
 
   headerSpace: {
@@ -189,6 +189,7 @@ const styles = StyleSheet.create({
   doctorCard: {
     flexDirection: "row",
     padding: 12,
+    marginTop: 20,
   },
 
   doctorImage: {

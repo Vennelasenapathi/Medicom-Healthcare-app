@@ -25,6 +25,7 @@ export const globalStyles = StyleSheet.create({
   header: {
     height: 90,
     paddingHorizontal: 20,
+    marginTop: 10,
     paddingTop:30,
     flexDirection: "row",
     alignItems: "center",
@@ -127,6 +128,7 @@ export const globalStyles = StyleSheet.create({
 
   input: {
     height: 52,
+    width: "100%",
     paddingHorizontal: 16,
     borderWidth: 1,
     borderColor: colors.borderLight,
