@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
   headerSpace: { width: 46,},
 
   mapContainer: {
-    height: 600,
+    height: 510,
     marginHorizontal: 12,
     borderRadius: 14,
     overflow: "hidden",
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
     width: "100%",
-    height: 700,
+    height: 500,
   },
 
   mapImage: {resizeMode: "cover", },
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     width: 165,
     height: 165,
     left: 95,
-    top: 205,
+    top: 105,
     borderRadius: 83,
     backgroundColor: "rgba(40,103,255,0.18)",
   },
@@ -186,23 +186,23 @@ const styles = StyleSheet.create({
 
   markerOne: {
     right: 49,
-    top: 255,
+    top: 155,
   },
 
   markerTwo: {
     left: 70,
-    top: 380,
+    top: 280,
   },
 
   markerThree: {
     right: 45,
-    top: 500,
+    top: 395,
   },
 
   route: {
     position: "absolute",
     left: 80,
-    top: 280,
+    top: 180,
     width: 195,
     height: 115,
   },
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
   route1: {
     left: 0,
     top: 10,
-    width: 82,
+    width: 85,
     height: 6,
   },
 
@@ -224,12 +224,12 @@ const styles = StyleSheet.create({
     left: 0,
     top: 10,
     width: 6,
-    height: 100,
+    height: 110,
   },
 
   route3: {
     left: 0,
-    top: 117,
+    top: 125,
     width: 243,
     height: 6,
     transform: [{ rotate: "6deg" }],
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
   onWayUserMarker: {
     position: "absolute",
     left: 148,
-    top: 257,
+    top: 165,
     width: 42,
     height: 42,
   },
@@ -268,9 +268,9 @@ const styles = StyleSheet.create({
 
   bottomCard: {
     marginHorizontal: 14,
-    marginTop: 10,
-    paddingTop: 10,
-    paddingBottom: 20,
+    marginTop: 0,
+    paddingTop: 0,
+    paddingBottom: 30,
     backgroundColor: colors.white,
   },
 

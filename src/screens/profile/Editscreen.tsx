@@ -2,7 +2,9 @@ import React from "react";
 import {
   Image,
   Pressable,
+  Platform,
   ScrollView,
+  KeyboardAvoidingView,
   StyleSheet,
   Text,
   View,
@@ -18,7 +20,12 @@ import { profileSchema } from "@/validations/profilevalidation";
 
 export default function EditProfileScreen({ navigation }: any) {
   return (
-    <View style={globalStyles.container}>
+    <KeyboardAvoidingView
+      style={globalStyles.keyboardContainer}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={0}
+    >
+
       <View style={[globalStyles.header, styles.header]}>
         <Pressable
           style={styles.backButton}
@@ -55,9 +62,11 @@ export default function EditProfileScreen({ navigation }: any) {
           setFieldTouched,
         }) => (
           <ScrollView
+            style={globalStyles.chatList}
             showsVerticalScrollIndicator={false}
+            contentContainerStyle={globalStyles.messages}
             keyboardShouldPersistTaps="handled"
-            contentContainerStyle={styles.scroll}
+            keyboardDismissMode="interactive"
           >
             <View style={styles.profileSection}>
               <View style={styles.imageContainer}>
@@ -141,7 +150,7 @@ export default function EditProfileScreen({ navigation }: any) {
           </ScrollView>
         )}
       </Formik>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

@@ -39,8 +39,9 @@ export default function Signup({ navigation }: any) {
 
   return (
     <KeyboardAvoidingView
-      style={globalStyles.container}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      style={globalStyles.keyboardContainer}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={0}
     >
       <Formik
         initialValues={initialValues}
@@ -71,9 +72,11 @@ export default function Signup({ navigation }: any) {
           return (
             <>
               <ScrollView
+                style={globalStyles.chatList}
                 showsVerticalScrollIndicator={false}
+                contentContainerStyle={globalStyles.messages}
                 keyboardShouldPersistTaps="handled"
-                contentContainerStyle={styles.scroll}
+                keyboardDismissMode="interactive"
               >
                 <View style={styles.content}>
                   <Image
@@ -239,6 +242,7 @@ export default function Signup({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
+
   scroll: {
     flexGrow: 1,
     paddingBottom: 35,

@@ -39,8 +39,9 @@ export default function Login({ navigation }: any) {
 
   return (
     <KeyboardAvoidingView
-      style={globalStyles.container}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      style={globalStyles.keyboardContainer}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={0}
     >
       <Formik
         initialValues={{ email: "", password: "" }}
@@ -57,9 +58,11 @@ export default function Login({ navigation }: any) {
           setFieldTouched,
         }) => (
           <ScrollView
-            keyboardShouldPersistTaps="handled"
+            style={globalStyles.chatList}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.scroll}
+            contentContainerStyle={globalStyles.messages}
+            keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="interactive"
           >
             <View style={styles.content}>
               <Image

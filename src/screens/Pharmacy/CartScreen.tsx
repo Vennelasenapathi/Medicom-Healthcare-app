@@ -118,11 +118,7 @@ function Header({ navigation }: any) {
         <Ionicons name="chevron-back" size={27} color={colors.white} />
       </Pressable>
       <Text style={globalStyles.title}>My Cart</Text>
-      <Ionicons
-        name="cart-outline"
-        size={27}
-        color={colors.primaryDark}
-      />
+      <View style={{ width: 44 }} />
     </View>
   );
 }
@@ -201,6 +197,7 @@ const styles = StyleSheet.create({
   header: {
     height: 105,
     paddingTop: 38,
+    
   },
   back: {
     width: 44,

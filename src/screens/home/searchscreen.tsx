@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import {
+  KeyboardAvoidingView,
   Pressable,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -9,6 +11,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "@/constants/colors";
+import { globalStyles } from "@/constants/Styles";
 
 const suggestions = [
   "Chest pain and shortness of breath",
@@ -27,10 +30,17 @@ export default function SearchScreen({ navigation }: any) {
   );
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={globalStyles.keyboardContainer}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={0}
+    >
       <ScrollView
-        keyboardShouldPersistTaps="handled"
+        style={globalStyles.chatList}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={globalStyles.messages}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive"
       >
         {/* HEADER */}
         <View style={styles.header}>
@@ -83,7 +93,7 @@ export default function SearchScreen({ navigation }: any) {
           ))}
         </View>
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

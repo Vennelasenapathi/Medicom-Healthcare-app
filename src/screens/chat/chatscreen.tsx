@@ -58,7 +58,7 @@ export default function ChatScreen({ navigation, route }: any) {
     },
   ]);
 
-  
+
 
   const sendMessage = () => {
     const text = input.trim();
@@ -84,11 +84,12 @@ export default function ChatScreen({ navigation, route }: any) {
   };
 
   return (
-    
-<KeyboardAvoidingView
-  style={globalStyles.container}
-  behavior={Platform.OS === "ios" ? "padding" : undefined}
->
+
+    <KeyboardAvoidingView
+      style={globalStyles.keyboardContainer}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={0}
+    >
 
       <View style={styles.header}>
         <Pressable style={styles.back} onPress={() => navigation.goBack()}>
@@ -115,9 +116,11 @@ export default function ChatScreen({ navigation, route }: any) {
       </View>
 
       <ScrollView
+        style={globalStyles.chatList}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.messages}
+        contentContainerStyle={globalStyles.messages}
         keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="interactive"
       >
         <Text style={styles.today}>TODAY</Text>
 
@@ -172,6 +175,7 @@ function MessageBubble({ message }: { message: Message }) {
 }
 
 const styles = StyleSheet.create({
+
   header: {
     height: 120,
     paddingTop: 48,
@@ -231,13 +235,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
-  messages: {
-  flex: 1,
-  paddingHorizontal: 17,
-  paddingTop: 22,
-  paddingBottom: 35,
-},
 
   today: {
     alignSelf: "center",

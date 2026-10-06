@@ -3,6 +3,8 @@ import React from "react";
 import {
   Image,
   Pressable,
+  Platform,
+  KeyboardAvoidingView,
   ScrollView,
   StyleSheet,
   Text,
@@ -19,7 +21,11 @@ export default function PharmacyScreen({ navigation }: any) {
     navigation.navigate("DrugDetails", { product });
 
   return (
-    <View style={globalStyles.container}>
+     <KeyboardAvoidingView
+          style={globalStyles.keyboardContainer}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={0}
+        >
       <View style={[globalStyles.header, styles.header]}>
         <Pressable style={styles.back} onPress={navigation.goBack}>
           <Ionicons name="chevron-back" size={29} color={colors.white} />
@@ -30,10 +36,13 @@ export default function PharmacyScreen({ navigation }: any) {
         </Pressable>
       </View>
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scroll}
-      >
+       <ScrollView
+                      style={globalStyles.chatList}
+                      showsVerticalScrollIndicator={false}
+                      contentContainerStyle={globalStyles.messages}
+                      keyboardShouldPersistTaps="handled"
+                      keyboardDismissMode="interactive"
+                    >
         <View style={styles.search}>
           <TextInput
             placeholder="Search medicines or categories"
@@ -112,7 +121,7 @@ export default function PharmacyScreen({ navigation }: any) {
           ))}
         </View>
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

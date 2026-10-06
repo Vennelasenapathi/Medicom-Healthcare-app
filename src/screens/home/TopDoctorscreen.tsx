@@ -15,17 +15,17 @@ import { doctors } from "@/data/doctordata";
 
 export default function TopDoctorsScreen({ navigation }: any) {
   const [searchText, setSearchText] = useState("");
+
   const search = searchText.trim().toLowerCase();
   const filteredDoctors = doctors.filter(
-    (doctor) =>
-      doctor.name.toLowerCase().includes(search) ||
-      doctor.specialty.toLowerCase().includes(search)
+    (d) =>
+      d.name.toLowerCase().includes(search) ||
+      d.specialty.toLowerCase().includes(search)
   );
 
   return (
     <View style={[globalStyles.container, styles.container]}>
-      {/* HEADER */}
-      <View style={[globalStyles.header, ]}>
+      <View style={globalStyles.header}>
         <Pressable onPress={() => navigation.goBack()} style={styles.back}>
           <Ionicons name="chevron-back" size={19} color={colors.white} />
         </Pressable>
@@ -34,13 +34,8 @@ export default function TopDoctorsScreen({ navigation }: any) {
         <View style={styles.headerSpace} />
       </View>
 
-      {/* SEARCH */}
-      <View style={[globalStyles.row, styles.search]}>
-        <Ionicons
-          name="search-outline"
-          size={20}
-          color={colors.primaryDark}
-        />
+      <View style={styles.search}>
+        <Ionicons name="search-outline" size={20} color={colors.primaryDark} />
 
         <TextInput
           value={searchText}
@@ -52,7 +47,7 @@ export default function TopDoctorsScreen({ navigation }: any) {
           autoCorrect={false}
         />
 
-        {searchText.length > 0 && (
+        {!!searchText && (
           <Pressable onPress={() => setSearchText("")}>
             <Ionicons
               name="close-circle"
@@ -63,51 +58,37 @@ export default function TopDoctorsScreen({ navigation }: any) {
         )}
       </View>
 
-      {/* RESULT COUNT */}
-      {searchText.length > 0 && (
+      {!!searchText && (
         <Text style={[globalStyles.smallText, styles.resultText]}>
           {filteredDoctors.length}{" "}
           {filteredDoctors.length === 1 ? "doctor" : "doctors"} found
         </Text>
       )}
 
-      {/* DOCTORS */}
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.list}
+        keyboardShouldPersistTaps="handled"
       >
-        {filteredDoctors.length > 0 ? (
+        {filteredDoctors.length ? (
           filteredDoctors.map((doctor) => (
             <Pressable
               key={doctor.name}
               style={[globalStyles.outlinedCard, styles.card]}
-              onPress={() =>
-                navigation.navigate("DoctorDetails", { doctor })
-              }
+              onPress={() => navigation.navigate("DoctorDetails", { doctor })}
             >
               <Image source={doctor.image} style={styles.image} />
 
               <View style={styles.details}>
-                <Text style={globalStyles.title}>{doctor.name}</Text>
+                <Text style={styles.title}>{doctor.name}</Text>
+                <Text style={styles.specialty}>{doctor.specialty}</Text>
 
-                <Text style={globalStyles.smallText}>
-                  {doctor.specialty}
-                </Text>
-
-                {/* RATING */}
-                <View style={[globalStyles.row, styles.rating]}>
-                  <Ionicons
-                    name="star"
-                    size={13}
-                    color={colors.star}
-                  />
-                  <Text style={styles.ratingText}>
-                    4.0 (100 reviews)
-                  </Text>
+                <View style={styles.rating}>
+                  <Ionicons name="star" size={13} color={colors.star} />
+                  <Text style={styles.ratingText}>4.0 (100 reviews)</Text>
                 </View>
 
-                {/* DISTANCE */}
-                <View style={[globalStyles.row, styles.distance]}>
+                <View style={styles.distance}>
                   <Ionicons
                     name="location-outline"
                     size={13}
@@ -137,8 +118,7 @@ export default function TopDoctorsScreen({ navigation }: any) {
             <Text style={styles.noResultsTitle}>No doctors found</Text>
 
             <Text style={globalStyles.emptyText}>
-              Try searching with a doctor name{"\n"}
-              or specialization.
+              Try searching with a doctor name{"\n"}or specialization.
             </Text>
           </View>
         )}
@@ -152,10 +132,6 @@ const styles = StyleSheet.create({
     marginTop: 30,
     backgroundColor: colors.white,
   },
-
-  // header: {
-  //   paddingTop: 42,
-  // },
 
   back: {
     width: 46,
@@ -172,12 +148,13 @@ const styles = StyleSheet.create({
 
   search: {
     height: 53,
-    marginHorizontal: 14,
-    marginTop: 20,
+    margin: 20,
     marginBottom: 5,
     paddingHorizontal: 12,
     borderRadius: 8,
     backgroundColor: colors.background,
+    flexDirection: "row",
+    alignItems: "center",
   },
 
   searchInput: {
@@ -189,7 +166,7 @@ const styles = StyleSheet.create({
 
   resultText: {
     marginHorizontal: 16,
-    marginTop: 8,
+    marginTop: 3,
   },
 
   list: {
@@ -210,7 +187,6 @@ const styles = StyleSheet.create({
     width: 111,
     height: 111,
     borderRadius: 7,
-    resizeMode: "cover",
   },
 
   details: {
@@ -218,7 +194,21 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
 
+  title: {
+    fontSize: 16,
+    fontWeight: "700",
+    color: colors.textPrimary,
+  },
+
+  specialty: {
+    marginTop: 3,
+    fontSize: 13,
+    color: colors.textSecondary,
+  },
+
   rating: {
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 14,
     paddingHorizontal: 4,
     borderRadius: 3,
@@ -233,6 +223,8 @@ const styles = StyleSheet.create({
   },
 
   distance: {
+    flexDirection: "row",
+    alignItems: "center",
     marginTop: 7,
   },
 

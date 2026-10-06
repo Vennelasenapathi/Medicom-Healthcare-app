@@ -20,6 +20,21 @@ export const globalStyles = StyleSheet.create({
     paddingBottom: 30,
   },
 
+  messages: {
+    paddingHorizontal: 17,
+    paddingTop: 22,
+    paddingBottom: 20,
+  },
+
+  chatList: {
+    flex: 1,
+  },
+
+  keyboardContainer: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
+
   /* ================= HEADER ================= */
 
   header: {
