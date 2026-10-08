@@ -3,6 +3,7 @@ import {
   Image,
   Pressable,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   TextInput,
@@ -30,6 +31,11 @@ export default function DoctorsScreen({ navigation }: any) {
 
   return (
     <View style={globalStyles.container}>
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scroll}

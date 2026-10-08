@@ -4,6 +4,7 @@ import {
   Image,
   Pressable,
   StyleSheet,
+  StatusBar,
   Text,
   TextInput,
   View,
@@ -50,6 +51,11 @@ export default function SpecialtyDoctorsScreen({ navigation }: any) {
 
   return (
     <View style={[globalStyles.container, styles.container]}>
+       <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
       {/* Header */}
       <View style={globalStyles.header}>
         <BackButton onPress={() => navigation.goBack()} />

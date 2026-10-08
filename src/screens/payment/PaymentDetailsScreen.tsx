@@ -4,6 +4,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  StatusBar,
   Text,
   View,
 } from "react-native";
@@ -36,6 +37,11 @@ export default function PaymentDetails({ navigation, route }: any) {
 
   return (
     <View style={globalStyles.container}>
+       <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scroll}

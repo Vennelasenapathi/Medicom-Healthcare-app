@@ -3,6 +3,7 @@ import {
   ImageBackground,
   Pressable,
   StyleSheet,
+  StatusBar,
   Text,
   View,
 } from "react-native";
@@ -25,6 +26,11 @@ export default function AmbulanceScreen({ navigation }: any) {
 
   return (
     <View style={globalStyles.container}>
+       <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
       {/* Header */}
       <View style={[globalStyles.header, styles.header]}>
         <BackButton onPress={() => navigation.goBack()} />
@@ -86,7 +92,7 @@ export default function AmbulanceScreen({ navigation }: any) {
             title="Request Ambulance"
             onPress={() => setScreen("confirm")}
           />
-          <Pressable style={[styles.emergencyButton, globalStyles.center]}>
+          <Pressable onPress={() => navigation.navigate("Drivercall")} style={styles.emergencyButton}>
             <Text style={styles.emergencyText}>Call Emergency</Text>
             <Ionicons
               name="chevron-forward"

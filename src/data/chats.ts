@@ -5,7 +5,7 @@ export const chats = [
     message: "How are you feeling today?",
     time: "10:30 AM",
     image: require("../../assets/images/medicom/topdoctor1.png"),
-    unread: 2,
+    unread: 1,
   },
   {
     id: 2,

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   Pressable,
   StyleSheet,
+  StatusBar,
   Switch,
   Text,
   View,
@@ -40,6 +41,11 @@ export default function NotificationSettingsScreen({navigation,}: any) {
 
   return (
     <View style={styles.container}>
+       <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
       {/* Header */}
       <View style={styles.header}>
         <Pressable

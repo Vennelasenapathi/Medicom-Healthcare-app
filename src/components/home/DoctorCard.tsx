@@ -65,8 +65,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.borderLight,
     padding: 5,
-  },
+    // Shadow
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.08,
+    shadowRadius: 5,
 
+    // Android
+    elevation: 3,
+  },
+   
   image: {
     width: "100%",
     height: 128,

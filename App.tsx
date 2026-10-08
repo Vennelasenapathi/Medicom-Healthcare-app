@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
-import "./globals.css";
 import { NavigationContainer } from "@react-navigation/native";
 import { registerForNotifications } from "@/utils/notifications";
-
+import { ChatProvider } from "@/context/ChatContext";
 import AppNavigator from "./src/navigation/AppNavigator";
 
 export default function App() {
@@ -10,8 +9,10 @@ export default function App() {
     registerForNotifications();
   },[]);
   return (
-    <NavigationContainer>
-      <AppNavigator />
-    </NavigationContainer> 
+    <ChatProvider>
+      <NavigationContainer>
+        <AppNavigator />
+      </NavigationContainer>
+    </ChatProvider>
   );
 }

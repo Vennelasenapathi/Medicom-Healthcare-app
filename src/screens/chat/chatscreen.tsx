@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import {
-  Image,
-  Keyboard,
+  Image,  
   KeyboardAvoidingView,
   Platform,
   Pressable,
   ScrollView,
   StyleSheet,
+  StatusBar,
   Text,
   TextInput,
   View,
 } from "react-native";
+import { useChats,Message } from "@/context/ChatContext";
 import { Ionicons } from "@expo/vector-icons";
 import { colors } from "@/constants/colors";
 import { globalStyles } from "@/constants/Styles";
@@ -47,16 +48,19 @@ const getReply = (text: string) => {
 };
 
 export default function ChatScreen({ navigation, route }: any) {
+  const { updateLastMessage } = useChats();
   const doctor = route?.params?.doctor;
   const [input, setInput] = useState("");
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      text: "Hello! How are you feeling today?",
-      sender: "doctor",
-      time: "10:30 AM",
-    },
-  ]);
+ const [messages, setMessages] = useState<Message[]>([
+  {
+    id: 1,
+    text:
+      doctor?.message ||
+      "Hello! How are you feeling today?",
+    sender: "doctor",
+    time: doctor?.time || "10:30 AM",
+  },
+]);
 
 
 
@@ -64,23 +68,46 @@ export default function ChatScreen({ navigation, route }: any) {
     const text = input.trim();
     if (!text) return;
 
+    const userMessage: Message = {
+    id: Date.now(),
+    text,
+    sender: "user",
+    time: "Now",
+  };
+
     setMessages((prev) => [
       ...prev,
-      { id: Date.now(), text, sender: "user", time: "Now" },
+      userMessage,
     ]);
     setInput("");
 
+    updateLastMessage(
+    doctor.id,
+    text,
+    "Now"
+  );
+
     setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: Date.now() + 1,
-          text: getReply(text),
-          sender: "doctor",
-          time: "Now",
-        },
-      ]);
-    }, 700);
+    const reply = getReply(text);
+
+    const doctorMessage: Message = {
+      id: Date.now() + 1,
+      text: reply,
+      sender: "doctor",
+      time: "Now",
+    };
+
+    setMessages((prev) => [
+      ...prev,
+      doctorMessage,
+    ]);
+
+    updateLastMessage(
+      doctor.id,
+      reply,
+      "Now"
+    );
+  }, 700);
   };
 
   return (
@@ -90,7 +117,11 @@ export default function ChatScreen({ navigation, route }: any) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={0}
     >
-
+       <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
       <View style={styles.header}>
         <Pressable style={styles.back} onPress={() => navigation.goBack()}>
           <Ionicons name="chevron-back" size={28} color={colors.white} />
@@ -106,7 +137,7 @@ export default function ChatScreen({ navigation, route }: any) {
           </View>
         </View>
 
-        <Pressable style={styles.iconButton}>
+        <Pressable onPress={() => navigation.navigate("AudioCall",{doctor})} style={styles.iconButton}>
           <Ionicons
             name="call-outline"
             size={25}

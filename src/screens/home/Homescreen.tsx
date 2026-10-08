@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Pressable,
   ScrollView,
@@ -7,6 +7,7 @@ import {
   View,
   useWindowDimensions,
 } from "react-native";
+import NotificationScreen from "./NotificationScreen";
 import { colors } from "@/constants/colors";
 import { globalStyles } from "@/constants/Styles";
 import { doctors } from "@/data/doctors";
@@ -20,7 +21,7 @@ import BottomTabBar from "@/components/Bottombar/BottomBar";
 export default function HomeScreen({ navigation }: any) {
   const { width } = useWindowDimensions();
   const isTablet = width >= 600;
-
+  const [showNotifications, setShowNotifications] = useState(false);
   return (
     <View style={[globalStyles.container, styles.container]}>
       <ScrollView
@@ -30,6 +31,7 @@ export default function HomeScreen({ navigation }: any) {
         <HomeHeader
           onProfilePress={() => navigation.navigate("Profile")}
           onSearch={() => navigation.navigate("Search")}
+          onNotificationPress={() => setShowNotifications(true)}
         />
 
         <View
@@ -70,7 +72,7 @@ export default function HomeScreen({ navigation }: any) {
                 doctor: {
                   name: "Dr. Azim Khan",
                   specialty: "Dermatologist",
-                  image: require("../../../assets/images/medicom/appointment.png"),
+                  image: require("../../../assets/images/medicom/doctors3.png"),
                 },
                 consultation: {
                   type: "Chat Consultation",
@@ -120,6 +122,14 @@ export default function HomeScreen({ navigation }: any) {
         navigation={navigation}
         activeTab="Home"
       />
+
+      {showNotifications && (
+      <View style={styles.notificationOverlay}>
+        <NotificationScreen
+          onClose={() => setShowNotifications(false)}
+        />
+      </View>
+    )}
     </View>
   );
 }
@@ -142,6 +152,16 @@ const styles = StyleSheet.create({
     maxWidth: 700,
     alignSelf: "center",
     width: "100%",
+  },
+
+  notificationOverlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    zIndex: 9999,
   },
 
   sectionHeader: {

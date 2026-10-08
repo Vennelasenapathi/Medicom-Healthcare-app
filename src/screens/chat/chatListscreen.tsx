@@ -4,6 +4,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  StatusBar,
   Text,
   View,
 } from "react-native";
@@ -11,11 +12,17 @@ import { Ionicons } from "@expo/vector-icons";
 import BottomTabBar from "@/components/Bottombar/BottomBar";
 import { colors } from "@/constants/colors";
 import { globalStyles } from "@/constants/Styles";
-import { chats } from "@/data/chats";
+import { useChats } from "@/context/ChatContext";
 
 export default function ChatListScreen({ navigation }: any) {
+  const { chats, openChat } = useChats();
   return (
     <View style={[globalStyles.container, styles.screen]}>
+       <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
       {/* HEADER */}
       <View style={[globalStyles.spaceBetween, styles.header]}>
         <View>
@@ -54,11 +61,12 @@ export default function ChatListScreen({ navigation }: any) {
           <ChatItem
             key={chat.id}
             chat={chat}
-            onPress={() =>
+            onPress={() =>{
+              openChat(chat.id);
               navigation.navigate("Chat", {
                 doctor: chat,
               })
-            }
+            }}
           />
         ))}
       </ScrollView>

@@ -3,6 +3,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  StatusBar,
   Text,
   View,
 } from "react-native";
@@ -132,6 +133,11 @@ export default function AppointmentsScreen({navigation,route,}: any) {
 
   return (
     <View style={[globalStyles.container, styles.screen]}>
+       <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
       <Text style={styles.title}>My Appointments</Text>
 
       {/* TABS */}

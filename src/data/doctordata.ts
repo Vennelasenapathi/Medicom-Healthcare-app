@@ -1,4 +1,4 @@
-export const doctors = [
+export const doctors= [
   {
     id: 1,
     name: "Dr. Eshan Khan",
@@ -42,6 +42,39 @@ export const doctors = [
     reviews: "100 reviews",
     distance: "800m away",
     image: require("../../assets/images/medicom/topdoctor4.png"),
+  },
+   {
+    id: 5,
+    name: "Dr. Azim Khan",
+    specialty: "Dermatologist",
+    experience: "12 Yrs Exp.",
+    rating: "4.8",
+    gender:"male",
+    reviews: "100 reviews",
+    distance: "500m away",
+    image: require("../../assets/images/medicom/doctors3.png"),
+  },
+   {
+    id: 6,
+    name: "Dr. Priya Varma",
+    specialty: "Cardiologist",
+    experience: "15 Yrs Exp.",
+    rating: "4.5",
+    gender:"female",
+    reviews: "100 reviews",
+    distance: "300m away",
+    image: require("../../assets/images/medicom/doctors1.png"),
+  },
+    {
+    id: 7,
+    name: "Dr. Rohan Mehta",
+    specialty: "Orthopedic Surgeon",
+    experience: "8 Yrs Exp.",
+    rating: "5.0",
+    gender:"male",
+    reviews: "100 reviews",
+    distance: "1.2km away",
+    image: require("../../assets/images/medicom/doctors2.png"),
   },
 ];
 

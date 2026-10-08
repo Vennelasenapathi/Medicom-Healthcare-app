@@ -2,6 +2,7 @@ import React,{useState} from "react";
 import {
   Pressable,
   StyleSheet,
+  StatusBar,
   Text,
   View,
 } from "react-native";
@@ -29,6 +30,11 @@ export default function SettingsScreen({ navigation }: any) {
 
   return (
     <View style={styles.container}>
+       <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
 
       {/* HEADER */}
       <View style={styles.header}>

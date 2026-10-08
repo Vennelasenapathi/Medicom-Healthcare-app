@@ -3,6 +3,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  StatusBar,
   Text,
   TextInput,
   View,
@@ -53,6 +54,11 @@ export default function HospitalsScreen({ navigation }: any) {
 
   return (
     <View style={globalStyles.container}>
+       <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
       <View style={[globalStyles.header, styles.header]}>
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={globalStyles.title}>Hospitals Near You</Text>

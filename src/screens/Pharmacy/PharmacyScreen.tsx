@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   StyleSheet,
+  StatusBar,
   Text,
   TextInput,
   View,
@@ -26,6 +27,11 @@ export default function PharmacyScreen({ navigation }: any) {
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           keyboardVerticalOffset={0}
         >
+           <StatusBar
+            translucent
+            backgroundColor="transparent"
+            barStyle="dark-content"
+          />
       <View style={[globalStyles.header, styles.header]}>
         <Pressable style={styles.back} onPress={navigation.goBack}>
           <Ionicons name="chevron-back" size={29} color={colors.white} />

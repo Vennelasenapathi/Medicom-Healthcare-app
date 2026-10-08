@@ -4,6 +4,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  StatusBar,
   Text,
   View,
 } from "react-native";
@@ -19,6 +20,11 @@ export default function HospitalDetailsScreen({ navigation, route, }: any) {
   const hospital = route?.params?.hospital;
   return (
     <View style={[globalStyles.container, styles.container]}>
+       <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
       {/* HEADER */}
       <View style={[globalStyles.header, styles.header]}>
         <Pressable onPress={() => navigation.goBack()} style={styles.back}>

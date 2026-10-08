@@ -4,6 +4,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  StatusBar,
   Text,
   TextInput,
   View,
@@ -25,6 +26,11 @@ export default function TopDoctorsScreen({ navigation }: any) {
 
   return (
     <View style={[globalStyles.container, styles.container]}>
+       <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
       <View style={globalStyles.header}>
         <Pressable onPress={() => navigation.goBack()} style={styles.back}>
           <Ionicons name="chevron-back" size={19} color={colors.white} />

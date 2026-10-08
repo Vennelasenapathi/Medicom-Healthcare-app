@@ -3,6 +3,7 @@ import {
   Image,
   Pressable,
   StyleSheet,
+  StatusBar,
   Text,
   View,
 } from "react-native";
@@ -14,6 +15,11 @@ import { colors } from "@/constants/colors";
 export default function Auth({ navigation }: any) {
   return (
     <View style={styles.container}>
+       <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
 
       {/* Logo */}
       <View style={styles.logoSection}>

@@ -5,6 +5,7 @@ import {
   Platform,
   ScrollView,
   StyleSheet,
+  StatusBar,
   View,
 } from "react-native";
 
@@ -161,6 +162,11 @@ export default function ForgotPasswordFlow({
           contentContainerStyle={styles.scroll}
         >
           <View style={styles.content}>
+             <StatusBar
+              translucent
+              backgroundColor="transparent"
+              barStyle="dark-content"
+            />
 
             {/* =================================================
                 ONE COMPONENT FOR ALL THREE STEPS

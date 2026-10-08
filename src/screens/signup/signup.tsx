@@ -6,10 +6,12 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  StatusBar,
   Text,
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Formik } from "formik";
 import AppButton from "@/components/common/AppButton";
 import InputField from "@/components/common/InputField";
@@ -28,6 +30,7 @@ export default function Signup({ navigation }: any) {
 
   const initialValues = {
     name: "",
+    phone: "",
     email: "",
     password: "",
     dob: "",
@@ -46,9 +49,10 @@ export default function Signup({ navigation }: any) {
       <Formik
         initialValues={initialValues}
         validationSchema={signupValidationSchema}
-        onSubmit={(values) => {
-          console.log(values);
+        onSubmit={async (values) => {
+          await AsyncStorage.setItem("user", JSON.stringify(values));
           setSuccess(true);
+          setSuccessVisible(true);
         }}
       >
         {({
@@ -78,6 +82,11 @@ export default function Signup({ navigation }: any) {
                 keyboardShouldPersistTaps="handled"
                 keyboardDismissMode="interactive"
               >
+                 <StatusBar
+                  translucent
+                  backgroundColor="transparent"
+                  barStyle="dark-content"
+                />
                 <View style={styles.content}>
                   <Image
                     source={require("../../../assets/images/medicom/Logo2.png")}
@@ -102,6 +111,20 @@ export default function Signup({ navigation }: any) {
                       error={errors.name}
                       valid={valid("name")}
                       autoCapitalize="words"
+                    />
+
+                    <InputField
+                      icon="call-outline"
+                      value={values.phone}
+                      onChangeText={(v) =>
+                        setFieldValue("phone", v.replace(/[^0-9]/g, ""))
+                      }
+                      onBlur={() => setFieldTouched("phone", true)}
+                      placeholder="Enter your phone number"
+                      touched={touched.phone}
+                      error={errors.phone}
+                      valid={valid("phone")}
+                      keyboardType="phone-pad"
                     />
 
                     <InputField
@@ -130,7 +153,7 @@ export default function Signup({ navigation }: any) {
                       value={values.dob}
                       touched={touched.dob}
                       error={errors.dob}
-                      onChange={(v) => setFieldValue("dob", v)}
+                      onValueChange={(v) => setFieldValue("dob", v)}
                       onBlur={() => setFieldTouched("dob", true)}
                     />
 
@@ -207,7 +230,6 @@ export default function Signup({ navigation }: any) {
                   <AppButton
                     title="Sign Up"
                     onPress={() => {
-                      setSuccessVisible(true);
                       touchAll();
                       handleSubmit();
                     }}
@@ -230,7 +252,7 @@ export default function Signup({ navigation }: any) {
                   title="All Set!"
                   description="You've successfully created your account."
                   buttonTitle="Get Started"
-                  onPress={() => navigation.replace("Home")}
+                  onPress={() => navigation.replace("Login")}
                 />
               )}
             </>

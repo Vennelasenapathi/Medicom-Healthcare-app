@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import {
   Image,
   StyleSheet,
+  StatusBar,
   View,
 } from "react-native";
 
@@ -18,7 +19,7 @@ export default function SplashScreen({ navigation }: any) {
 
   return (
     <View style={styles.container}>
-
+       
       {/* Logo */}
       <View style={styles.logoContainer}>
         <Image

@@ -17,7 +17,7 @@ type Props = {
   value: string;
   touched?: boolean;
   error?: string;
-  onChange: (value: string) => void;
+  onValueChange: (value: string) => void;
   onBlur: () => void;
 };
 
@@ -30,100 +30,83 @@ export default function DateOfBirthField({
   value,
   touched,
   error,
-  onChange,
+  onValueChange,
   onBlur,
 }: Props) {
   const [showPicker, setShowPicker] = useState(false);
 
-  const pickDate = (
-    event: DateTimePickerEvent,
-    date?: Date
-  ) => {
-    setShowPicker(false);
-
-    if (event.type !== "set" || !date) return;
-
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-
-    onChange(`${day}/${month}/${year}`);
-    onBlur();
-  };
-
+  
   const hasError = !!touched && !!error;
+  const isValid = !!value && !!touched && !error;
 
   return (
-    <View>
-      {/* DATE FIELD */}
+    <View style={styles.container}>
       <Pressable
         onPress={() => setShowPicker(true)}
         style={[
           styles.field,
-          {
-            borderColor: hasError
-              ? colors.error
-              : value
-              ? colors.primaryLight
-              : colors.border,
-          },
+          hasError && styles.errorBorder,
+          isValid && styles.validBorder,
         ]}
       >
-        {/* CALENDAR ICON */}
-        <Ionicons
-          name="calendar-outline"
-          size={20}
-          color={
-            value
-              ? colors.primaryDark
-              : colors.dobcolor
-          }
-        />
+        <View style={styles.iconContainer}>
+          <Ionicons
+            name="calendar-outline"
+            size={20}
+            color={
+              hasError
+                ? colors.error
+                : isValid
+                ? colors.primaryDark
+                : colors.dobcolor
+            }
+          />
+        </View>
 
-        {/* DATE TEXT */}
         <Text
           style={[
             styles.dateText,
-            {
-              color: value
-                ? "#071B44"
-                : "#989898",
-            },
+            !value && styles.placeholder,
           ]}
         >
           {value || "Date of birth (DD/MM/YYYY)"}
         </Text>
 
-        {/* VALID ICON */}
-        {value && !error && touched && (
+        {isValid && (
           <Ionicons
-            name="checkmark"
+            name="checkmark-circle"
             size={19}
             color={colors.primaryDark}
           />
         )}
       </Pressable>
 
-      {/* DATE PICKER */}
-      {showPicker && (
-        <DateTimePicker
-          value={
-            value
-              ? parseDate(value)
-              : new Date()
-          }
-          mode="date"
-          display={
-            Platform.OS === "android"
-              ? "calendar"
-              : "spinner"
-          }
-          maximumDate={new Date()}
-          onChange={pickDate}
-        />
-      )}
+     {showPicker && (
+  <DateTimePicker
+    value={value ? parseDate(value) : new Date()}
+    
+    mode="date"
+    display={
+      Platform.OS === "android"
+        ? "calendar"
+        : "spinner"
+    }
+    maximumDate={new Date()}
+    onValueChange={(event, date) => {
+      setShowPicker(false);
 
-      {/* ERROR MESSAGE */}
+      if (!date) return;
+
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const year = date.getFullYear();
+
+      onValueChange(`${day}/${month}/${year}`);
+      onBlur();
+    }}
+  />
+)}
+
       {hasError && (
         <Text style={styles.error}>
           {error}
@@ -134,24 +117,56 @@ export default function DateOfBirthField({
 }
 
 const styles = StyleSheet.create({
+  container: {
+    marginBottom: 10,
+  },
+
+  picker: {
+    width: "100%",
+    height: 200,
+    backgroundColor: colors.white,
+    borderRadius: 10,
+  },
+
   field: {
     height: 50,
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: 8,
     paddingHorizontal: 12,
+    borderRadius: 8,
     backgroundColor: colors.background,
     borderWidth: 1,
+    borderColor: colors.border,
+  },
+
+  iconContainer: {
+    width: 28,
+    alignItems: "flex-start",
+    justifyContent: "center",
   },
 
   dateText: {
     flex: 1,
-    marginLeft: 12,
+    marginLeft: 4,
     fontSize: 12,
+    color: "#071B44",
+  },
+
+  placeholder: {
+    color: "#989898",
+  },
+
+  validBorder: {
+    borderColor: colors.primaryLight,
+  },
+
+  errorBorder: {
+    borderColor: colors.error,
   },
 
   error: {
     marginTop: 4,
+    marginLeft: 4,
     fontSize: 9,
     color: colors.error,
   },

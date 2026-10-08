@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   Pressable,
   StyleSheet,
+  StatusBar,
   Text,
   View,
 } from "react-native";
@@ -78,6 +79,11 @@ export default function RescheduleAppointment({
         styles.screen,
       ]}
     >
+       <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
       {/* HEADER */}
       <View
         style={[

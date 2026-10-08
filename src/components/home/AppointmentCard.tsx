@@ -27,7 +27,7 @@ export default function AppointmentCard({press,}:AppointmentCardProps) {
       <View style={styles.card}>
         <View style={styles.info}>
           <Image
-            source={require("../../../assets/images/medicom/appointment.png")}
+            source={require("../../../assets/images/medicom/doctors3.png")}
             style={styles.image}
           />
 
@@ -119,6 +119,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
 
     padding: 8,
+
+    // Shadow
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.08,
+    shadowRadius: 5,
+
+    // Android
+    elevation: 3,
 
     zIndex: 3,
   },

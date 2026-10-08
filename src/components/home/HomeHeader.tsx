@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   Pressable,
@@ -8,21 +8,42 @@ import {
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { colors } from "@/constants/colors";
 
 type Props = {
   onSearch: () => void;
   onProfilePress: () => void;
+  onNotificationPress: () => void;
 };
 
 export default function HomeHeader({
   onSearch,
   onProfilePress,
+  onNotificationPress,
 }: Props) {
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    const loadUser = async () => {
+      try {
+        const savedUser = await AsyncStorage.getItem("user");
+
+        if (savedUser) {
+          const user = JSON.parse(savedUser);
+          setUsername(user.name || "");
+        }
+      } catch (error) {
+        console.log("Error loading user:", error);
+      }
+    };
+
+    loadUser();
+  }, []);
+
   return (
     <View style={styles.header}>
       <View style={styles.topRow}>
-
         <Pressable
           style={styles.profileRow}
           onPress={onProfilePress}
@@ -38,12 +59,14 @@ export default function HomeHeader({
             </Text>
 
             <Text style={styles.username}>
-              Vennela
+              {username || "User"}
             </Text>
           </View>
         </Pressable>
 
-        <Pressable style={styles.notification}>
+        <Pressable
+        onPress={onNotificationPress}
+         style={styles.notification}>
           <Ionicons
             name="notifications-outline"
             size={22}

@@ -4,6 +4,7 @@ import {
   Modal,
   Pressable,
   StyleSheet,
+  StatusBar,
   Text,
   View,
 } from "react-native";
@@ -11,16 +12,24 @@ import { Ionicons } from "@expo/vector-icons";
 import { colors } from "@/constants/colors";
 import { globalStyles } from "@/constants/Styles";
 import BottomTabBar from "@/components/Bottombar/BottomBar";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ProfileScreen({ navigation, route }: any) {
   const [logoutVisible, setLogoutVisible] = useState(false);
-  const [profileName, setProfileName] = useState("Vennela");
+  const [profileName, setProfileName] = useState("");
 
-  useEffect(() => {
-    const name = route?.params?.updatedProfile?.fullName;
-    if (name) setProfileName(name);
-  }, [route?.params?.updatedProfile?.fullName]);
+useEffect(() => {
+  const loadProfile = async () => {
+    const savedUser = await AsyncStorage.getItem("user");
 
+    if (savedUser) {
+      const user = JSON.parse(savedUser);
+      setProfileName(user.name);
+    }
+  };
+
+  loadProfile();
+}, []);
   const menuItems = [
     { icon: "person-outline", title: "Profile" },
     { icon: "settings-outline", title: "Settings" },
@@ -43,6 +52,11 @@ export default function ProfileScreen({ navigation, route }: any) {
 
   return (
     <View style={globalStyles.container}>
+       <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
       <View style={[globalStyles.header, styles.header]}>
         <Pressable
           style={styles.backButton}

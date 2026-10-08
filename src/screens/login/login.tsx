@@ -6,9 +6,11 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  StatusBar,
   Text,
   View,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Formik } from "formik";
 import AppButton from "@/components/common/AppButton";
 import InputField from "@/components/common/InputField";
@@ -26,15 +28,29 @@ export default function Login({ navigation }: any) {
   const [successVisible, setSuccessVisible] = useState(false);
   const [forgotPasswordVisible, setForgotPasswordVisible] = useState(false);
 
-  const login = (email: string, password: string) => {
+  const login = async (email: string, password: string) => {
+    const savedUser = await AsyncStorage.getItem("user");
+
+    if (!savedUser) {
+      setEmailError(true);
+      setPasswordError(true);
+      return;
+    }
+
+    const user = JSON.parse(savedUser);
+
     const validEmail =
-      email.trim().toLowerCase() === "vennela@medicom.com";
-    const validPassword = password === "12345678";
+      email.trim().toLowerCase() === user.email.trim().toLowerCase();
+
+    const validPassword = password === user.password;
 
     setEmailError(!validEmail);
     setPasswordError(!validPassword);
 
-    if (validEmail && validPassword) setSuccess(true);
+    if (validEmail && validPassword) {
+      setSuccess(true);
+      setSuccessVisible(true);
+    }
   };
 
   return (
@@ -64,6 +80,7 @@ export default function Login({ navigation }: any) {
             keyboardShouldPersistTaps="handled"
             keyboardDismissMode="interactive"
           >
+            
             <View style={styles.content}>
               <Image
                 source={require("../../../assets/images/medicom/Logo2.png")}
@@ -136,7 +153,6 @@ export default function Login({ navigation }: any) {
               <AppButton
                 title="Login"
                 onPress={() => {
-                  setSuccessVisible(true);
                   setFieldTouched("email", true);
                   setFieldTouched("password", true);
                   handleSubmit();
@@ -147,6 +163,7 @@ export default function Login({ navigation }: any) {
                 <Text style={styles.signupText}>
                   Don't have an account?{" "}
                 </Text>
+
                 <Pressable
                   onPress={() => navigation.navigate("Signup")}
                 >
@@ -162,7 +179,9 @@ export default function Login({ navigation }: any) {
         <SuccessModal
           visible={successVisible}
           title="Welcome back!"
-          description={"You've successfully logged into the\nMedicom app."}
+          description={
+            "You've successfully logged into the\nMedicom app."
+          }
           buttonTitle="Go to Home"
           onPress={() => navigation.replace("Home")}
         />
@@ -177,29 +196,31 @@ export default function Login({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
-  scroll: {
-    flexGrow: 1,
-  },
   content: {
     flex: 1,
     paddingHorizontal: 24,
     paddingTop: 125,
   },
+
   logo: {
     width: 68,
     height: 68,
     alignSelf: "center",
   },
+
   heading: {
     marginTop: 32,
     alignItems: "center",
   },
+
   email: {
     marginTop: 40,
   },
+
   password: {
     marginTop: 16,
   },
+
   forgot: {
     marginTop: 28,
     marginBottom: 20,
@@ -208,14 +229,17 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: colors.primaryDark,
   },
+
   signup: {
     justifyContent: "center",
     marginTop: 28,
   },
+
   signupText: {
     fontSize: 13,
     color: colors.textGray,
   },
+
   signupButton: {
     fontSize: 13,
     fontWeight: "500",

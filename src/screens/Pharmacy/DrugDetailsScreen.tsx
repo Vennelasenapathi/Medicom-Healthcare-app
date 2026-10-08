@@ -4,6 +4,7 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
+  StatusBar, 
   Text,
   View,
 } from "react-native";
@@ -37,6 +38,11 @@ export default function DrugDetailsScreen({ navigation, route }: any) {
 
   return (
     <View style={globalStyles.container}>
+       <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
       <Header navigation={navigation} />
       <ScrollView
         showsVerticalScrollIndicator={false}

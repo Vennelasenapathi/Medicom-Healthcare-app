@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   ScrollView,
   StyleSheet,
+  StatusBar,
   Text,
   View,
 } from "react-native";
@@ -43,6 +44,11 @@ export default function DoctorDetailsScreen({
   if (!doctor) {
     return (
       <View style={globalStyles.empty}>
+         <StatusBar
+          translucent
+          backgroundColor="transparent"
+          barStyle="dark-content"
+        />
         <Text style={globalStyles.emptyText}>
           Doctor details not found
         </Text>
@@ -57,6 +63,11 @@ export default function DoctorDetailsScreen({
         styles.container,
       ]}
     >
+       <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
       {/* HEADER */}
 
       <View style={globalStyles.header}>

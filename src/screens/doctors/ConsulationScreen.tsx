@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   Pressable,
   StyleSheet,
+  StatusBar,
   Text,
   View,
   ScrollView,
@@ -33,8 +34,12 @@ export default function ConsultationScreen({navigation, route, }: any) {
 
   return (
     <View style={[ globalStyles.container, styles.container,]}>
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
       {/* HEADER */}
-
       <View style={globalStyles.header}>
         <BackButton onPress={() => navigation.goBack()} />
         <Text style={globalStyles.title}>Consultation</Text>

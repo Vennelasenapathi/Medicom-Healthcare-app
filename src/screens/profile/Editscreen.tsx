@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   Pressable,
   Platform,
   ScrollView,
+  StatusBar,
   KeyboardAvoidingView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Formik } from "formik";
 import AppButton from "@/components/common/AppButton";
 import InputField from "@/components/common/InputField";
@@ -19,13 +21,34 @@ import { globalStyles } from "@/constants/Styles";
 import { profileSchema } from "@/validations/profilevalidation";
 
 export default function EditProfileScreen({ navigation }: any) {
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const loadUser = async () => {
+      const savedUser = await AsyncStorage.getItem("user");
+
+      if (savedUser) {
+        setUser(JSON.parse(savedUser));
+      }
+    };
+
+    loadUser();
+  }, []);
+
+  if (!user) return null;
+
   return (
     <KeyboardAvoidingView
       style={globalStyles.keyboardContainer}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={0}
     >
-
+      <View style={globalStyles.container}>
+         <StatusBar
+          translucent
+          backgroundColor="transparent"
+          barStyle="dark-content"
+        />
       <View style={[globalStyles.header, styles.header]}>
         <Pressable
           style={styles.backButton}
@@ -40,15 +63,27 @@ export default function EditProfileScreen({ navigation }: any) {
 
       <Formik
         initialValues={{
-          fullName: "Vennela",
-          phone: "+123 567 89000",
-          email: "vennela@example.com",
-          dob: "",
+          fullName: user.name || "",
+          phone: user.phone || "",
+          email: user.email || "",
+          dob: user.dob || "",
         }}
         validationSchema={profileSchema}
-        onSubmit={(values) => {
-          console.log("Updated Profile:", values);
-          navigation.navigate("Profile", { updatedProfile: values });
+        onSubmit={async (values) => {
+          const updatedUser = {
+            ...user,
+            name: values.fullName,
+            phone: values.phone,
+            email: values.email,
+            dob: values.dob,
+          };
+
+          await AsyncStorage.setItem(
+            "user",
+            JSON.stringify(updatedUser)
+          );
+
+          navigation.navigate("Profile");
         }}
       >
         {({
@@ -76,11 +111,18 @@ export default function EditProfileScreen({ navigation }: any) {
                 />
 
                 <Pressable style={styles.editIcon}>
-                  <Ionicons name="camera" size={15} color={colors.white} />
+                  <Ionicons
+                    name="camera"
+                    size={15}
+                    color={colors.white}
+                  />
                 </Pressable>
               </View>
 
-              <Text style={styles.profileName}>{values.fullName}</Text>
+              <Text style={styles.profileName}>
+                {values.fullName}
+              </Text>
+
               <Text style={globalStyles.smallText}>
                 Edit your personal information
               </Text>
@@ -93,8 +135,8 @@ export default function EditProfileScreen({ navigation }: any) {
                 onChangeText={handleChange("fullName")}
                 onBlur={handleBlur("fullName")}
                 placeholder="Enter your full name"
-                error={errors.fullName}
-                touched={touched.fullName}
+                error={typeof errors.fullName === "string" ? errors.fullName : undefined}
+                touched={!!touched.fullName}
               />
             </ProfileField>
 
@@ -106,8 +148,8 @@ export default function EditProfileScreen({ navigation }: any) {
                 onBlur={handleBlur("phone")}
                 placeholder="Enter your phone number"
                 keyboardType="phone-pad"
-                error={errors.phone}
-                touched={touched.phone}
+                error={typeof errors.phone === "string" ? errors.phone : undefined}
+                touched={!!touched.phone}
               />
             </ProfileField>
 
@@ -121,17 +163,17 @@ export default function EditProfileScreen({ navigation }: any) {
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoCorrect={false}
-                error={errors.email}
-                touched={touched.email}
+                error={typeof errors.email === "string" ? errors.email : undefined}
+                touched={!!touched.email}
               />
             </ProfileField>
 
             <ProfileField label="Date of Birth">
               <DateOfBirthField
                 value={values.dob}
-                touched={touched.dob}
-                error={errors.dob}
-                onChange={(date) => setFieldValue("dob", date)}
+                touched={!!touched.dob}
+                error={typeof errors.dob === "string" ? errors.dob : undefined}
+                onValueChange={(date) => setFieldValue("dob", date)}
                 onBlur={() => setFieldTouched("dob", true)}
               />
             </ProfileField>
@@ -140,9 +182,10 @@ export default function EditProfileScreen({ navigation }: any) {
               <AppButton
                 title="Update Profile"
                 onPress={() => {
-                  ["fullName", "phone", "email", "dob"].forEach((field) =>
-                    setFieldTouched(field, true)
+                  ["fullName", "phone", "email", "dob"].forEach(
+                    (field) => setFieldTouched(field, true)
                   );
+
                   handleSubmit();
                 }}
               />
@@ -150,6 +193,7 @@ export default function EditProfileScreen({ navigation }: any) {
           </ScrollView>
         )}
       </Formik>
+      </View>
     </KeyboardAvoidingView>
   );
 }
@@ -193,11 +237,6 @@ const styles = StyleSheet.create({
 
   headerSpace: {
     width: 42,
-  },
-
-  scroll: {
-    paddingHorizontal: 20,
-    paddingBottom: 40,
   },
 
   profileSection: {

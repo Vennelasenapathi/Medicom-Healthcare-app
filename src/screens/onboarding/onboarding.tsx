@@ -4,6 +4,7 @@ import {
   Image,
   Pressable,
   StyleSheet,
+  StatusBar,
   Text,
   View,
 } from "react-native";
@@ -47,6 +48,11 @@ export default function Onboarding({ navigation }: any) {
 
   return (
     <View style={styles.container}>
+      <StatusBar
+  translucent
+  backgroundColor="transparent"
+  barStyle="dark-content"
+/>
 
       {/* SKIP */}
       <Pressable
