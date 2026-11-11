@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   Image,
   Modal,
@@ -15,21 +16,37 @@ import BottomTabBar from "@/components/Bottombar/BottomBar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function ProfileScreen({ navigation, route }: any) {
+
   const [logoutVisible, setLogoutVisible] = useState(false);
   const [profileName, setProfileName] = useState("");
+  const [profileImage, setProfileImage] = useState<string | null>(null);
 
-useEffect(() => {
-  const loadProfile = async () => {
-    const savedUser = await AsyncStorage.getItem("user");
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
 
-    if (savedUser) {
-      const user = JSON.parse(savedUser);
-      setProfileName(user.name);
-    }
-  };
+      const loadProfile = async () => {
+        try {
+          const savedUser = await AsyncStorage.getItem("user");
 
-  loadProfile();
-}, []);
+          if (savedUser && isActive) {
+            const user = JSON.parse(savedUser);
+            setProfileName(user.name ?? user.fullName ?? "");
+            setProfileImage(user.profileImage ?? null);
+          }
+        } catch (error) {
+          console.error("Error loading profile:", error);
+        }
+      };
+
+      loadProfile();
+
+      return () => {
+        isActive = false;
+      };
+    }, [])
+  );
+
   const menuItems = [
     { icon: "person-outline", title: "Profile" },
     { icon: "settings-outline", title: "Settings" },
@@ -51,8 +68,8 @@ useEffect(() => {
   };
 
   return (
-    <View style={globalStyles.container}>
-       <StatusBar
+    <View style={styles.container}>
+      <StatusBar
         translucent
         backgroundColor="transparent"
         barStyle="dark-content"
@@ -74,10 +91,16 @@ useEffect(() => {
       </View>
 
       <View style={styles.profile}>
+
         <Image
-          source={require("../../../assets/images/medicom/Image.png")}
+          source={
+            profileImage
+              ? { uri: profileImage }
+              : require("../../../assets/images/medicom/Image.png")
+          }
           style={styles.avatar}
         />
+
         <Text style={styles.name}>{profileName}</Text>
       </View>
 
@@ -152,16 +175,20 @@ useEffect(() => {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
   header: {
-    height: 100,
-    paddingHorizontal: 10,
-    paddingTop: 50,
+    height: 95,
+    paddingHorizontal: 18,
+    paddingTop: 30,
   },
 
   backButton: {
-    width: 46,
-    height: 46,
-    borderRadius: 7,
+    width: 42,
+    height: 42,
+    borderRadius: 9,
     backgroundColor: colors.primaryDark,
     alignItems: "center",
     justifyContent: "center",
@@ -174,7 +201,7 @@ const styles = StyleSheet.create({
   },
 
   headerSpace: {
-    width: 30,
+    width: 42,
   },
 
   profile: {
@@ -198,7 +225,7 @@ const styles = StyleSheet.create({
   },
 
   menu: {
-    paddingHorizontal: 15,
+    paddingHorizontal: 30,
     gap: 15,
   },
 
@@ -211,7 +238,8 @@ const styles = StyleSheet.create({
   menuText: {
     marginLeft: 15,
     fontSize: 16,
-    color: "#888",
+    fontWeight: "500",
+    color: "#777",
   },
 
   overlay: {

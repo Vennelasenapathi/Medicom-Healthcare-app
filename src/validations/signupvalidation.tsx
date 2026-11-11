@@ -25,6 +25,11 @@ export const signupValidationSchema = Yup.object({
       /[0-9]/,
       "Password must contain one number"
     ),
+    
+phone: Yup.string()
+  .required("Phone number is required")
+  .matches(/^[6-9]\d{9}$/, "Enter a valid 10-digit mobile number"),
+
 
   dob: Yup.string()
     .required("Date of birth is required")

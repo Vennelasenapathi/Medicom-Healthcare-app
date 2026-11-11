@@ -9,7 +9,6 @@ import {
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
 import { colors } from "@/constants/colors";
 
 const { height } = Dimensions.get("window");
@@ -49,10 +48,10 @@ export default function Onboarding({ navigation }: any) {
   return (
     <View style={styles.container}>
       <StatusBar
-  translucent
-  backgroundColor="transparent"
-  barStyle="dark-content"
-/>
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
 
       {/* SKIP */}
       <Pressable
@@ -71,7 +70,7 @@ export default function Onboarding({ navigation }: any) {
       <View
         style={[
           styles.imageContainer,
-          { height: height * 0.63 },
+          { height: height * 0.6 },
         ]}
       >
         <Image
@@ -175,7 +174,7 @@ const styles = StyleSheet.create({
   imageContainer: {
     alignItems: "center",
     justifyContent: "flex-end",
-    paddingTop: 10,
+    paddingTop: 50,
   },
 
   doctorImage: {

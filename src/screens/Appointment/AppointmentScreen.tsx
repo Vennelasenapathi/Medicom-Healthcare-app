@@ -22,19 +22,15 @@ type Screen = "list" | "details" | "reschedule";
 export default function AppointmentsScreen({navigation,route,}: any) {
   const [screen, setScreen] = useState<Screen>("list");
   const [tab, setTab] = useState<Tab>("Upcoming");
-  const [appointments, setAppointments] =
+  const [appointments, setAppointments] = 
     useState<Appointment[]>(initialAppointments);
-
   const [cancelled, setCancelled] = useState<Appointment[]>([]);
   const [selected, setSelected] = useState<Appointment | null>(null);
   const [resultVisible, setResultVisible] = useState(false);
   const [resultType, setResultType] =
     useState<"cancelled" | "rescheduled">("cancelled");
-
   const [date, setDate] = useState("");
   const [time, setTime] = useState("10:00 AM");
-
-  
 
   /* ADD RECENT BOOKING */
   useEffect(() => {
@@ -52,6 +48,21 @@ export default function AppointmentsScreen({navigation,route,}: any) {
     setTab("Upcoming");
     setScreen("list");
   }, [route?.params?.newAppointment]);
+
+  /* OPEN RESCHEDULE FROM HOME */
+useEffect(() => {
+  const appointment = route?.params?.editAppointment;
+
+  if (!appointment) return;
+
+  setSelected(appointment);
+  setDate(appointment.date);
+  setTime(appointment.time);
+  setTab("Upcoming");
+  setScreen("reschedule");
+
+  navigation.setParams({ editAppointment: undefined });
+}, [route?.params?.editAppointment]);
 
   /* OPEN DETAILS */
   const openDetails = (item: Appointment) => {
@@ -80,24 +91,30 @@ export default function AppointmentsScreen({navigation,route,}: any) {
 
   /* RESCHEDULE */
   const confirmReschedule = () => {
-    if (!selected || !date) return;
+  if (!selected || !date) return;
 
-    setAppointments((prev) =>
-      prev.map((item) =>
-        item.id === selected.id
-          ? { ...item, date, time }
-          : item
-      )
-    );
-
-    setScreen("list");
-    setTab("Upcoming");
-    setResultType("rescheduled");
-    setResultVisible(true);
+  const updatedAppointment = {
+    ...selected,
+    date,
+    time,
   };
 
-  const currentList =
-    tab === "Cancelled" ? cancelled : appointments;
+  setAppointments((prev) =>
+    prev.map((item) =>
+      item.id === selected.id ? updatedAppointment : item
+    )
+  );
+
+  setScreen("list");
+  setTab("Upcoming");
+  setResultType("rescheduled");
+  setResultVisible(true);
+
+  navigation.navigate("Home", {
+    updatedAppointment,
+  });
+};
+  const currentList = tab === "Cancelled" ? cancelled : appointments;
 
   /* DETAILS */
   if (screen === "details" && selected) {
@@ -152,12 +169,7 @@ export default function AppointmentsScreen({navigation,route,}: any) {
                 tab === item && styles.activeTab,
               ]}
             >
-              <Text
-                style={[
-                  styles.tabText,
-                  tab === item && styles.activeText,
-                ]}
-              >
+              <Text style={[styles.tabText,tab === item && styles.activeText,]}>
                 {item}
               </Text>
             </Pressable>
@@ -182,7 +194,6 @@ export default function AppointmentsScreen({navigation,route,}: any) {
                 setDate(item.date);
                 setTime(item.time);
                 setScreen("reschedule");
-               
               }}
             />
           ))
@@ -196,10 +207,7 @@ export default function AppointmentsScreen({navigation,route,}: any) {
       </ScrollView>
 
       {/* BOTTOM BAR */}
-      <BottomTabBar
-        navigation={navigation}
-        activeTab="Appointments"
-      />
+      <BottomTabBar  navigation={navigation} activeTab="Appointments" />
 
       {/* RESULT POPUP */}
       <AppointmentResultModal

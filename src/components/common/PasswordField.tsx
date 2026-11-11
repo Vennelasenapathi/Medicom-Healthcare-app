@@ -13,6 +13,7 @@ type PasswordFieldProps = {
   value: string;
   onChangeText: (text: string) => void;
   onBlur?: (e: any) => void;
+  onFocus?: (e: any) => void;
   placeholder?: string;
   error?: string;
   touched?: boolean;
@@ -23,6 +24,7 @@ export default function PasswordField({
   value,
   onChangeText,
   onBlur,
+  onFocus,
   placeholder = "Enter password",
   error,
   touched,
@@ -62,6 +64,7 @@ export default function PasswordField({
           value={value}
           onChangeText={onChangeText}
           onBlur={onBlur}
+          onFocus={onFocus}
           placeholder={placeholder}
           placeholderTextColor={colors.textSecondary}
           secureTextEntry={!showPassword}

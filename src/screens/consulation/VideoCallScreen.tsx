@@ -37,9 +37,7 @@ export default function VideoCallScreen({navigation, route,}: any) {
 
   /* END CALL */
 
-  const endCall = () => {
-    navigation.navigate("Home");
-  };
+  const endCall = () => { navigation.navigate("Home");};
 
   return (
     <View style={[globalStyles.container, styles.container]}>
@@ -63,11 +61,8 @@ export default function VideoCallScreen({navigation, route,}: any) {
         )}
 
         {/* DARK OVERLAY */}
-
         <View style={styles.overlay} />
-
         {/* TOP AREA */}
-
         <View style={styles.topBar}>
           <Pressable
             style={styles.backButton}
@@ -79,7 +74,6 @@ export default function VideoCallScreen({navigation, route,}: any) {
               color={colors.white}
             />
           </Pressable>
-
           <View style={styles.callInfo}>
             <Text style={styles.doctorName}>
               {doctor?.name || "Dr. Eshan Khan"}
@@ -87,10 +81,7 @@ export default function VideoCallScreen({navigation, route,}: any) {
 
             <View style={globalStyles.row}>
               <View style={styles.liveDot} />
-
-              <Text style={styles.callStatus}>
-                Connected
-              </Text>
+              <Text style={styles.callStatus}>Connected</Text>
             </View>
           </View>
 
@@ -102,7 +93,6 @@ export default function VideoCallScreen({navigation, route,}: any) {
         </View>
 
         {/* SELF CAMERA */}
-
         <View style={styles.selfCamera}>
           {cameraOff ? (
             <View style={styles.cameraOff}>
@@ -140,7 +130,6 @@ export default function VideoCallScreen({navigation, route,}: any) {
 
         <View style={[globalStyles.row, styles.controls]}>
           {/* MUTE */}
-
           <Pressable
             style={[
               styles.controlButton,
@@ -156,7 +145,6 @@ export default function VideoCallScreen({navigation, route,}: any) {
           </Pressable>
 
           {/* CAMERA */}
-
           <Pressable
             style={[
               styles.controlButton,
@@ -165,18 +153,13 @@ export default function VideoCallScreen({navigation, route,}: any) {
             onPress={() => setCameraOff(!cameraOff)}
           >
             <Ionicons
-              name={
-                cameraOff
-                  ? "videocam-off"
-                  : "videocam"
-              }
+              name={cameraOff ? "videocam-off": "videocam"}
               size={23}
               color={colors.white}
             />
           </Pressable>
 
           {/* SPEAKER */}
-
           <Pressable
             style={[
               styles.controlButton,
@@ -185,18 +168,13 @@ export default function VideoCallScreen({navigation, route,}: any) {
             onPress={() => setSpeaker(!speaker)}
           >
             <Ionicons
-              name={
-                speaker
-                  ? "volume-high"
-                  : "volume-mute"
-              }
+              name={speaker ? "volume-high" : "volume-mute"}
               size={23}
               color={colors.white}
             />
           </Pressable>
 
           {/* END CALL */}
-
           <Pressable
             style={styles.endCallButton}
             onPress={endCall}
@@ -217,8 +195,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#101522",
   },
-
-  /* VIDEO */
 
   videoContainer: {
     flex: 1,
@@ -246,8 +222,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     backgroundColor: "rgba(0,0,0,0.20)",
   },
-
-  /* TOP BAR */
 
   topBar: {
     position: "absolute",
@@ -303,8 +277,6 @@ const styles = StyleSheet.create({
     color: colors.white,
   },
 
-  /* SELF CAMERA */
-
   selfCamera: {
     position: "absolute",
     top: 105,
@@ -332,8 +304,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#202A3D",
   },
 
-  /* DOCTOR LABEL */
-
   doctorLabel: {
     position: "absolute",
     left: 18,
@@ -351,8 +321,6 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: "#E2E7F0",
   },
-
-  /* CONTROLS */
 
   controls: {
     position: "absolute",

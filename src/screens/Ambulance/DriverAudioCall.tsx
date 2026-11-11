@@ -10,9 +10,12 @@ import { Ionicons } from "@expo/vector-icons";
 
 import { colors } from "@/constants/colors";
 
-export default function DriverAudioCallScreen({navigation,}: any) {
+export default function DriverAudioCallScreen({navigation,route}: any) {
   const [seconds, setSeconds] = useState(0);
+  const callType = route?.params?.callType;
 
+const title =
+  callType === "emergency" ? "Emergency Call" : "Call Driver";
   /* CALL TIMER */
 
   useEffect(() => {
@@ -63,7 +66,7 @@ export default function DriverAudioCallScreen({navigation,}: any) {
         {/* DRIVER NAME */}
 
         <Text style={styles.name}>
-          Ambulance Driver
+         {title}
         </Text>
 
         <Text style={styles.status}>

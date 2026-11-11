@@ -13,6 +13,8 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Formik } from "formik";
+import * as ImagePicker from "expo-image-picker";
+import SuccessModal from "@/components/common/SuccessModal";
 import AppButton from "@/components/common/AppButton";
 import InputField from "@/components/common/InputField";
 import DateOfBirthField from "@/components/signupcomponents/DateofBirthField";
@@ -22,6 +24,7 @@ import { profileSchema } from "@/validations/profilevalidation";
 
 export default function EditProfileScreen({ navigation }: any) {
   const [user, setUser] = useState<any>(null);
+  const [successVisible, setSuccessVisible] = useState(false);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -37,6 +40,34 @@ export default function EditProfileScreen({ navigation }: any) {
 
   if (!user) return null;
 
+  const pickProfileImage = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ["images"],
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.8,
+      });
+
+      if (result.canceled) return;
+
+      const imageUri = result.assets[0].uri;
+
+      const storedUser = await AsyncStorage.getItem("user");
+      const currentUser =storedUser ? JSON.parse(storedUser) : {};
+
+      const updatedUser = {
+        ...currentUser,
+        profileImage: imageUri,
+      };
+
+      await AsyncStorage.setItem("user", JSON.stringify(updatedUser));
+      setUser(updatedUser);
+    } catch (error) {
+      console.error("Error selecting profile photo:", error);
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       style={globalStyles.keyboardContainer}
@@ -44,155 +75,172 @@ export default function EditProfileScreen({ navigation }: any) {
       keyboardVerticalOffset={0}
     >
       <View style={globalStyles.container}>
-         <StatusBar
+        <StatusBar
           translucent
           backgroundColor="transparent"
           barStyle="dark-content"
         />
-      <View style={[globalStyles.header, styles.header]}>
-        <Pressable
-          style={styles.backButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Ionicons name="chevron-back" size={22} color={colors.white} />
-        </Pressable>
-
-        <Text style={styles.headerTitle}>Profile</Text>
-        <View style={styles.headerSpace} />
-      </View>
-
-      <Formik
-        initialValues={{
-          fullName: user.name || "",
-          phone: user.phone || "",
-          email: user.email || "",
-          dob: user.dob || "",
-        }}
-        validationSchema={profileSchema}
-        onSubmit={async (values) => {
-          const updatedUser = {
-            ...user,
-            name: values.fullName,
-            phone: values.phone,
-            email: values.email,
-            dob: values.dob,
-          };
-
-          await AsyncStorage.setItem(
-            "user",
-            JSON.stringify(updatedUser)
-          );
-
-          navigation.navigate("Profile");
-        }}
-      >
-        {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          setFieldValue,
-          setFieldTouched,
-        }) => (
-          <ScrollView
-            style={globalStyles.chatList}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={globalStyles.messages}
-            keyboardShouldPersistTaps="handled"
-            keyboardDismissMode="interactive"
+        <View style={[globalStyles.header, styles.header]}>
+          <Pressable
+            style={styles.backButton}
+            onPress={() => navigation.goBack()}
           >
-            <View style={styles.profileSection}>
-              <View style={styles.imageContainer}>
-                <Image
-                  source={require("../../../assets/images/medicom/Image.png")}
-                  style={styles.avatar}
-                />
+            <Ionicons name="chevron-back" size={22} color={colors.white} />
+          </Pressable>
 
-                <Pressable style={styles.editIcon}>
-                  <Ionicons
-                    name="camera"
-                    size={15}
-                    color={colors.white}
+          <Text style={styles.headerTitle}>Profile</Text>
+          <View style={styles.headerSpace} />
+        </View>
+
+        <Formik
+          initialValues={{
+            fullName: user.name || "",
+            phone: user.phone || "",
+            email: user.email || "",
+            dob: user.dob || "",
+          }}
+          validationSchema={profileSchema}
+          onSubmit={async (values) => {
+            const updatedUser = {
+              ...user,
+              name: values.fullName,
+              phone: values.phone,
+              email: values.email,
+              dob: values.dob,
+            };
+
+            await AsyncStorage.setItem("user", JSON.stringify(updatedUser));
+
+            setUser(updatedUser);
+            setSuccessVisible(true);
+          }}
+        >
+          {({
+            values,
+            errors,
+            touched,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            setFieldValue,
+            setFieldTouched,
+          }) => (
+            <ScrollView
+              style={globalStyles.scroll}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={globalStyles.messages}
+              keyboardShouldPersistTaps="handled"
+              keyboardDismissMode="interactive"
+            >
+              <View style={styles.profileSection}>
+                <View style={styles.imageContainer}>
+                  <Image
+                    source={
+                      user.profileImage
+                        ? { uri: user.profileImage }
+                        : require("../../../assets/images/medicom/Image.png")
+                    }
+                    style={styles.avatar}
                   />
-                </Pressable>
+
+                  <Pressable
+                    style={styles.editIcon}
+                    onPress={pickProfileImage}
+                  >
+                    <Ionicons
+                      name="camera"
+                      size={15}
+                      color={colors.white}
+                    />
+                  </Pressable>
+                </View>
+
+                <Text style={styles.profileName}>
+                  {values.fullName}
+                </Text>
+
+                <Text style={globalStyles.smallText}>
+                  Edit your personal information
+                </Text>
               </View>
 
-              <Text style={styles.profileName}>
-                {values.fullName}
-              </Text>
+              <ProfileField label="Full Name">
+                <InputField
+                  icon="person-outline"
+                  value={values.fullName}
+                  onChangeText={handleChange("fullName")}
+                  onBlur={handleBlur("fullName")}
+                  placeholder="Enter your full name"
+                  error={typeof errors.fullName === "string" ? errors.fullName : undefined}
+                  touched={!!touched.fullName}
+                />
+              </ProfileField>
 
-              <Text style={globalStyles.smallText}>
-                Edit your personal information
-              </Text>
-            </View>
+              <ProfileField label="Phone Number">
+                <InputField
+                  icon="call-outline"
+                  value={values.phone}
+                  onChangeText={handleChange("phone")}
+                  onBlur={handleBlur("phone")}
+                  placeholder="Enter your phone number"
+                  keyboardType="phone-pad"
+                  error={typeof errors.phone === "string" ? errors.phone : undefined}
+                  touched={!!touched.phone}
+                />
+              </ProfileField>
 
-            <ProfileField label="Full Name">
-              <InputField
-                icon="person-outline"
-                value={values.fullName}
-                onChangeText={handleChange("fullName")}
-                onBlur={handleBlur("fullName")}
-                placeholder="Enter your full name"
-                error={typeof errors.fullName === "string" ? errors.fullName : undefined}
-                touched={!!touched.fullName}
-              />
-            </ProfileField>
+              <ProfileField label="Email">
+                <InputField
+                  icon="mail-outline"
+                  value={values.email}
+                  onChangeText={handleChange("email")}
+                  onBlur={handleBlur("email")}
+                  placeholder="Enter your email"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  error={typeof errors.email === "string" ? errors.email : undefined}
+                  touched={!!touched.email}
+                />
+              </ProfileField>
 
-            <ProfileField label="Phone Number">
-              <InputField
-                icon="call-outline"
-                value={values.phone}
-                onChangeText={handleChange("phone")}
-                onBlur={handleBlur("phone")}
-                placeholder="Enter your phone number"
-                keyboardType="phone-pad"
-                error={typeof errors.phone === "string" ? errors.phone : undefined}
-                touched={!!touched.phone}
-              />
-            </ProfileField>
+              <ProfileField label="Date of Birth">
+                <DateOfBirthField
+                  value={values.dob}
+                  touched={!!touched.dob}
+                  error={typeof errors.dob === "string" ? errors.dob : undefined}
+                  onValueChange={(date) => setFieldValue("dob", date)}
+                  onBlur={() => setFieldTouched("dob", true)}
+                />
+              </ProfileField>
 
-            <ProfileField label="Email">
-              <InputField
-                icon="mail-outline"
-                value={values.email}
-                onChangeText={handleChange("email")}
-                onBlur={handleBlur("email")}
-                placeholder="Enter your email"
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoCorrect={false}
-                error={typeof errors.email === "string" ? errors.email : undefined}
-                touched={!!touched.email}
-              />
-            </ProfileField>
+              <View style={styles.buttonContainer}>
+                <AppButton
+                  title="Update Profile"
+                  onPress={() => {
+                    ["fullName", "phone", "email", "dob"].forEach(
+                      (field) => setFieldTouched(field, true)
+                    );
 
-            <ProfileField label="Date of Birth">
-              <DateOfBirthField
-                value={values.dob}
-                touched={!!touched.dob}
-                error={typeof errors.dob === "string" ? errors.dob : undefined}
-                onValueChange={(date) => setFieldValue("dob", date)}
-                onBlur={() => setFieldTouched("dob", true)}
-              />
-            </ProfileField>
-
-            <View style={styles.buttonContainer}>
-              <AppButton
-                title="Update Profile"
-                onPress={() => {
-                  ["fullName", "phone", "email", "dob"].forEach(
-                    (field) => setFieldTouched(field, true)
-                  );
-
-                  handleSubmit();
-                }}
-              />
-            </View>
-          </ScrollView>
+                    handleSubmit();
+                  }}
+                />
+              </View>
+            </ScrollView>
+          )}
+        </Formik>
+        {successVisible && (
+          <SuccessModal
+            visible={successVisible}
+            title="Profile Updated!"
+            description="Your profile details have been updated successfully."
+            buttonTitle="Continue"
+            onPress={() => {
+              setSuccessVisible(false);
+              navigation.navigate("Profile");
+            }}
+          />
         )}
-      </Formik>
       </View>
     </KeyboardAvoidingView>
   );

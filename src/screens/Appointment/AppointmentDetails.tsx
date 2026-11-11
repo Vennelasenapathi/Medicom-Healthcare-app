@@ -36,12 +36,7 @@ const InfoRow = ({
   </View>
 );
 
-const ActionButton = ({
-  icon,
-  text,
-  color,
-  onPress,
-}: {
+const ActionButton = ({ icon, text,color,onPress,}: {
   icon: any;
   text: string;
   color: string;
@@ -78,8 +73,7 @@ export default function AppointmentDetails({
       appointment.type === "Chat Consultation"
         ? "Chat"
         : appointment.type === "Video Consultation"
-        ? "VideoCall"
-        : "AudioCall";
+        ? "VideoCall": "AudioCall";
 
     navigation.navigate(screen, { doctor, consultation });
   };
@@ -133,19 +127,16 @@ export default function AppointmentDetails({
             label="Date"
             value={appointment.date}
           />
-
           <InfoRow
             icon="time-outline"
             label="Time"
             value={appointment.time}
           />
-
           <InfoRow
             icon="videocam-outline"
             label="Consultation Type"
             value={appointment.type}
           />
-
           <InfoRow
             icon="document-text-outline"
             label="Consultation Reason"

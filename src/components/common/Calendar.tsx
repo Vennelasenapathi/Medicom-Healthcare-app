@@ -6,7 +6,6 @@ import {
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-
 import { colors } from "@/constants/colors";
 import { globalStyles } from "@/constants/Styles";
 import { months, weeks } from "@/data/Appointments";
@@ -182,35 +181,37 @@ export default function Calendar({
   );
 }
 
+
 const styles = StyleSheet.create({
   calendar: {
-    padding: 12,
+    padding: 16,
     borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: 14,
     borderColor: colors.borderLight,
   },
 
   monthHeader: {
-    height: 35,
+    height: 42,
     ...globalStyles.spaceBetween,
   },
 
   month: {
-    fontSize: 14,
+    fontSize: 17,
     fontWeight: "700",
     color: colors.textPrimary,
   },
 
   week: {
     flexDirection: "row",
-    marginTop: 8,
-    marginBottom: 5,
+    marginTop: 12,
+    marginBottom: 8,
   },
 
   weekText: {
     width: "14.28%",
     textAlign: "center",
-    fontSize: 9,
+    fontSize: 12,
+    fontWeight: "600",
     color: colors.textSecondary,
   },
 
@@ -221,23 +222,23 @@ const styles = StyleSheet.create({
 
   day: {
     width: "14.28%",
-    height: 36,
+    height: 45,
     alignItems: "center",
     justifyContent: "center",
   },
 
   dayText: {
-    width: 29,
-    height: 29,
+    width: 36,
+    height: 36,
     textAlign: "center",
     textAlignVertical: "center",
-    fontSize: 10,
+    fontSize: 14,
     color: colors.textPrimary,
   },
 
   selectedDay: {
     backgroundColor: colors.primaryDark,
-    borderRadius: 15,
+    borderRadius: 20,
   },
 
   selectedText: {
@@ -246,6 +247,6 @@ const styles = StyleSheet.create({
   },
 
   disabled: {
-    color: "#D0D0D0",
+    color: colors.disabled,
   },
 });

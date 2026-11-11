@@ -1,4 +1,5 @@
-import React,{useState} from "react";
+
+import React, { useState } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -7,11 +8,21 @@ import {
   View,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { colors } from "@/constants/colors";
 import ForgotPasswordFlow from "@/screens/forgot-password/forgotpasswordflow";
+import ConfirmationModal from "@/components/common/ConfirmationModal";
 
 export default function SettingsScreen({ navigation }: any) {
-  const [forgotPasswordVisible, setForgotPasswordVisible] = useState(false);
+  const [forgotPasswordVisible, setForgotPasswordVisible] =
+    useState(false);
+
+  const [deleteModalVisible, setDeleteModalVisible] =
+    useState(false);
+
+  const [deleting, setDeleting] = useState(false);
+
   const settings = [
     {
       title: "Notification Setting",
@@ -28,9 +39,28 @@ export default function SettingsScreen({ navigation }: any) {
     },
   ];
 
+  const handleDeleteAccount = async () => {
+    try {
+      setDeleting(true);
+
+      await AsyncStorage.removeItem("user");
+
+      setDeleteModalVisible(false);
+
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Signup" }],
+      });
+    } catch (error) {
+      console.log("Account deletion failed:", error);
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   return (
     <View style={styles.container}>
-       <StatusBar
+      <StatusBar
         translucent
         backgroundColor="transparent"
         barStyle="dark-content"
@@ -60,14 +90,15 @@ export default function SettingsScreen({ navigation }: any) {
           <Pressable
             key={item.title}
             style={styles.item}
-            onPress={() =>{
-            if (item.title === "Password Manager") {
-              setForgotPasswordVisible(true);
-            } else if (item.screen) {
-              navigation.navigate(item.screen);
-            }
-          }
-        }
+            onPress={() => {
+              if (item.title === "Password Manager") {
+                setForgotPasswordVisible(true);
+              } else if (item.title === "Delete Account") {
+                setDeleteModalVisible(true);
+              } else if (item.screen) {
+                navigation.navigate(item.screen);
+              }
+            }}
           >
             <View style={styles.left}>
               <Ionicons
@@ -89,11 +120,22 @@ export default function SettingsScreen({ navigation }: any) {
           </Pressable>
         ))}
       </View>
-      
-        <ForgotPasswordFlow
-          visible={forgotPasswordVisible}
-          onClose={() => setForgotPasswordVisible(false)}
-        />
+
+      {/* FORGOT PASSWORD */}
+      <ForgotPasswordFlow
+        visible={forgotPasswordVisible}
+        onClose={() => setForgotPasswordVisible(false)}
+      />
+
+      {/* DELETE ACCOUNT CONFIRMATION */}
+      <ConfirmationModal
+        visible={deleteModalVisible}
+        title="Delete Account?"
+        description="This account will be permanently removed from your schedule. This action cannot be undone."
+        buttonTitle={deleting ? "Deleting..." : "Delete Account"}
+        onCancel={() => setDeleteModalVisible(false)}
+        onConfirm={handleDeleteAccount}
+      />
     </View>
   );
 }
@@ -104,7 +146,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
 
-  /* HEADER */
   header: {
     height: 100,
     paddingHorizontal: 18,
@@ -133,7 +174,6 @@ const styles = StyleSheet.create({
     width: 44,
   },
 
-  /* LIST */
   list: {
     paddingHorizontal: 20,
     marginTop: 20,

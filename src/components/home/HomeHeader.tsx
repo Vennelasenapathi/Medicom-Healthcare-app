@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+
+import React, { useCallback, useState } from "react";
 import {
   Image,
   Pressable,
@@ -9,6 +10,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
 import { colors } from "@/constants/colors";
 
 type Props = {
@@ -23,23 +25,33 @@ export default function HomeHeader({
   onNotificationPress,
 }: Props) {
   const [username, setUsername] = useState("");
+  const [profileImage, setProfileImage] = useState<string | null>(null);
 
-  useEffect(() => {
-    const loadUser = async () => {
-      try {
-        const savedUser = await AsyncStorage.getItem("user");
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
 
-        if (savedUser) {
-          const user = JSON.parse(savedUser);
-          setUsername(user.name || "");
+      const loadUser = async () => {
+        try {
+          const savedUser = await AsyncStorage.getItem("user");
+
+          if (savedUser && isActive) {
+            const user = JSON.parse(savedUser);
+            setUsername(user.name || user.fullName || "User");
+            setProfileImage(user.profileImage || null);
+          }
+        } catch (error) {
+          console.log("Error loading user:", error);
         }
-      } catch (error) {
-        console.log("Error loading user:", error);
-      }
-    };
+      };
 
-    loadUser();
-  }, []);
+      loadUser();
+
+      return () => {
+        isActive = false;
+      };
+    }, [])
+  );
 
   return (
     <View style={styles.header}>
@@ -49,24 +61,24 @@ export default function HomeHeader({
           onPress={onProfilePress}
         >
           <Image
-            source={require("../../../assets/images/medicom/Image.png")}
+            source={
+              profileImage
+                ? { uri: profileImage }
+                : require("../../../assets/images/medicom/Image.png")
+            }
             style={styles.avatar}
           />
 
           <View>
-            <Text style={styles.welcome}>
-              Hello, Welcome!
-            </Text>
-
-            <Text style={styles.username}>
-              {username || "User"}
-            </Text>
+            <Text style={styles.welcome}>Hello, Welcome!</Text>
+            <Text style={styles.username}>{username || "User"}</Text>
           </View>
         </Pressable>
 
         <Pressable
-        onPress={onNotificationPress}
-         style={styles.notification}>
+          onPress={onNotificationPress}
+          style={styles.notification}
+        >
           <Ionicons
             name="notifications-outline"
             size={22}
@@ -75,10 +87,7 @@ export default function HomeHeader({
         </Pressable>
       </View>
 
-      <Pressable
-        style={styles.searchBox}
-        onPress={onSearch}
-      >
+      <Pressable style={styles.searchBox} onPress={onSearch}>
         <TextInput
           editable={false}
           placeholder="Search doctor, drugs..."
@@ -105,38 +114,32 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 220,
   },
-
   topRow: {
     paddingTop: 15,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
-
   profileRow: {
     flexDirection: "row",
     alignItems: "center",
   },
-
   avatar: {
     width: 48,
     height: 48,
     borderRadius: 24,
     marginRight: 10,
   },
-
   welcome: {
     fontSize: 13,
     color: colors.white,
     marginBottom: 3,
   },
-
   username: {
     fontSize: 21,
     fontWeight: "700",
     color: colors.white,
   },
-
   notification: {
     width: 48,
     height: 48,
@@ -145,7 +148,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
   searchBox: {
     height: 53,
     marginTop: 30,
@@ -155,7 +157,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-
   searchInput: {
     flex: 1,
     fontSize: 14,

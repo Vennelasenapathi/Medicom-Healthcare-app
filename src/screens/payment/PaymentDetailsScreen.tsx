@@ -74,7 +74,6 @@ export default function PaymentDetails({ navigation, route }: any) {
           <Text style={globalStyles.sectionTitle}>
             Consultation Summary
           </Text>
-          <Text style={styles.edit}>Edit</Text>
         </View>
 
         <View style={globalStyles.summaryCard}>

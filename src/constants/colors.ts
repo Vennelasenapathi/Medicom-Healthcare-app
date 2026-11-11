@@ -14,6 +14,7 @@ export const colors = {
   paleBlue: "#F7F9FF",
   dobcolor: "#A5A9B1",
   notification:"#136daa",
+  timebackground:"#F1F4F8",
   // Text
   textPrimary: "#011133",
   textSecondary: "#989898",
@@ -24,6 +25,7 @@ export const colors = {
   // Border
   border: "#E5E7EB",
   borderLight: "#EEEEEE",
+  borderGray: "#D1D5DB",
 
   // Status
   error: "#FF4D4F",
@@ -36,6 +38,8 @@ export const colors = {
 
   // Overlay
   overlay: "rgba(0,0,0,0.2)",
+
+  disabled: "#D0D0D0",
 
 };
 

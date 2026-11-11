@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Image,
   Pressable,
   ScrollView,
+  TextInput,
   StyleSheet,
   StatusBar,
   Text,
@@ -16,9 +17,13 @@ import { useChats } from "@/context/ChatContext";
 
 export default function ChatListScreen({ navigation }: any) {
   const { chats, openChat } = useChats();
+  const [search, setSearch] = useState("");
+  const filteredChats = chats.filter((chat) =>
+    chat.name.toLowerCase().includes(search.toLowerCase())
+  );
   return (
     <View style={[globalStyles.container, styles.screen]}>
-       <StatusBar
+      <StatusBar
         translucent
         backgroundColor="transparent"
         barStyle="dark-content"
@@ -29,46 +34,58 @@ export default function ChatListScreen({ navigation }: any) {
           <Text style={styles.title}>My Messages</Text>
           <Text style={globalStyles.subtitle}>Chat with your doctors</Text>
         </View>
-
-        <Pressable style={styles.searchButton}>
-          <Ionicons
-            name="search-outline"
-            size={25}
-            color={colors.primaryDark}
-          />
-        </Pressable>
       </View>
 
       {/* SEARCH */}
-      <Pressable style={styles.searchBox}>
+      <View style={styles.searchBox}>
         <Ionicons
           name="search-outline"
           size={18}
           color={colors.textSecondary}
         />
-        <Text style={styles.searchText}>Search...</Text>
-      </Pressable>
 
-      {/* FILTERS */}
-      
+        <TextInput
+          value={search}
+          onChangeText={setSearch}
+          placeholder="Search doctors..."
+          placeholderTextColor={colors.textSecondary}
+          style={styles.searchInput}
+        />
+
+        {search.length > 0 && (
+          <Pressable onPress={() => setSearch("")}>
+            <Ionicons
+              name="close-circle"
+              size={19}
+              color={colors.textSecondary}
+            />
+          </Pressable>
+        )}
+      </View>
 
       {/* CHAT LIST */}
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.list}
       >
-        {chats.map((chat) => (
-          <ChatItem
-            key={chat.id}
-            chat={chat}
-            onPress={() =>{
-              openChat(chat.id);
-              navigation.navigate("Chat", {
-                doctor: chat,
-              })
-            }}
-          />
-        ))}
+        {filteredChats.length === 0 ? (
+          <Text style={styles.noResults}>
+            No doctors found
+          </Text>
+        ) : (
+          filteredChats.map((chat) => (
+            <ChatItem
+              key={chat.id}
+              chat={chat}
+              onPress={() => {
+                openChat(chat.id);
+                navigation.navigate("Chat", {
+                  doctor: chat,
+                });
+              }}
+            />
+          ))
+        )}
       </ScrollView>
       <BottomTabBar
         navigation={navigation}
@@ -112,6 +129,7 @@ function ChatItem({ chat, onPress }: any) {
 const styles = StyleSheet.create({
   screen: {
     paddingHorizontal: 18,
+    backgroundColor: colors.white,
   },
 
   header: {
@@ -142,9 +160,17 @@ const styles = StyleSheet.create({
     ...globalStyles.row,
   },
 
-  searchText: {
+  searchInput: {
+    flex: 1,
     marginLeft: 9,
     fontSize: 13,
+    color: colors.textPrimary,
+    paddingVertical: 0,
+  },
+  noResults: {
+    textAlign: "center",
+    marginTop: 40,
+    fontSize: 14,
     color: colors.textSecondary,
   },
 

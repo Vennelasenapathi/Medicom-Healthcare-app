@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useRef } from "react";
 import {
   Image,
   KeyboardAvoidingView,
@@ -42,10 +42,9 @@ export default function Signup({ navigation }: any) {
 
   return (
     <KeyboardAvoidingView
-      style={globalStyles.keyboardContainer}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={0}
-    >
+  style={{ flex: 1 }}
+  behavior={Platform.OS === "ios" ? "padding" : "padding"}
+>
       <Formik
         initialValues={initialValues}
         validationSchema={signupValidationSchema}
@@ -76,13 +75,12 @@ export default function Signup({ navigation }: any) {
           return (
             <>
               <ScrollView
-                style={globalStyles.chatList}
+              style={styles.scrollContent}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={globalStyles.messages}
                 keyboardShouldPersistTaps="handled"
-                keyboardDismissMode="interactive"
               >
-                 <StatusBar
+                <StatusBar
                   translucent
                   backgroundColor="transparent"
                   barStyle="dark-content"
@@ -117,10 +115,10 @@ export default function Signup({ navigation }: any) {
                       icon="call-outline"
                       value={values.phone}
                       onChangeText={(v) =>
-                        setFieldValue("phone", v.replace(/[^0-9]/g, ""))
+                        setFieldValue("phone", v.replace(/[^0-9]/g, "").slice(0, 10))
                       }
                       onBlur={() => setFieldTouched("phone", true)}
-                      placeholder="Enter your phone number"
+                      placeholder="Enter your 10-digit mobile number"
                       touched={touched.phone}
                       error={errors.phone}
                       valid={valid("phone")}
@@ -153,8 +151,11 @@ export default function Signup({ navigation }: any) {
                       value={values.dob}
                       touched={touched.dob}
                       error={errors.dob}
-                      onValueChange={(v) => setFieldValue("dob", v)}
-                      onBlur={() => setFieldTouched("dob", true)}
+                      onValueChange={(v) => {
+                        setFieldValue("dob", v, true);
+                        setFieldTouched("dob", true, false);
+                      }}
+                      onBlur={() => setFieldTouched("dob", true, false)}
                     />
 
                   </View>
@@ -265,15 +266,16 @@ export default function Signup({ navigation }: any) {
 
 const styles = StyleSheet.create({
 
-  scroll: {
-    flexGrow: 1,
-    paddingBottom: 35,
-  },
+ scrollContent: {
+  flexGrow: 1,
+  paddingBottom: 60,
+},
 
-  content: {
-    paddingHorizontal: 20,
-    paddingTop: 70,
-  },
+content: {
+  flexGrow: 1,
+  paddingHorizontal: 20,
+  paddingTop: 24,
+},
 
   logo: {
     width: 78,

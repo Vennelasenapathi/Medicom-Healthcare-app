@@ -11,29 +11,24 @@ export const globalStyles = StyleSheet.create({
 
   content: {
     paddingHorizontal: 20,
-    paddingBottom: 30,
+    paddingBottom: 40,
   },
 
   scroll: {
-    flexGrow: 1,
+    flex: 1,
     paddingHorizontal: 20,
-    paddingBottom: 30,
+    paddingBottom: 40,
   },
 
   messages: {
-    paddingHorizontal: 17,
-    paddingTop: 22,
-    paddingBottom: 20,
-  },
-
-  chatList: {
-    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 25,
+    paddingBottom: 40,
   },
 
   keyboardContainer: {
     flex: 1,
-    backgroundColor: colors.white,
-  },
+    },
 
   /* ================= HEADER ================= */
 

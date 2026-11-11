@@ -13,6 +13,7 @@ interface InputFieldProps {
   value: string;
   onChangeText: (text: string) => void;
   onBlur?: (e: any) => void;
+  onFocus?: (e: any) => void;
   placeholder: string;
   error?: string;
   touched?: boolean;
@@ -30,6 +31,7 @@ export default function InputField({
   value,
   onChangeText,
   onBlur,
+  onFocus,
   placeholder,
   error,
   touched,
@@ -84,6 +86,7 @@ export default function InputField({
           value={value}
           onChangeText={onChangeText}
           onBlur={onBlur}
+          onFocus={onFocus}
           placeholder={placeholder}
           placeholderTextColor={colors.textSecondary}
           keyboardType={keyboardType}

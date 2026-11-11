@@ -1,17 +1,17 @@
 {
   "expo": {
-    "name": "Medicom",
-    "slug": "Medicom",
+    "name": "MyReactNativeApp",
+    "slug": "MyReactNativeApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "medicom",
+    "scheme": "myreactnativeapp",
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon"
     },
     "android": {
-      "package": "com.vennelas.Medicom",
+      "package": "com.vennelas.MyReactNativeApp",
       "googleServicesFile": "./google-services.json",
       "softwareKeyboardLayoutMode": "resize",
       "adaptiveIcon": {
@@ -35,25 +35,27 @@
           "imageWidth": 76
         }
       ],
-[
-  "@react-native-community/datetimepicker",
-  {
-    "android": {
-      "datePicker": {
-        "colorAccent": {
-          "light": "#2867FF",
-          "dark": "#2867FF"
-        },
-        "textColorPrimary": {
-          "light": "#2867FF",
-          "dark": "#2867FF"
+      [
+        "@react-native-community/datetimepicker",
+        {
+          "android": {
+            "datePicker": {
+              "colorAccent": {
+                "light": "#2867FF",
+                "dark": "#2867FF"
+              },
+              "textColorPrimary": {
+                "light": "#2867FF",
+                "dark": "#2867FF"
+              }
+            }
+          }
         }
-      }
-    }
-  }
-],      "expo-notifications",
+      ],
+      "expo-notifications",
       "expo-image",
       "expo-web-browser"
+     
     ],
     "experiments": {
       "reactCompiler": true

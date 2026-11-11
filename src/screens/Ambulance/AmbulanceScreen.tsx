@@ -1,36 +1,117 @@
-import React, { useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import {
-  ImageBackground,
   Pressable,
   StyleSheet,
   StatusBar,
   Text,
   View,
+  ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import * as Location from "expo-location";
 import BackButton from "@/components/home/BackButton";
 import AppButton from "@/components/common/AppButton";
 import { colors } from "@/constants/colors";
 import { globalStyles } from "@/constants/Styles";
 
-type AmbulanceState = "request" | "confirm" | "onWay";
-
-const Marker = ({ style }: { style: object }) => (
-  <View style={[styles.marker, style]}>
-    <Ionicons name="add" size={17} color={colors.white} />
-  </View>
-);
+type AmbulanceState = "request" | "confirm" | "requested";
 
 export default function AmbulanceScreen({ navigation }: any) {
   const [screen, setScreen] = useState<AmbulanceState>("request");
+  const [loading, setLoading] = useState(false);
+  const [address, setAddress] = useState("");
+  const [error, setError] = useState("");
+
+  // Get actual phone location and convert it into an address
+  const getCurrentLocation = async () => {
+    try {
+      setLoading(true);
+      setError("");
+      setAddress("");
+
+      const servicesEnabled =
+        await Location.hasServicesEnabledAsync();
+
+      if (!servicesEnabled) {
+        setError("Please enable GPS/location services on your phone.");
+        return;
+      }
+
+      const permission =
+        await Location.requestForegroundPermissionsAsync();
+
+      if (permission.status !== "granted") {
+        setError("Location permission denied. Please allow location access.");
+        return;
+      }
+
+      const currentLocation =
+        await Location.getCurrentPositionAsync({
+          accuracy: Location.Accuracy.High,
+        });
+
+      const { latitude, longitude } = currentLocation.coords;
+
+      // Convert actual GPS coordinates into a readable address
+      const result = await Location.reverseGeocodeAsync({
+        latitude,
+        longitude,
+      });
+
+      if (result.length === 0) {
+        setError(
+          "Could not find your address. Please refresh your location."
+        );
+        return;
+      }
+
+      const place = result[0];
+
+      const addressParts = [
+        place.name,
+        place.street,
+        place.subregion,
+        place.district,
+        place.city,
+        place.region,
+        place.postalCode,
+        place.country,
+      ];
+
+      const uniqueParts = [
+        ...new Set(addressParts.filter(Boolean)),
+      ];
+
+      if (uniqueParts.length === 0) {
+        setError("Address unavailable. Please try again.");
+        return;
+      }
+
+      setAddress(uniqueParts.join(", "));
+    } catch (err) {
+      console.log("Location error:", err);
+      setError(
+        "Unable to detect your address. Check your internet and GPS."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Automatically detect location when screen opens
+  useEffect(() => {
+    getCurrentLocation();
+  }, []);
 
   return (
     <View style={globalStyles.container}>
-       <StatusBar
+      <StatusBar
         translucent
         backgroundColor="transparent"
         barStyle="dark-content"
       />
+
       {/* Header */}
       <View style={[globalStyles.header, styles.header]}>
         <BackButton onPress={() => navigation.goBack()} />
@@ -38,107 +119,180 @@ export default function AmbulanceScreen({ navigation }: any) {
         <View style={styles.headerSpace} />
       </View>
 
-      {/* Map */}
-      <View style={styles.mapContainer}>
-        <ImageBackground
-          source={require("../../../assets/images/medicom/ambulancebackground.png")}
-          style={styles.map}
-          imageStyle={styles.mapImage}
-        >
-          {screen !== "onWay" ? (
-            <>
-              <View style={[styles.locationCircle, globalStyles.center]}>
-                <Ionicons
-                  name="location"
-                  size={23}
-                  color={colors.primaryDark}
-                />
-              </View>
-              <Marker style={styles.markerOne} />
-              <Marker style={styles.markerTwo} />
-              <Marker style={styles.markerThree} />
-            </>
-          ) : (
-            <>
-              <View style={styles.route}>
-                <View style={[styles.routeLine, styles.route1]} />
-                <View style={[styles.routeLine, styles.route2]} />
-                <View style={[styles.routeLine, styles.route3]} />
-                <View style={[styles.routeLine, styles.route4]} />
-              </View>
+      {/* Current Location */}
+      <View style={styles.locationPanel}>
+        <View style={styles.locationIcon}>
+          <Ionicons
+            name="location"
+            size={35}
+            color={colors.primaryDark}
+          />
+        </View>
 
-              <View style={[styles.onWayUserMarker, globalStyles.center]}>
-                <Ionicons
-                  name="location"
-                  size={22}
-                  color={colors.primaryDark}
-                />
-              </View>    
-              <Marker style={styles.markerOne} />
-              <View style={styles.onWayBadge}>
-                <Text style={styles.onWayText}>
-                  Ambulance is on the way!
-                </Text>
-              </View>
-            </>
-          )}
-        </ImageBackground>
+        <Text style={styles.panelTitle}>
+          Your Current Location
+        </Text>
+
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator
+              size="large"
+              color={colors.primaryDark}
+            />
+            <Text style={styles.description}>
+              Detecting your current address...
+            </Text>
+          </View>
+        ) : error ? (
+          <Text style={styles.errorText}>{error}</Text>
+        ) : (
+          <>
+            <Text style={styles.addressText}>
+              {address}
+            </Text>
+
+            <View style={styles.detectedBadge}>
+              <View style={styles.greenDot} />
+              <Text style={styles.detectedText}>
+                Location detected
+              </Text>
+            </View>
+          </>
+        )}
+
+        <Pressable
+          style={styles.refreshButton}
+          onPress={getCurrentLocation}
+          disabled={loading}
+        >
+          <Ionicons
+            name="refresh"
+            size={17}
+            color={colors.primaryDark}
+          />
+          <Text style={styles.refreshText}>
+            Refresh Location
+          </Text>
+        </Pressable>
       </View>
 
-      {/* Request */}
+      {/* Request Ambulance */}
       {screen === "request" && (
         <View style={styles.bottomCard}>
           <AppButton
             title="Request Ambulance"
-            onPress={() => setScreen("confirm")}
+            onPress={() => {
+              if (address && !loading) {
+                setScreen("confirm");
+              }
+            }}
           />
-          <Pressable onPress={() => navigation.navigate("Drivercall")} style={styles.emergencyButton}>
-            <Text style={styles.emergencyText}>Call Emergency</Text>
+
+          <Pressable
+            style={styles.emergencyButton}
+            onPress={() =>
+              navigation.navigate("Drivercall", {
+                callType: "emergency",
+              })
+            }
+          >
+            <Text style={styles.emergencyText}>
+              Call Emergency
+            </Text>
             <Ionicons
               name="chevron-forward"
-              size={17}
+              size={18}
               color={colors.primaryDark}
             />
           </Pressable>
         </View>
       )}
 
-      {/* Confirm */}
+      {/* Confirm Location */}
       {screen === "confirm" && (
         <View style={styles.sheet}>
-          <Text style={globalStyles.sectionTitle}>Confirm your address</Text>
+          <Text style={globalStyles.sectionTitle}>
+            Confirm your pickup location
+          </Text>
+
           <View style={globalStyles.divider} />
+
           <View style={styles.addressRow}>
-            <Ionicons name="location" size={21} color="#FF5A5F" />
-            <Text style={styles.addressText}>
-              {"2680 Kolpuri Campup Rd #102\n"}
-              Aaram Nagar, Mumbai, 22314
+            <Ionicons
+              name="location"
+              size={23}
+              color="#FF5A5F"
+            />
+            <Text style={styles.confirmAddress}>
+              {address}
             </Text>
           </View>
+
           <AppButton
             title="Confirm Location"
-            onPress={() => setScreen("onWay")}
+            onPress={() => setScreen("requested")}
           />
+
+          <Pressable
+            style={styles.backButton}
+            onPress={() => setScreen("request")}
+          >
+            <Text style={styles.refreshText}>Go Back</Text>
+          </Pressable>
         </View>
       )}
 
-      {/* On the way */}
-      {screen === "onWay" && (
+      {/* Request Status */}
+      {screen === "requested" && (
         <View style={styles.sheet}>
+          <View style={styles.successIcon}>
+            <Ionicons
+              name="checkmark"
+              size={28}
+              color={colors.white}
+            />
+          </View>
+
           <Text style={globalStyles.sectionTitle}>
             Pickup Location Confirmed!
           </Text>
-          <Text style={styles.confirmedAddress}>
-            {"2680 Kolpuri Campup Rd #102 Aaram Nagar,\n"}
-            Mumbai, 22314
+
+          <Text style={styles.confirmAddress}>
+            {address}
           </Text>
-          <Text style={styles.driverMessage}>
-            {"*Please stay at the pickup location. The driver\n"}
-            may contact you if needed.
+
+          <View style={styles.waitingCard}>
+            <Ionicons
+              name="time-outline"
+              size={23}
+              color={colors.primaryDark}
+            />
+            <Text style={styles.waitingText}>
+              Waiting for ambulance assignment.
+            </Text>
+          </View>
+
+          <Text style={styles.description}>
+            Your pickup location is confirmed on this device.
+            An ambulance has not yet been dispatched.
           </Text>
-          <Pressable style={styles.driverButton} onPress={() => navigation.navigate("Drivercall")}>
-            <Text style={globalStyles.buttonText}>Call Driver</Text>
-            <Ionicons name="call" size={17} color={colors.white} />
+
+          <Pressable
+            style={styles.emergencyButton}
+            onPress={() =>
+              navigation.navigate("Drivercall", {
+                callType: "emergency",
+              })
+            }
+          >
+            <Text style={styles.emergencyText}>
+              Call Emergency
+            </Text>
+            <Ionicons
+              name="call-outline"
+              size={18}
+              color={colors.primaryDark}
+            />
           </Pressable>
         </View>
       )}
@@ -153,192 +307,178 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
   },
 
-  headerSpace: { width: 46,},
-
-  mapContainer: {
-    height: 510,
-    marginHorizontal: 12,
-    borderRadius: 14,
-    overflow: "hidden",
+  headerSpace: {
+    width: 46,
   },
 
-  map: {
-    flex: 1,
-    width: "100%",
-    height: 500,
-  },
-
-  mapImage: {resizeMode: "cover", },
-
-  locationCircle: {
-    position: "absolute",
-    width: 165,
-    height: 165,
-    left: 95,
-    top: 105,
-    borderRadius: 83,
-    backgroundColor: "rgba(40,103,255,0.18)",
-  },
-
-  marker: {
-    position: "absolute",
-    width: 27,
-    height: 27,
-    borderRadius: 14,
-    backgroundColor: "#FF5A5F",
+  locationPanel: {
+    minHeight: 300,
+    marginHorizontal: 14,
+    marginTop: 12,
+    padding: 22,
+    borderRadius: 16,
+    backgroundColor: "#F1F5FF",
     alignItems: "center",
     justifyContent: "center",
   },
 
-  markerOne: {
-    right: 49,
-    top: 155,
+  locationIcon: {
+    width: 75,
+    height: 75,
+    borderRadius: 38,
+    backgroundColor: "#DCE7FF",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 15,
   },
 
-  markerTwo: {
-    left: 70,
-    top: 280,
-  },
-
-  markerThree: {
-    right: 45,
-    top: 395,
-  },
-
-  route: {
-    position: "absolute",
-    left: 80,
-    top: 180,
-    width: 195,
-    height: 115,
-  },
-
-  routeLine: {
-    position: "absolute",
-    backgroundColor: colors.primaryDark,
-    borderRadius: 4,
-  },
-
-  route1: {
-    left: 0,
-    top: 10,
-    width: 85,
-    height: 6,
-  },
-
-  route2: {
-    left: 0,
-    top: 10,
-    width: 6,
-    height: 110,
-  },
-
-  route3: {
-    left: 0,
-    top: 125,
-    width: 243,
-    height: 6,
-    transform: [{ rotate: "6deg" }],
-  },
-
-  route4: {
-    right: -50,
-    top: 0,
-    width: 6,
-    height: 140,
-  },
-
-  onWayUserMarker: {
-    position: "absolute",
-    left: 148,
-    top: 165,
-    width: 42,
-    height: 42,
-  },
-
-  onWayBadge: {
-    position: "absolute",
-    top: 22,
-    alignSelf: "center",
-    paddingHorizontal: 14,
-    paddingVertical: 9,
-    borderRadius: 7,
-    backgroundColor: "#FFD9DA",
-  },
-
-  onWayText: {
-    fontSize: 13,
+  panelTitle: {
+    fontSize: 18,
     fontWeight: "700",
-    color: "#FF3035",
+    color: colors.primaryDark,
+    textAlign: "center",
+  },
+
+  loadingContainer: {
+    alignItems: "center",
+    marginTop: 20,
+  },
+
+  description: {
+    marginTop: 12,
+    fontSize: 13,
+    lineHeight: 20,
+    color: colors.textSecondary,
+    textAlign: "center",
+  },
+
+  addressText: {
+    marginTop: 15,
+    fontSize: 14,
+    lineHeight: 22,
+    color: colors.textSecondary,
+    textAlign: "center",
+  },
+
+  errorText: {
+    marginTop: 15,
+    fontSize: 13,
+    lineHeight: 20,
+    color: "#DC2626",
+    textAlign: "center",
+  },
+
+  detectedBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 15,
+    paddingHorizontal: 12,
+    paddingVertical: 9,
+    borderRadius: 20,
+    backgroundColor: colors.white,
+  },
+
+  greenDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "#22C55E",
+    marginRight: 7,
+  },
+
+  detectedText: {
+    fontSize: 12,
+    color: "#16A34A",
+    fontWeight: "600",
+  },
+
+  refreshButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 7,
+    marginTop: 18,
+    padding: 10,
+  },
+
+  refreshText: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: colors.primaryDark,
   },
 
   bottomCard: {
     marginHorizontal: 14,
-    marginTop: 0,
-    paddingTop: 0,
-    paddingBottom: 30,
-    backgroundColor: colors.white,
+    marginTop: 20,
+    paddingBottom: 25,
   },
 
   sheet: {
     marginHorizontal: 14,
-    marginTop: 5,
-    paddingTop: 7,
-    paddingBottom: 20,
-    backgroundColor: colors.white,
+    marginTop: 20,
+    paddingBottom: 25,
+  },
+
+  addressRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    marginVertical: 20,
+    gap: 12,
+  },
+
+  confirmAddress: {
+    flex: 1,
+    fontSize: 13,
+    lineHeight: 21,
+    color: colors.textSecondary,
   },
 
   emergencyButton: {
     height: 60,
     marginTop: 12,
     borderRadius: 13,
-    flexDirection:"row",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
     backgroundColor: colors.white,
+    borderColor: colors.primaryDark,
+    borderWidth: 1,
   },
 
   emergencyText: {
-    marginRight: 7,
     fontSize: 15,
     fontWeight: "700",
     color: colors.primaryDark,
   },
 
-  addressRow: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    marginBottom: 17,
+  backButton: {
+    alignItems: "center",
+    padding: 14,
   },
 
-  addressText: {
-    flex: 1,
-    marginLeft: 12,
-    fontSize: 13,
-    lineHeight: 19,
-    color: colors.textSecondary,
-  },
-
-  confirmedAddress: {
-    marginTop: 10,
-    fontSize: 12,
-    lineHeight: 18,
-    color: colors.textSecondary,
-  },
-
-  driverMessage: {
-    marginTop: 9,
-    fontSize: 12,
-    lineHeight: 17,
-    color: "#FF3B3F",
-  },
-
-  driverButton: {
-    height: 60,
-    marginTop: 7,
-    borderRadius: 13,
-    backgroundColor: "#FF3035",
-    flexDirection: "row",
+  successIcon: {
+    width: 55,
+    height: 55,
+    borderRadius: 28,
+    backgroundColor: "#22C55E",
     alignItems: "center",
     justifyContent: "center",
-    gap: 8,
+    marginBottom: 15,
+  },
+
+  waitingCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    marginTop: 20,
+    padding: 15,
+    borderRadius: 12,
+    backgroundColor: "#F1F5FF",
+  },
+
+  waitingText: {
+    flex: 1,
+    fontSize: 13,
+    color: colors.textSecondary,
   },
 });

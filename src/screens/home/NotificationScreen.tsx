@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import {
   FlatList,
@@ -5,6 +6,7 @@ import {
   StatusBar,
   Text,
   View,
+  Pressable,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import ScreenHeader from "@/components/common/ScreenHeader";
@@ -22,12 +24,11 @@ type Props = {
   onClose: () => void;
 };
 
-const notifications: Notification[] = [
+const initialNotifications: Notification[] = [
   {
     id: "1",
     title: "Appointment Reminder",
-    message:
-      "You have an appointment with Dr. Priya tomorrow at 10:00 AM.",
+    message: "You have an appointment with Dr. Priya tomorrow at 10:00 AM.",
     icon: "calendar-outline",
   },
   {
@@ -45,14 +46,23 @@ const notifications: Notification[] = [
 ];
 
 export default function NotificationScreen({ onClose }: Props) {
-    const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] =
+    useState<Notification[]>(initialNotifications);
+
+  const deleteNotification = (id: string) => {
+    setNotifications((previous) =>
+      previous.filter((item) => item.id !== id)
+    );
+  };
+
   return (
     <View style={styles.container}>
-         <StatusBar
-          translucent
-          backgroundColor="transparent"
-          barStyle="dark-content"
-        />
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="dark-content"
+      />
+
       <BackButton onPress={onClose} />
 
       <ScreenHeader
@@ -65,6 +75,19 @@ export default function NotificationScreen({ onClose }: Props) {
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.list}
+        ListEmptyComponent={
+          <View style={styles.empty}>
+            <Ionicons
+              name="notifications-off-outline"
+              size={45}
+              color={colors.textSecondary}
+            />
+            <Text style={styles.emptyTitle}>No notifications</Text>
+            <Text style={styles.emptyMessage}>
+              You're all caught up!
+            </Text>
+          </View>
+        }
         renderItem={({ item }) => (
           <View style={styles.notification}>
             <View style={styles.icon}>
@@ -77,9 +100,20 @@ export default function NotificationScreen({ onClose }: Props) {
 
             <View style={styles.content}>
               <Text style={styles.title}>{item.title}</Text>
-
               <Text style={styles.message}>{item.message}</Text>
             </View>
+
+            <Pressable
+              onPress={() => deleteNotification(item.id)}
+              style={styles.deleteButton}
+              hitSlop={8}
+            >
+              <Ionicons
+                name="trash-outline"
+                size={20}
+                color={colors.error}
+              />
+            </Pressable>
           </View>
         )}
       />
@@ -98,10 +132,12 @@ const styles = StyleSheet.create({
   list: {
     paddingTop: 25,
     paddingBottom: 30,
+    flexGrow: 1,
   },
 
   notification: {
     flexDirection: "row",
+    alignItems: "center",
     padding: 15,
     marginBottom: 12,
     borderRadius: 12,
@@ -133,5 +169,30 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 19,
     color: colors.textSecondary,
+  },
+
+  deleteButton: {
+    padding: 8,
+    marginLeft: 5,
+  },
+
+  empty: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: 100,
+  },
+
+  emptyTitle: {
+    fontSize: 17,
+    fontWeight: "700",
+    color: colors.textPrimary,
+    marginTop: 12,
+  },
+
+  emptyMessage: {
+    fontSize: 13,
+    color: colors.textSecondary,
+    marginTop: 5,
   },
 });

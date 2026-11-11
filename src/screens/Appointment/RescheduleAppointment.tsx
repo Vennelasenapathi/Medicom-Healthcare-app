@@ -182,22 +182,24 @@ const styles = StyleSheet.create({
   label: {
     marginTop: 15,
     marginBottom: 7,
-    fontSize: 11,
-    fontWeight: "600",
+    fontSize: 18,
+    fontWeight: "700",
     color: colors.textPrimary,
   },
 
   times: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 8,
+    gap: 10,
   },
 
   time: {
-    width: "47%",
+    width: "31%",
+    minHeight: 48,
     paddingVertical: 11,
-    borderRadius: 7,
-    backgroundColor: colors.background,
+    borderRadius: 10,
+    justifyContent: "center",
+    backgroundColor: colors.timebackground,
     alignItems: "center",
   },
 
@@ -206,7 +208,8 @@ const styles = StyleSheet.create({
   },
 
   timeText: {
-    fontSize: 10,
+    fontSize: 13,
+    fontWeight: "500",
     color: colors.textPrimary,
   },
 

@@ -92,7 +92,7 @@ export default function DateOfBirthField({
         : "spinner"
     }
     maximumDate={new Date()}
-    onValueChange={(event, date) => {
+    onChange={(event, date) => {
       setShowPicker(false);
 
       if (!date) return;
